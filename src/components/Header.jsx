@@ -1,6 +1,6 @@
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { ChevronDown, Download, MessageCircle, Search, ShoppingBag } from 'lucide-react'
+import { ChefHat, ChevronDown, Download, MessageCircle, Search, ShoppingBag } from 'lucide-react'
 import { IconoInstagram } from './Instagram'
 import { categorias, marca } from '../data/seed'
 import { irA, irACategoria, pausarScroll } from '../lib/scroll'
@@ -8,6 +8,7 @@ import { linkWhatsApp } from '../lib/usePedido'
 
 const enlaces = [
   { t: 'Catálogo', id: 'catalogo', ir: () => irA('#categorias', -30) },
+  { t: 'Recetas', id: 'recetas', icono: ChefHat, ir: () => irA('#recetas', -100) },
   { t: 'Food Truck', id: 'foodtruck', ir: () => irA('#foodtruck', -110) },
   { t: 'Historia', id: 'historia', ir: () => irA('#historia', -80) },
   { t: 'Contacto', id: 'contacto', ir: () => irA('#contacto', -80) },
@@ -41,7 +42,7 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
       (es) => es.forEach((e) => { if (e.isIntersecting) setSeccion(e.target.id === 'top' ? null : e.target.id === 'categorias' ? 'catalogo' : e.target.id) }),
       { rootMargin: '-45% 0px -50% 0px' },
     )
-    ;['top', 'categorias', 'catalogo', 'foodtruck', 'historia', 'contacto'].forEach((id) => {
+    ;['top', 'categorias', 'catalogo', 'recetas', 'foodtruck', 'historia', 'contacto'].forEach((id) => {
       const el = document.getElementById(id)
       if (el) io.observe(el)
     })
@@ -78,10 +79,11 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
             <img src={marca.logo} alt="Nuevo Munich" className={`w-auto max-w-full transition-all duration-500 ${solido ? 'h-14 md:h-16' : 'h-16 md:h-20'}`} />
           </button>
 
-          <nav className="hidden items-center gap-8 xl:gap-10 lg:flex" aria-label="Principal">
+          <nav className="hidden items-center gap-5 xl:gap-9 lg:flex" aria-label="Principal">
             {enlaces.map((e) => (
               <button key={e.id} onClick={e.ir} aria-current={seccion === e.id ? 'true' : undefined}
-                className={`group relative py-2 font-display text-xl tracking-wide transition duration-300 hover:-translate-y-0.5 hover:text-oro xl:text-[1.4rem] ${seccion === e.id ? 'text-oro' : 'text-crema'}`}>
+                className={`group relative flex items-center gap-1.5 py-2 font-display text-xl tracking-wide whitespace-nowrap transition duration-300 hover:-translate-y-0.5 hover:text-oro xl:text-[1.4rem] ${seccion === e.id ? 'text-oro' : 'text-crema'}`}>
+                {e.icono && <e.icono size={20} aria-hidden />}
                 {e.t}
                 <span className="absolute inset-x-0 bottom-0 h-0.5 origin-center scale-x-0 rounded-full bg-oro transition-transform duration-300 ease-out group-hover:scale-x-100" />
                 {seccion === e.id && <motion.span layoutId="menu-activo" className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-oro" transition={{ type: 'spring', stiffness: 380, damping: 32 }} />}
@@ -147,7 +149,7 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
               {enlaces.filter((e) => e.id !== 'catalogo').map((e) => (
                 <button key={e.id} onClick={() => irDesdeMenu(e.ir)} aria-current={seccion === e.id ? 'true' : undefined}
                   className={`${fila} ${seccion === e.id ? 'text-oro' : 'text-crema'}`}>
-                  {e.t}
+                  <span className="flex items-center gap-3">{e.t}{e.icono && <e.icono size={26} className="text-oro" aria-hidden />}</span>
                 </button>
               ))}
             </nav>

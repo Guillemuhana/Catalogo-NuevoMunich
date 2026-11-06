@@ -25,7 +25,8 @@ export default function NuevoEnvase({ producto, onAbrir }) {
             <motion.img src={marca.envaseNuevo} alt="Nuevo envase de la salchicha con piel tipo Frankfurt, libre de gluten" loading="lazy" decoding="async"
               style={{ rotateX, rotateY }}
               initial={{ opacity: 0, y: 40, rotate: -4 }} whileInView={{ opacity: 1, y: 0, rotate: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}
-              className="max-h-[62svh] w-auto rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,.65)] md:max-h-[560px]" />
+              width="611" height="1100"
+              className="aspect-[407/733] h-[62svh] w-auto rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,.65)] md:h-[560px]" />
           </div>
           <div>
             <span className="inline-block rounded-full bg-oro px-3 py-1 text-[11px] font-bold tracking-wider text-humo uppercase">Nuevo envase</span>

@@ -13,7 +13,7 @@ export default function CatalogoPdf() {
           initial={{ opacity: 0, rotate: -9, y: 24 }} whileInView={{ opacity: 1, rotate: -5, y: 0 }} viewport={{ once: true }} transition={{ duration: .8 }}
           whileHover={{ rotate: 0, scale: 1.05 }}
           className="mx-auto block w-36 overflow-hidden rounded-lg shadow-[0_24px_50px_rgba(0,0,0,.6)] md:w-44">
-          <img src={marca.catalogoTapa} alt="" loading="lazy" className="block w-full" />
+          <img src={marca.catalogoTapa} alt="" loading="lazy" width="520" height="735" className="block aspect-[520/735] h-auto w-full" />
         </motion.a>
         <div>
           <p className="mb-2 text-[11px] tracking-[.35em] text-oro uppercase">Para compartir o imprimir</p>

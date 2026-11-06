@@ -14,6 +14,7 @@ import Historia from './components/Historia'
 import FoodTruck from './components/FoodTruck'
 import Footer from './components/Footer'
 import Clasicos from './components/Clasicos'
+import Recetas from './components/Recetas'
 import NuevoEnvase from './components/NuevoEnvase'
 import Instagram from './components/Instagram'
 import CatalogoPdf from './components/CatalogoPdf'
@@ -151,6 +152,7 @@ export default function App() {
             </div>
           </main>
 
+          <Recetas productos={productos} onAbrir={setAbierto} />
           <FoodTruck />
           <div className="mt-20 md:mt-32"><Manifiesto /></div>
           <Historia />

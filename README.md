@@ -9,6 +9,7 @@ Catálogo online de Nuevo Munich (fiambres artesanales desde 1972). React + Vite
 - Detalle de producto con galería, ingredientes, sugerencia, presentaciones, cantidad, relacionados y link compartible (`#p=slug`)
 - Buscador ⌘K / Ctrl+K / "/" (sin tildes, con teclado)
 - "Mi pedido" pide nombre y entrega, y manda el mensaje agrupado por categoría al asistente virtual (WhatsApp 351 701-0545). Las consultas de un producto van a ventas (351 384-4802)
+- Sección Recetas con las publicadas por Nuevo Munich en Instagram (`src/data/recetas.js`; fotos en `public/img/recetas/`). Copiar el texto de la publicación, sin completarlo
 - Catálogo en PDF para descargar, con índice y botones a WhatsApp e Instagram
 - En celular: menú hamburguesa arriba y scroll nativo
 - Estilo inspirado en el envase nuevo: negro con dibujos de comida, degradado dorado y franja roja y dorada
@@ -60,20 +61,3 @@ Importar el repo de GitHub → Framework: Vite → Deploy. Las variables `VITE_S
 Colores: rojo `#C04B54`, marrón `#5A270D`, dorado `#FFCC00` (en `src/index.css`, bloque `@theme`).
 Tipografías: Cormorant Unicase (títulos) e Inria Sans (texto), las mismas de nuevomunich.com.ar.
 
-## Validación del pedido por email
-
-Antes de mandar el pedido por WhatsApp, el cliente recibe un código de 6 dígitos por mail
-(`api/codigo.js`) y lo ingresa en el catálogo (`api/confirmar.js`). Al validarlo se asigna un
-número de pedido (NM-AAMMDD-XXXX) y se manda el resumen por mail.
-
-Variables de entorno en Vercel (Settings → Environment Variables):
-
-| Variable | Valor |
-|---|---|
-| `GMAIL_USER` | cuenta Gmail que envía los mails |
-| `GMAIL_APP_PASSWORD` | contraseña de aplicación de esa cuenta (requiere verificación en 2 pasos) |
-| `PEDIDOS_EMAIL` | opcional: recibe una copia de cada pedido (ej. ventas@nuevomunich.com.ar) |
-| `CODIGO_SECRET` | opcional: clave para firmar los códigos |
-
-Si faltan `GMAIL_USER` o `GMAIL_APP_PASSWORD`, el catálogo salta la validación y el pedido sale
-directo por WhatsApp como antes.

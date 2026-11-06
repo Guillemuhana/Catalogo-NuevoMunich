@@ -435,6 +435,7 @@ export const marca = {
   whatsapp: '5493513844802',      // ventas
   whatsappBot: '5493517010545',   // asistente virtual (chatbot)
   whatsappFoodTruck: '5493518145265',
+  fabrica: '12 de Octubre 112, Barrio Parque Norte, Juárez Celman, Córdoba',
   telefono: '351 499-8803',
   email: 'ventas@nuevomunich.com.ar',
   instagram: 'https://www.instagram.com/nuevomunich/',

@@ -38,7 +38,7 @@ export function linkWhatsApp(texto, numero = marca.whatsapp) {
 }
 
 // Mensaje del pedido, agrupado por categoría en el orden del catálogo.
-export function mensajePedido(items, { numero = '', nombre = '', email = '', telefono = '', tipo = '', razonSocial = '', cuit = '', entrega = 'Retiro en local', direccion = '', localidad = '', horario = '', comentario = '' } = {}) {
+export function mensajePedido(items, { nombre = '', email = '', telefono = '', tipo = '', razonSocial = '', cuit = '', entrega = 'Retiro en local', direccion = '', localidad = '', horario = '', comentario = '' } = {}) {
   const grupos = categorias
     .slice()
     .sort((a, b) => a.orden - b.orden)
@@ -54,8 +54,7 @@ export function mensajePedido(items, { numero = '', nombre = '', email = '', tel
   const unidades = items.reduce((a, i) => a + i.cantidad, 0)
   const t = (v) => String(v || '').trim()
   const lineas = [
-    numero ? `🛒 *NUEVO PEDIDO ${numero}*` : '🛒 *NUEVO PEDIDO · CATÁLOGO WEB*',
-    numero ? '✅ Email verificado' : false,
+    '🛒 *NUEVO PEDIDO · CATÁLOGO WEB*',
     '',
     t(nombre) ? `👤 *Cliente:* ${t(nombre)}` : false,
     tipo === 'Comercio' && t(razonSocial) ? `🏪 *Comercio:* ${t(razonSocial)}${t(cuit) ? ` · CUIT ${t(cuit)}` : ''}` : false,
