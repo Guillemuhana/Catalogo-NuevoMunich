@@ -145,6 +145,59 @@ body { font-family: var(--font-sans); overflow-x: clip; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 
+/* Gorro de tela: copa abullonada, pliegues y banda satinada. */
+.gorro-chef {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 34px;
+  margin-right: 3px;
+  flex-shrink: 0;
+  transform: rotate(-9deg);
+  transform-origin: 50% 85%;
+  filter: drop-shadow(0 3px 3px rgb(0 0 0 / .35));
+  transition: transform .55s cubic-bezier(.22, 1, .36, 1), filter .55s;
+}
+.gorro-chef__copa,
+.gorro-chef__copa::before,
+.gorro-chef__copa::after {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 22%, #fff 12%, #f8f5ed 48%, #c7c0b0 100%);
+  box-shadow: inset 0 1px 1px #fff, inset -2px -2px 3px rgb(92 75 45 / .15);
+}
+.gorro-chef__copa { top: 1px; left: 7px; width: 20px; height: 22px; }
+.gorro-chef__copa::before { content: ''; width: 19px; height: 19px; left: -7px; top: 5px; }
+.gorro-chef__copa::after { content: ''; width: 18px; height: 20px; right: -6px; top: 4px; }
+.gorro-chef__pliegues {
+  position: absolute;
+  top: 16px;
+  left: 6px;
+  width: 23px;
+  height: 12px;
+  border-radius: 0 0 5px 5px;
+  background: linear-gradient(92deg, #ded8cb, #fff 18%, #e3ded3 29%, #fffdf7 43%, #d5cebf 57%, #fff 72%, #ddd5c5 93%);
+  clip-path: polygon(0 0, 100% 0, 89% 100%, 9% 100%);
+}
+.gorro-chef__banda {
+  position: absolute;
+  bottom: 1px;
+  left: 8px;
+  width: 20px;
+  height: 9px;
+  border-radius: 2px 2px 5px 5px;
+  background: linear-gradient(100deg, #ccc3b2, #fffdf5 30%, #f5f0e5 62%, #b9ae98);
+  box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgb(96 73 34 / .25), 0 -1px 2px rgb(104 87 53 / .18);
+}
+button:is(:hover, :focus-visible) > .gorro-chef {
+  transform: translateY(-3px) rotate(5deg);
+  filter: drop-shadow(0 4px 6px rgb(255 193 70 / .3));
+}
+@media (prefers-reduced-motion: reduce) {
+  .gorro-chef { transition: none; }
+  button:is(:hover, :focus-visible) > .gorro-chef { transform: rotate(-9deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .grain::after, .animate-marquee, .animate-marquee-lento, .animate-marquee-inverso, .animate-spin-slow, .brasa { animation: none; }
   .brasa { display: none; }

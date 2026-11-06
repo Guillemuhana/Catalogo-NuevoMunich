@@ -83,7 +83,13 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
             {enlaces.map((e) => (
               <button key={e.id} onClick={e.ir} aria-current={seccion === e.id ? 'true' : undefined}
                 className={`group relative flex items-center gap-1.5 py-2 font-display text-xl tracking-wide whitespace-nowrap transition duration-300 hover:-translate-y-0.5 hover:text-oro xl:text-[1.4rem] ${seccion === e.id ? 'text-oro' : 'text-crema'}`}>
-                {e.icono && <e.icono size={20} aria-hidden />}
+                {e.id === 'recetas' && (
+                  <span className="gorro-chef" aria-hidden="true">
+                    <span className="gorro-chef__copa" />
+                    <span className="gorro-chef__pliegues" />
+                    <span className="gorro-chef__banda" />
+                  </span>
+                )}
                 {e.t}
                 <span className="absolute inset-x-0 bottom-0 h-0.5 origin-center scale-x-0 rounded-full bg-oro transition-transform duration-300 ease-out group-hover:scale-x-100" />
                 {seccion === e.id && <motion.span layoutId="menu-activo" className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-oro" transition={{ type: 'spring', stiffness: 380, damping: 32 }} />}
