@@ -346,8 +346,9 @@ export const productos = [
     ],
   }),
   // especialidades
-  p('especialidades', 'Bondiola', [], {
-    ingredientes: 'Bondiola de cerdo, pimienta negra, coriandro, sal y azúcar.',
+  p('especialidades', 'Bondiola', ['Pieza entera · venta al peso'], {
+    descripcion: 'Pieza entera envasada al vacío, para fetear.',
+    ingredientes: 'Carne de cerdo, azúcar, sal y coriandro.',
     sugerencias: 'Ideal para tablas y sándwiches.',
     imagenes: [
       'img/productos/especialidades-bondiola/1.webp',
