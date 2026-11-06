@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Search, ArrowUpRight } from 'lucide-react'
+import { Search, ArrowUpRight, X } from 'lucide-react'
 import { buscar } from '../lib/data'
 import ProductImage from './ProductImage'
 
@@ -13,7 +13,7 @@ export default function SearchOverlay({ productos, catMap, onCerrar, onAbrir }) 
   const res = useMemo(() => buscar(productos, q).slice(0, 12), [productos, q])
 
   useEffect(() => { input.current?.focus() }, [])
-  useEffect(() => setIdx(0), [q])
+  const escribir = (v) => { setQ(v); setIdx(0) }
 
   const tecla = (e) => {
     if (e.key === 'Escape') onCerrar()
@@ -30,10 +30,11 @@ export default function SearchOverlay({ productos, catMap, onCerrar, onAbrir }) 
         className="relative h-fit max-h-[75svh] w-full max-w-2xl overflow-hidden rounded-3xl border border-white/10 bg-carbon shadow-2xl">
         <div className="flex items-center gap-3 border-b border-white/5 px-6">
           <Search size={20} className="text-munich" />
-          <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={tecla}
+          <input ref={input} value={q} onChange={(e) => escribir(e.target.value)} onKeyDown={tecla}
             placeholder="Buscá un producto…" aria-label="Buscar productos"
-            className="h-16 flex-1 bg-transparent font-display text-2xl text-crema outline-none placeholder:text-crema/25" />
-          <kbd className="rounded border border-white/10 px-2 py-1 text-[10px] text-crema/40">ESC</kbd>
+            className="h-16 min-w-0 flex-1 bg-transparent font-display text-2xl text-crema outline-none placeholder:text-crema/25" />
+          <button onClick={onCerrar} aria-label="Cerrar búsqueda" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-crema/70 transition hover:text-crema md:hidden"><X size={20} /></button>
+          <kbd className="hidden rounded border border-white/10 px-2 py-1 text-[10px] text-crema/40 md:inline">ESC</kbd>
         </div>
 
         <div data-lenis-prevent className="max-h-[60svh] overflow-y-auto p-3">
@@ -42,7 +43,7 @@ export default function SearchOverlay({ productos, catMap, onCerrar, onAbrir }) 
               <p className="mb-3 text-[11px] tracking-[.3em] text-crema/40 uppercase">Probá con</p>
               <div className="flex flex-wrap gap-2">
                 {sugerencias.map((s) => (
-                  <button key={s} onClick={() => setQ(s)} className="rounded-full border border-white/10 px-4 py-2 text-sm text-crema/70 transition hover:border-oro hover:text-oro">{s}</button>
+                  <button key={s} onClick={() => escribir(s)} className="rounded-full border border-white/10 px-4 py-2 text-sm text-crema/70 transition hover:border-oro hover:text-oro">{s}</button>
                 ))}
               </div>
             </div>

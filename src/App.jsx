@@ -1,9 +1,10 @@
-import { AnimatePresence, motion, LayoutGroup } from 'motion/react'
+import { AnimatePresence, motion, LayoutGroup, MotionConfig } from 'motion/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Check } from 'lucide-react'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Marquee from './components/Marquee'
+import Categorias from './components/Categorias'
 import CategoryNav from './components/CategoryNav'
 import CategorySection from './components/CategorySection'
 import ProductModal from './components/ProductModal'
@@ -21,7 +22,7 @@ function Intro() {
   return (
     <motion.div className="fixed inset-0 z-[70] flex items-center justify-center bg-humo"
       exit={{ clipPath: 'inset(0 0 100% 0)' }} transition={{ duration: .9, ease: [.76, 0, .24, 1] }}>
-      <motion.img src={marca.logo} alt="Nuevo Munich" className="h-20 md:h-24"
+      <motion.img src={marca.logo} alt="Nuevo Munich" className="h-28 md:h-36"
         initial={{ opacity: 0, scale: .85 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: .8 }} />
     </motion.div>
   )
@@ -42,6 +43,10 @@ export default function App() {
     const t0 = Date.now()
     cargarCatalogo().then((d) => {
       setData(d)
+      // Deep link: #p=slug abre el producto (para compartir por WhatsApp)
+      const m = location.hash.match(/p=([\w-]+)/)
+      const p = m && d.productos.find((x) => x.slug === m[1])
+      if (p) setAbierto(p)
       setTimeout(() => setIntro(false), Math.max(0, 1300 - (Date.now() - t0)))
     })
   }, [])
@@ -67,13 +72,6 @@ export default function App() {
     return () => io.disconnect()
   }, [categorias])
 
-  // Deep link: #p=slug abre el producto (para compartir por WhatsApp)
-  useEffect(() => {
-    if (!productos.length) return
-    const m = location.hash.match(/p=([\w-]+)/)
-    const p = m && productos.find((x) => x.slug === m[1])
-    if (p) setAbierto(p)
-  }, [productos])
   useEffect(() => {
     if (!productos.length) return
     history.replaceState(null, '', abierto ? `#p=${abierto.slug}` : location.pathname + location.search)
@@ -96,7 +94,7 @@ export default function App() {
     document.documentElement.style.overflow = hayOverlay ? 'hidden' : ''
   }, [hayOverlay])
 
-  const agregar = useCallback((producto, presentacion, _e, cantidad = 1) => {
+  const agregar = useCallback((producto, presentacion, cantidad = 1) => {
     pedido.agregar(producto, presentacion, cantidad)
     setToast({ id: Date.now(), texto: `${cantidad} × ${producto.nombre}` })
   }, [pedido])
@@ -108,17 +106,19 @@ export default function App() {
   }, [toast])
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="grain">
       <AnimatePresence>{intro && <Intro key="intro" />}</AnimatePresence>
 
-      <Header total={pedido.total} onBuscar={() => setVerBuscar(true)} onPedido={() => setVerPedido(true)} />
+      <Header total={pedido.total} listo={!!data} onBuscar={() => setVerBuscar(true)} onPedido={() => setVerPedido(true)} />
 
       {data && (
         <LayoutGroup>
-          <Hero categorias={categorias} />
+          <Hero />
           <Marquee items={categorias.map((c) => c.nombre)} />
+          <Categorias categorias={categorias} />
 
-          <main id="catalogo" className="scroll-mt-20">
+          <main id="catalogo" className="mt-16 scroll-mt-20 md:mt-24">
             <CategoryNav categorias={categorias} activa={activa} conteo={conteo} />
             <div className="mx-auto max-w-7xl px-5 md:px-8">
               {categorias.map((c, i) => porCat[c.slug]?.length ? (
@@ -148,7 +148,7 @@ export default function App() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {toast && (
+        {toast && !verPedido && (
           <motion.button key={toast.id} onClick={() => { setToast(null); setVerPedido(true) }}
             initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 80, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 26 }}
@@ -160,5 +160,6 @@ export default function App() {
         )}
       </AnimatePresence>
     </div>
+    </MotionConfig>
   )
 }

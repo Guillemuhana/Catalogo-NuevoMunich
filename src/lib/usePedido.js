@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { marca } from '../data/seed'
 
-const KEY = 'nm-pedido-v1'
+const KEY = 'nm-pedido-v2'
 const leer = () => {
   try { return JSON.parse(localStorage.getItem(KEY)) || [] } catch { return [] }
 }

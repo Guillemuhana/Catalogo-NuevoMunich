@@ -18,6 +18,16 @@
   --animate-spin-slow: spin 22s linear infinite;
 }
 
+/* Pantalla apaisada con lugar para poner el texto al lado de la foto del hero */
+@custom-variant ancho (@media (min-aspect-ratio: 7/5) and (min-width: 640px));
+
+/* La foto cubre la pantalla y la comida termina en el 60 % de su ancho. Como la foto es 16:9,
+   su ancho real es el mayor entre 100vw y 177.7vh: de ahí sale dónde empieza la zona libre. */
+@media (min-aspect-ratio: 7/5) and (min-width: 640px) {
+  .hero-texto { --libre: max(62vw, 106.6vh); left: var(--libre); right: 0; }
+  .hero-titulo { font-size: min(calc((100vw - var(--libre) - 3vw) / 4.6), 13vh); }
+}
+
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
@@ -40,7 +50,7 @@ body { font-family: var(--font-sans); overflow-x: hidden; }
   content: '';
   position: fixed; inset: -50%;
   pointer-events: none; z-index: 60;
-  opacity: .07;
+  opacity: .035;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain 1.2s steps(6) infinite;
 }

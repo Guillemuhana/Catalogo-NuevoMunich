@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react'
 import { Minus, Plus, X, Trash2, MessageCircle } from 'lucide-react'
 import { linkWhatsApp, mensajePedido } from '../lib/usePedido'
+import { miniatura } from '../lib/data'
 
 export default function PedidoDrawer({ pedido, onCerrar }) {
   const { items, cambiar, vaciar, total } = pedido
@@ -36,9 +37,9 @@ export default function PedidoDrawer({ pedido, onCerrar }) {
                 {items.map((i) => (
                   <motion.li key={i.id} layout initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30, height: 0 }}
                     className="flex items-center gap-4 rounded-2xl border border-white/5 bg-roble/50 p-3">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-humo">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
                       {i.imagen_url
-                        ? <img src={i.imagen_url} alt="" className="h-full w-full object-cover" />
+                        ? <img src={miniatura(i.imagen_url)} alt="" className="h-full w-full object-cover" />
                         : <span className="font-display text-2xl text-munich">{i.nombre[0]}</span>}
                     </div>
                     <div className="min-w-0 flex-1">

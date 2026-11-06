@@ -1,72 +1,58 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
+import { motion } from 'motion/react'
+import { useState } from 'react'
 import { Plus, Star } from 'lucide-react'
 import ProductImage from './ProductImage'
+import { fotosDe, miniatura } from '../lib/data'
 
 export default function ProductCard({ producto, categoria, index, onAbrir, onAgregar }) {
-  // Tilt 3D siguiendo el mouse
-  const mx = useMotionValue(.5)
-  const my = useMotionValue(.5)
-  const rx = useSpring(useTransform(my, [0, 1], [7, -7]), { stiffness: 200, damping: 20 })
-  const ry = useSpring(useTransform(mx, [0, 1], [-7, 7]), { stiffness: 200, damping: 20 })
-  const brillo = useTransform([mx, my], ([x, y]) => `radial-gradient(400px circle at ${x * 100}% ${y * 100}%, rgb(255 255 255 / .12), transparent 45%)`)
-
-  const mover = (e) => {
-    const r = e.currentTarget.getBoundingClientRect()
-    mx.set((e.clientX - r.left) / r.width)
-    my.set((e.clientY - r.top) / r.height)
-  }
-  const salir = () => { mx.set(.5); my.set(.5) }
-
+  // La segunda foto (ambiente) se carga recién cuando se pasa el mouse.
+  const [activa, setActiva] = useState(false)
   const pres = producto.presentaciones || []
+  const fotos = fotosDe(producto)
+  const alterna = fotos.length > 1 ? fotos[fotos.length - 1] : null
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: .8, ease: [.22, 1, .36, 1], delay: (index % 4) * .07 }}
-      style={{ perspective: 1000 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: .6, ease: [.22, 1, .36, 1], delay: (index % 4) * .05 }}
+      onMouseEnter={() => setActiva(true)}
+      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[.07] bg-carbon transition duration-300 hover:-translate-y-1 hover:border-oro/40 hover:shadow-2xl hover:shadow-black/50"
     >
-      <motion.div
-        onMouseMove={mover} onMouseLeave={salir}
-        style={{ rotateX: rx, rotateY: ry, transformStyle: 'preserve-3d' }}
-        className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/[.06] bg-carbon"
-        onClick={() => onAbrir(producto)}
-      >
-        <motion.div layoutId={`img-${producto.slug}`} className="relative aspect-[4/5] overflow-hidden">
-          <div className="h-full w-full transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.07]">
-            <ProductImage producto={producto} categoria={categoria} />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-carbon via-transparent to-transparent" />
-          {producto.destacado && (
-            <span className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-oro px-2.5 py-1 text-[10px] font-bold tracking-wider text-humo uppercase">
-              <Star size={10} fill="currentColor" /> Clásico
-            </span>
-          )}
-        </motion.div>
+      <div className="relative aspect-square overflow-hidden bg-white">
+        <ProductImage producto={producto} categoria={categoria} />
+        {alterna && activa && (
+          <img src={miniatura(alterna)} alt="" aria-hidden decoding="async"
+            className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        )}
+        {producto.destacado && (
+          <span className="absolute bottom-2.5 left-2.5 flex items-center gap-1 rounded-full bg-oro px-2.5 py-1 text-[10px] font-bold tracking-wider text-humo uppercase shadow-md">
+            <Star size={10} fill="currentColor" /> Clásico
+          </span>
+        )}
+      </div>
 
-        <motion.div style={{ background: brillo }} className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-        <div className="relative p-5" style={{ transform: 'translateZ(30px)' }}>
-          <p className="mb-1.5 text-[10px] tracking-[.3em] text-munich uppercase">{categoria?.nombre}</p>
-          <h3 className="font-display text-2xl leading-[1.05] text-crema">{producto.nombre}</h3>
-          <div className="mt-4 flex items-end justify-between gap-3">
-            <div className="flex flex-wrap gap-1.5">
-              {pres.slice(0, 2).map((x) => (
-                <span key={x} className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] text-crema/60">{x}</span>
-              ))}
-              {pres.length > 2 && <span className="px-1 py-1 text-[10px] text-crema/40">+{pres.length - 2}</span>}
-            </div>
-            <button
-              onClick={(e) => { e.stopPropagation(); onAgregar(producto, pres[0], e) }}
-              aria-label={`Agregar ${producto.nombre} al pedido`}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema transition-all duration-300 hover:rotate-90 hover:border-munich hover:bg-munich"
-            >
-              <Plus size={18} />
-            </button>
-          </div>
+      <div className="flex flex-1 flex-col p-3.5 md:p-5">
+        <h3 className="font-display text-lg leading-[1.08] text-crema md:text-2xl">
+          <button onClick={() => onAbrir(producto)} className="text-left after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
+            {producto.nombre}
+          </button>
+        </h3>
+        <div className="mt-auto flex items-end justify-between gap-2 pt-3 md:pt-4">
+          <p className="min-w-0 text-[11px] leading-snug text-crema/60 md:text-xs">
+            {pres[0]}
+            {pres.length > 1 && <span className="block text-crema/40">+{pres.length - 1} {pres.length === 2 ? 'opción' : 'opciones'}</span>}
+          </p>
+          <button
+            onClick={() => onAgregar(producto, pres[0])}
+            aria-label={`Agregar ${producto.nombre} al pedido`}
+            className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema transition duration-300 hover:rotate-90 hover:border-munich hover:bg-munich md:h-10 md:w-10"
+          >
+            <Plus size={18} />
+          </button>
         </div>
-      </motion.div>
+      </div>
     </motion.article>
   )
 }

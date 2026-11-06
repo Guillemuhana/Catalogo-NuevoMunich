@@ -21,6 +21,12 @@ create table if not exists public.productos (
   actualizado_en  timestamptz default now()
 );
 
+-- Columnas sumadas después de la primera versión del esquema
+alter table public.categorias add column if not exists banner_url text;
+alter table public.productos  add column if not exists ingredientes text default '';
+alter table public.productos  add column if not exists sugerencias  text default '';
+alter table public.productos  add column if not exists imagenes     jsonb default '[]'::jsonb;  -- galería; la primera es la principal
+
 create index if not exists productos_categoria_idx on public.productos(categoria);
 
 create or replace function public.tocar_actualizado() returns trigger language plpgsql as $$

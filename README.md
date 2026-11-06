@@ -3,10 +3,10 @@
 Catálogo online de Nuevo Munich (fiambres artesanales desde 1972). React + Vite + Tailwind v4 + Motion + Lenis + Supabase. Deploy en Vercel.
 
 ## Qué tiene
-- Intro con logo, hero con parallax, sello giratorio "1972", marquee de categorías
+- Intro con logo, hero con parallax, sello giratorio "1972", marquee y tarjetas de categoría
 - Navegación sticky por categoría con scroll-spy
-- Cards con tilt 3D, brillo que sigue al mouse y transición compartida al detalle
-- Detalle de producto con presentaciones, cantidad, relacionados y link compartible (`#p=slug`)
+- Cards con la foto del envase; al pasar el mouse aparece la foto de ambiente
+- Detalle de producto con galería, ingredientes, sugerencia, presentaciones, cantidad, relacionados y link compartible (`#p=slug`)
 - Buscador ⌘K / Ctrl+K / "/" (sin tildes, con teclado)
 - "Mi pedido" que arma el mensaje y lo manda por WhatsApp (ventas: 351 384-4802)
 - Sección Food Truck (Superpancho Premium, Picada) con WhatsApp de reservas 351 814-5265
@@ -16,13 +16,20 @@ Catálogo online de Nuevo Munich (fiambres artesanales desde 1972). React + Vite
 ## Local
 ```bash
 npm i
-cp .env.example .env   # completar URL y anon key
 npm run dev
 ```
+No hace falta configurar nada: sin `.env` la app usa el catálogo local. El `.env` solo se necesita si se conecta Supabase.
 
-## Supabase
+## Imágenes
+Están en `public/img/`, optimizadas en WebP, y no dependen de ningún servicio externo:
+- `productos/{slug}/{n}.webp` (hasta 1080 px) y `{n}-480.webp` (miniatura). El orden lo define `imagenes` en `src/data/seed.js`: primero el envase, al final la foto de ambiente.
+- `categorias/`: piezas de categoría con la cinta roja. Traen el nombre en la imagen, así que van solo en las tarjetas sobre fondo blanco.
+- `banners/`: fotos de ambiente para el encabezado de cada categoría.
+- `marca/`: logo, ícono, hero, food truck y Oktoberfest.
+
+## Supabase (opcional)
 1. SQL Editor → correr `supabase/schema.sql` (tablas, RLS de solo lectura y bucket `productos`).
-2. Correr `supabase/seed.sql` (7 categorías y 37 productos de la web).
+2. Correr `supabase/seed.sql` (7 categorías y 38 productos).
 3. Si editás `src/data/seed.js`: `node scripts/generar-seed.mjs > supabase/seed.sql`.
 
 ## Fotos desde n8n
@@ -37,7 +44,7 @@ Cada producto tiene `slug` único e `imagen_url`. Desde n8n:
 La service role key va solo en n8n, nunca en el frontend.
 
 ## Vercel
-Importar el repo de GitHub → Framework: Vite → variables `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` → Deploy.
+Importar el repo de GitHub → Framework: Vite → Deploy. Las variables `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY` solo hacen falta si se usa Supabase.
 
 ## Marca
 Colores: rojo `#C04B54`, marrón `#5A270D`, dorado `#FFCC00` (en `src/index.css`, bloque `@theme`).

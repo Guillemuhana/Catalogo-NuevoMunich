@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { motion } from 'motion/react'
 import { ArrowDown } from 'lucide-react'
 import { irA } from '../lib/scroll'
+import { marca } from '../data/seed'
 
 const ease = [.22, 1, .36, 1]
 
@@ -15,81 +15,65 @@ function Palabra({ children, delay }) {
   )
 }
 
-export default function Hero({ categorias }) {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const yImg = useTransform(scrollYProgress, [0, 1], ['0%', '25%'])
-  const scale = useTransform(scrollYProgress, [0, 1], [1.05, 1.25])
-  const yTxt = useTransform(scrollYProgress, [0, 1], ['0%', '60%'])
-  const fade = useTransform(scrollYProgress, [0, .7], [1, 0])
-
-  const fondo = categorias.find((c) => c.slug === 'especialidades')?.imagen_url || categorias[0]?.imagen_url
-  const tiles = categorias.filter((c) => !c.imagen_url?.endsWith('.png')).slice(0, 3)
-
+// La comida de la foto está a la izquierda y la derecha queda libre.
+// Pantalla ancha: el texto va en esa zona libre. Celular y tablet: la foto arriba y el texto abajo.
+// En ningún caso hay letras encima de la comida.
+export default function Hero() {
   return (
-    <section id="top" ref={ref} className="relative h-[100svh] min-h-[640px] overflow-hidden">
-      <motion.div style={{ y: yImg, scale }} className="absolute inset-0">
+    <section id="top" className="relative flex min-h-[100svh] flex-col bg-humo ancho:block ancho:h-[100svh] ancho:min-h-[420px]">
+      <div className="relative mt-20 aspect-[8/7] w-full shrink-0 overflow-hidden sm:aspect-video ancho:absolute ancho:inset-0 ancho:mt-0 ancho:aspect-auto ancho:h-full">
         <motion.img
-          src={fondo} alt="" aria-hidden
-          initial={{ opacity: 0, filter: 'blur(20px)' }}
-          animate={{ opacity: .55, filter: 'blur(0px)' }}
-          transition={{ duration: 2, ease }}
-          className="h-full w-full object-cover"
+          src={marca.hero} alt="Trío de panchos Nuevo Munich sobre tabla de madera" fetchPriority="high"
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.6, ease }}
+          className="h-full w-full origin-left object-cover object-[left_35%] sm:object-[left_top]"
         />
-      </motion.div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_10%,var(--color-humo)_78%)]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-humo/70 via-transparent to-humo" />
+        <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-humo to-transparent ancho:h-28 ancho:from-humo/70" />
+        <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-humo to-transparent ancho:h-20" />
+      </div>
 
-      <motion.div style={{ y: yTxt, opacity: fade }} className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-24 md:px-8 md:pb-28">
+      <div className="relative z-10 flex flex-1 flex-col justify-center px-5 pt-3 pb-8 sm:px-8 hero-texto ancho:absolute ancho:inset-y-0 ancho:px-0 ancho:pt-24 ancho:pr-[3vw] ancho:pb-6">
         <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .5, duration: .8 }}
-          className="mb-6 flex items-center gap-3 text-[11px] tracking-[.4em] text-oro uppercase">
-          <span className="h-px w-10 bg-oro" /> Córdoba · Desde 1972
+          className="mb-3 flex items-center gap-3 text-[11px] tracking-[.35em] text-oro uppercase sm:mb-5">
+          <span className="h-px w-8 shrink-0 bg-oro" /> Córdoba · Desde 1972
         </motion.p>
 
-        <h1 className="font-display text-[15vw] leading-[.85] text-crema md:text-[9.5vw] lg:text-[8.5rem]">
+        <h1 className="hero-titulo font-display text-[min(17vw,7.5rem)] leading-[.92] text-crema">
           <Palabra delay={.35}>Artesanos</Palabra><br />
-          <Palabra delay={.5}><span className="text-outline">del</span></Palabra>{' '}
-          <Palabra delay={.62}><span className="italic text-munich">Sabor</span></Palabra>
+          <Palabra delay={.5}><span className="text-crema/75">del</span></Palabra>{' '}
+          <Palabra delay={.62}><span className="text-oro italic">Sabor</span></Palabra>
         </h1>
 
-        <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1, duration: 1 }}
-            className="max-w-md text-base leading-relaxed font-light text-crema/70 md:text-lg">
-            Recetas centroeuropeas heredadas de generación en generación. Fiambres, salchichas y especialidades hechas como en Austria.
-          </motion.p>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1, duration: 1 }}
+          className="mt-4 max-w-xl text-base leading-relaxed font-light text-crema/80 sm:mt-6 sm:text-lg ancho:text-[clamp(.95rem,1.2vw,1.2rem)] [@media(max-height:520px)]:hidden">
+          Recetas centroeuropeas heredadas de generación en generación. Fiambres, salchichas y especialidades hechas como en Austria.
+        </motion.p>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25, duration: .9, ease }}
-            className="flex items-center gap-4">
-            <button onClick={() => irA('#catalogo')}
-              className="group relative overflow-hidden rounded-full bg-crema px-7 py-4 text-xs font-bold tracking-[.25em] text-humo uppercase">
-              <span className="relative z-10 flex items-center gap-3 transition-colors duration-500 group-hover:text-crema">
-                Ver catálogo <ArrowDown size={15} className="transition-transform duration-500 group-hover:translate-y-1" />
-              </span>
-              <span className="absolute inset-0 translate-y-full rounded-full bg-munich transition-transform duration-500 ease-out group-hover:translate-y-0" />
-            </button>
-            <div className="hidden -space-x-4 sm:flex">
-              {tiles.map((c, i) => (
-                <motion.img key={c.slug} src={c.imagen_url} alt={c.nombre}
-                  initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.4 + i * .1 }}
-                  className="h-12 w-12 rounded-full border-2 border-humo object-cover" />
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.25, duration: .9, ease }}
+          className="mt-6 sm:mt-8">
+          <button onClick={() => irA('#categorias', -30)}
+            className="group relative w-full overflow-hidden rounded-full bg-crema px-7 py-4 text-xs font-bold tracking-[.25em] text-humo uppercase sm:w-auto">
+            <span className="relative z-10 flex items-center justify-center gap-3 transition-colors duration-500 group-hover:text-crema">
+              Ver catálogo <ArrowDown size={15} className="transition-transform duration-500 group-hover:translate-y-1" />
+            </span>
+            <span className="absolute inset-0 translate-y-full rounded-full bg-munich transition-transform duration-500 ease-out group-hover:translate-y-0" />
+          </button>
+        </motion.div>
+      </div>
 
-      {/* Sello giratorio */}
+      {/* Sello giratorio: solo en pantallas anchas y altas, en la esquina libre de la foto */}
       <motion.div initial={{ opacity: 0, scale: .6, rotate: -40 }} animate={{ opacity: 1, scale: 1, rotate: 0 }}
         transition={{ delay: 1.3, duration: 1.2, ease }}
-        className="absolute top-28 right-6 z-10 hidden h-36 w-36 md:block lg:right-16 lg:h-44 lg:w-44">
+        className="absolute right-[3vw] bottom-8 z-10 hidden h-28 w-28 ancho:block xl:h-32 xl:w-32 [@media(max-height:780px)]:!hidden">
         <svg viewBox="0 0 200 200" className="h-full w-full animate-spin-slow">
           <defs><path id="c" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0" /></defs>
-          <text className="fill-crema/80 font-display" fontSize="17" letterSpacing="5">
-            <textPath href="#c">Fiambres artesanales · Recetas austríacas · </textPath>
+          <text className="fill-crema/85 font-display" fontSize="16">
+            <textPath href="#c" textLength="486" lengthAdjust="spacing">Fiambres artesanales · Recetas austríacas · </textPath>
           </text>
         </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-display text-4xl text-oro lg:text-5xl">1972</span>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="font-display text-3xl text-oro xl:text-4xl">1972</span>
         </div>
       </motion.div>
     </section>

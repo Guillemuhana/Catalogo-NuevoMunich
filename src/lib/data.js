@@ -21,6 +21,12 @@ export async function cargarCatalogo() {
   }
 }
 
+// Todas las fotos de un producto; la primera es la principal.
+export const fotosDe = (p) => (p.imagenes?.length ? p.imagenes : p.imagen_url ? [p.imagen_url] : [])
+
+// Versión liviana (480 px) para grillas y miniaturas.
+export const miniatura = (url = '') => (url.startsWith('img/productos/') ? url.replace(/\.webp$/, '-480.webp') : url)
+
 export const normalizar = (s = '') =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 

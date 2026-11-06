@@ -38,7 +38,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-24 flex flex-col items-center justify-between gap-6 border-t border-white/5 py-10 md:flex-row">
-          <img src={marca.logo} alt="Nuevo Munich" className="h-12" />
+          <img src={marca.logo} alt="Nuevo Munich" className="h-20" />
           <p className="text-center text-xs text-crema/40">Nuevo Munich SRL · Fiambres artesanales · Córdoba, Argentina · Desde 1972</p>
           <div className="flex gap-2">
             {[[Instagram, marca.instagram], [Facebook, marca.facebook], [Globe, marca.web]].map(([I, h]) => (

@@ -11,8 +11,8 @@ const hitos = [
 export default function Historia() {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y1 = useTransform(scrollYProgress, [0, 1], [80, -80])
-  const y2 = useTransform(scrollYProgress, [0, 1], [-40, 120])
+  const y1 = useTransform(scrollYProgress, [0, 1], [24, -24])
+  const y2 = useTransform(scrollYProgress, [0, 1], [-24, 24])
   const x = useTransform(scrollYProgress, [0, 1], ['10%', '-30%'])
 
   return (
@@ -22,11 +22,11 @@ export default function Historia() {
       </motion.p>
 
       <div className="relative mx-auto grid max-w-7xl gap-16 px-5 md:grid-cols-2 md:px-8">
-        <div className="relative h-[460px] md:h-[620px]">
-          <motion.img style={{ y: y1 }} src={marca.oktoberfest[0]} alt="Nuevo Munich en Oktoberfest" loading="lazy"
-            className="absolute top-0 left-0 h-[70%] w-[72%] rounded-3xl object-cover shadow-2xl" />
-          <motion.img style={{ y: y2 }} src={marca.oktoberfest[1]} alt="" loading="lazy"
-            className="absolute right-0 bottom-0 h-[55%] w-[55%] rounded-3xl border-8 border-carbon object-cover shadow-2xl" />
+        <div className="relative aspect-square w-full self-center">
+          <motion.img style={{ y: y1 }} src={marca.oktoberfest[0]} alt="Servicio de Nuevo Munich en la Oktoberfest" loading="lazy" decoding="async"
+            className="absolute top-0 left-0 aspect-[4/5] w-[64%] rounded-3xl object-cover shadow-2xl" />
+          <motion.img style={{ y: y2 }} src={marca.oktoberfest[1]} alt="Salchichas a la parrilla en la Oktoberfest" loading="lazy" decoding="async"
+            className="absolute right-0 bottom-0 aspect-[4/5] w-[50%] rounded-3xl border-8 border-carbon object-cover shadow-2xl" />
         </div>
 
         <div className="flex flex-col justify-center">

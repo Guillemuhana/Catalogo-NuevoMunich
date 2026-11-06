@@ -19,8 +19,7 @@ const propuestas = [
 export default function FoodTruck() {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const rot = useTransform(scrollYProgress, [0, 1], [-12, 12])
-  const y = useTransform(scrollYProgress, [0, 1], [60, -60])
+  const y = useTransform(scrollYProgress, [0, 1], [24, -24])
   const wa = `https://wa.me/${marca.whatsappFoodTruck}?text=${encodeURIComponent('¡Hola! Quiero consultar por el Food Truck de Nuevo Munich para un evento.')}`
 
   return (
@@ -31,7 +30,7 @@ export default function FoodTruck() {
           <div>
             <p className="mb-5 text-[11px] tracking-[.4em] text-oro uppercase">Food Truck · Para tu evento</p>
             <h2 className="font-display text-5xl leading-[.92] text-crema md:text-6xl">
-              Vos ponés el evento.<br /><span className="italic text-humo/80">Nosotros llevamos el sabor.</span>
+              Vos ponés el evento.<br /><span className="text-oro italic">Nosotros llevamos el sabor.</span>
             </h2>
             <p className="mt-6 max-w-lg font-light text-crema/85">
               Una experiencia gastronómica con identidad propia, productos Nuevo Munich y atención cuidada para eventos sociales, empresariales y celebraciones.
@@ -53,12 +52,14 @@ export default function FoodTruck() {
               className="mt-10 inline-flex h-14 items-center gap-3 rounded-full bg-crema px-7 text-xs font-bold tracking-[.2em] text-humo uppercase transition hover:bg-oro">
               <MessageCircle size={17} /> Consultas y reservas
             </a>
-            <p className="mt-4 text-xs tracking-wide text-crema/60">Personal capacitado · Atención cuidada · Presentación premium</p>
+            <p className="mt-4 text-xs tracking-wide text-crema/85">Personal capacitado · Atención cuidada · Presentación premium</p>
           </div>
 
-          <motion.div style={{ rotate: rot, y }} className="relative mx-auto w-full max-w-md">
-            <div className="absolute inset-[10%] rounded-full bg-oro/30 blur-3xl" />
-            <img src={marca.foodtruck} alt="Superpancho Nuevo Munich" loading="lazy" className="relative w-full drop-shadow-[0_40px_60px_rgba(0,0,0,.5)]" />
+          <motion.div style={{ y }} className="relative mx-auto grid w-full max-w-xl gap-4">
+            <img src={marca.foodtruck[0]} alt="El food truck de Nuevo Munich en un evento al aire libre" loading="lazy" decoding="async"
+              className="aspect-[3/2] w-full rounded-2xl object-cover shadow-2xl shadow-black/40" />
+            <img src={marca.foodtruck[1]} alt="Atención en la barra del food truck de Nuevo Munich" loading="lazy" decoding="async"
+              className="aspect-[3/2] w-full rounded-2xl object-cover shadow-2xl shadow-black/40" />
           </motion.div>
         </div>
       </div>
