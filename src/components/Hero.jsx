@@ -21,7 +21,7 @@ function Palabra({ children, delay }) {
 // En ningún caso hay letras encima de la comida.
 export default function Hero() {
   return (
-    <section id="top" className="relative flex min-h-[100svh] flex-col bg-humo ancho:block ancho:h-[100svh] ancho:min-h-[420px]">
+    <section id="top" className="relative flex flex-col bg-humo sm:min-h-[100svh] ancho:block ancho:h-[100svh] ancho:min-h-[420px]">
       <div className="relative mt-20 aspect-[4/3] w-full shrink-0 overflow-hidden sm:aspect-video ancho:absolute ancho:inset-0 ancho:mt-0 ancho:aspect-auto ancho:h-full">
         <motion.img
           src={marca.hero} alt="Trío de panchos Nuevo Munich sobre tabla de madera" fetchPriority="high"
