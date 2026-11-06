@@ -21,7 +21,7 @@ export function BotonBot() {
       aria-label="Chatear con el asistente virtual de Nuevo Munich por WhatsApp"
       initial={false} animate={{ scale: ver ? 1 : 0, opacity: ver ? 1 : 0 }} transition={{ type: 'spring', stiffness: 320, damping: 24 }}
       style={{ pointerEvents: ver ? 'auto' : 'none' }}
-      className="group fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex h-14 con-barra:!hidden items-center overflow-hidden rounded-full bg-[#25D366] text-humo shadow-xl shadow-black/40 md:right-6 md:bottom-6">
+      className="group fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex h-14 items-center overflow-hidden rounded-full bg-[#25D366] text-humo shadow-xl shadow-black/40 md:right-6 md:bottom-6">
       <span aria-hidden className="absolute inset-0 animate-ping rounded-full bg-[#25D366] opacity-20 [animation-duration:2.6s]" />
       <span className="relative flex h-14 w-14 shrink-0 items-center justify-center"><MessageCircle size={25} /></span>
       <span className="relative max-w-0 overflow-hidden text-sm font-bold whitespace-nowrap transition-all duration-500 group-hover:max-w-56 group-hover:pr-5">Asistente virtual</span>

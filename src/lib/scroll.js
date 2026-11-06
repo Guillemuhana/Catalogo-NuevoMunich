@@ -19,4 +19,7 @@ export function irA(target, offset = -120) {
   else window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + offset, behavior: 'smooth' })
 }
 
+// En celular no hay barra de categorías fija, así que la sección puede subir más.
+export const irACategoria = (slug) => irA(`#cat-${slug}`, window.innerWidth < 768 ? -32 : -80)
+
 export const pausarScroll = (p) => (p ? lenis?.stop() : lenis?.start())

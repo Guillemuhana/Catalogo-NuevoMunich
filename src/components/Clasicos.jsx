@@ -32,17 +32,17 @@ export default function Clasicos({ productos, onAbrir }) {
           <p className="mb-2 flex items-center gap-3 text-[11px] tracking-[.4em] text-oro uppercase"><span className="h-px w-8 bg-oro" />Los favoritos</p>
           <h2 className="font-display text-4xl leading-none text-crema md:text-6xl">Los <span className="texto-oro italic">clásicos</span> de la casa</h2>
         </div>
-        <motion.div ref={pista} style={quieto ? undefined : { x }} className={`flex gap-4 px-5 md:gap-6 md:px-[max(2rem,calc((100vw-80rem)/2+2rem))] ${quieto ? 'no-scrollbar snap-x snap-mandatory scroll-pl-5 overflow-x-auto overscroll-x-contain' : 'w-max'}`}>
+        <motion.div ref={pista} style={quieto ? undefined : { x }} className={quieto ? 'mx-auto grid w-full max-w-7xl grid-cols-2 gap-x-3 gap-y-5 px-5 md:grid-cols-4 md:gap-5 md:px-8' : 'flex w-max gap-6 px-[max(2rem,calc((100vw-80rem)/2+2rem))]'}>
           {lista.map((p, i) => {
             const fotos = fotosDe(p)
             return (
-              <button key={p.slug} onClick={() => onAbrir(p)} className="group w-[min(74vw,50svh)] shrink-0 snap-start text-left md:w-[min(30vw,54svh)]">
+              <button key={p.slug} onClick={() => onAbrir(p)} className={`group block self-start text-left ${quieto ? 'w-full' : 'w-[min(30vw,54svh)] shrink-0'}`}>
                 <span className="relative block aspect-square overflow-hidden rounded-3xl border border-white/10 bg-carbon">
                   <img src={fotos[fotos.length - 1]} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105" />
                 </span>
-                <span className="mt-3 flex items-baseline gap-3">
-                  <span className="texto-oro font-display text-2xl">{String(i + 1).padStart(2, '0')}</span>
-                  <span className="font-display text-xl leading-[1.05] text-crema md:text-2xl">{p.nombre}</span>
+                <span className="mt-2 flex items-baseline gap-2 md:mt-3 md:gap-3">
+                  <span className="texto-oro font-display text-lg md:text-2xl">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="font-display text-lg leading-[1.05] text-crema md:text-2xl">{p.nombre}</span>
                 </span>
               </button>
             )

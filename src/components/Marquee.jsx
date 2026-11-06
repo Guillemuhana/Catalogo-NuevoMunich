@@ -9,7 +9,7 @@ export default function Marquee({ items }) {
   const inclinacion = useTransform(velocidad, [-2500, 2500], [-14, 14], { clamp: true })
   const skewX = tactil ? 0 : inclinacion
   return (
-    <div className="relative overflow-hidden bg-carbon py-5">
+    <div className="relative hidden overflow-hidden bg-carbon py-5 md:block">
       <span className="franja absolute inset-x-0 top-0" />
       <motion.div style={{ skewX }} className="flex w-max animate-marquee items-center gap-10">
         {[...fila, ...fila].map((t, i) => (

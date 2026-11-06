@@ -46,13 +46,13 @@ export default function ProductCard({ producto, categoria, index, onAbrir, onAgr
         </h3>
         <div className="mt-auto flex items-end justify-between gap-2 pt-3 md:pt-4">
           <p className="min-w-0 text-[11px] leading-snug text-crema/60 md:text-xs">
-            {pres[0]}
+            {pres[0]?.replace(/(\d) (g|kg|cm)\b/g, '$1 $2')}
             {pres.length > 1 && <span className="block text-crema/40">+{pres.length - 1} {pres.length === 2 ? 'opción' : 'opciones'}</span>}
           </p>
           <button
             onClick={(e) => onAgregar(producto, pres[0], 1, e.currentTarget.closest('article').querySelector('img')?.getBoundingClientRect())}
             aria-label={`Agregar ${producto.nombre} al pedido`}
-            className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema transition duration-300 hover:rotate-90 hover:border-munich hover:bg-munich md:h-10 md:w-10"
+            className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema transition duration-300 hover:rotate-90 hover:border-munich hover:bg-munich"
           >
             <Plus size={18} />
           </button>

@@ -23,9 +23,6 @@
 /* Pantalla apaisada con lugar para poner el texto al lado de la foto del hero */
 @custom-variant ancho (@media (min-aspect-ratio: 7/5) and (min-width: 640px));
 
-/* Celular y tablet con altura suficiente: barra inferior estilo app */
-@custom-variant con-barra (@media (max-width: 1023px) and (min-height: 481px));
-
 /* La foto cubre la pantalla y la comida termina en el 60 % de su ancho. Como la foto es 16:9,
    su ancho real es el mayor entre 100vw y 177.7vh: de ahí sale dónde empieza la zona libre. */
 @media (min-aspect-ratio: 7/5) and (min-width: 640px) {

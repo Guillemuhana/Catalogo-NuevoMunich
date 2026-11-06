@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import { irA } from '../lib/scroll'
+import { irA, irACategoria } from '../lib/scroll'
 import { marca } from '../data/seed'
 
 // Las piezas de categoría ya traen el nombre en la cinta roja: van tal cual, sin texto encima.
@@ -21,7 +21,7 @@ export default function Categorias({ categorias }) {
         {categorias.map((c, i) => {
           const oscura = c.slug === 'linea-ogianco'
           return (
-            <motion.button key={c.slug} onClick={() => irA(`#cat-${c.slug}`, -80)} aria-label={`Ver ${c.nombre}`}
+            <motion.button key={c.slug} onClick={() => irACategoria(c.slug)} aria-label={`Ver ${c.nombre}`}
               onMouseMove={inclinar} onMouseLeave={soltar} style={{ transform: 'perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))' }}
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: .6, delay: (i % 4) * .06, ease: [.22, 1, .36, 1] }}

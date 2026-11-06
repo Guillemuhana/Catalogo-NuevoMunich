@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { ArrowDown, Download } from 'lucide-react'
 import { irA } from '../lib/scroll'
 import { marca } from '../data/seed'
+import Humo from './Humo'
 
 const ease = [.22, 1, .36, 1]
 
@@ -29,6 +30,7 @@ export default function Hero() {
           transition={{ duration: 1.6, ease }}
           className="h-full w-full origin-left object-cover object-[left_35%] sm:object-[left_top]"
         />
+        <Humo />
         <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-humo to-transparent ancho:h-28 ancho:from-humo/70" />
         <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-humo to-transparent ancho:h-20" />
       </div>

@@ -117,7 +117,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="grain con-barra:pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
+    <div className="grain">
       <AnimatePresence>{intro && <Intro key="intro" />}</AnimatePresence>
       <Progreso />
       {data && <BotonBot />}
@@ -177,7 +177,7 @@ export default function App() {
           <motion.button key={toast.id} onClick={() => { setToast(null); setVerPedido(true) }}
             initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 80, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-            className="fixed bottom-6 left-1/2 z-50 flex con-barra:bottom-[calc(5.25rem+env(safe-area-inset-bottom))] -translate-x-1/2 items-center gap-3 rounded-full border border-white/10 bg-crema py-2 pr-5 pl-2 text-sm text-humo shadow-2xl">
+            className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/10 bg-crema py-2 pr-5 pl-2 text-sm text-humo shadow-2xl">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-munich text-crema"><Check size={16} /></span>
             <span className="max-w-[55vw] truncate">{toast.texto}</span>
             <span className="text-xs font-bold tracking-wider text-munich uppercase">Ver pedido</span>

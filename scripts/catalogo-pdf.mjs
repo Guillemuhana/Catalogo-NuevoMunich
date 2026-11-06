@@ -6,7 +6,6 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import puppeteer from 'puppeteer-core'
-import QRCode from 'qrcode'
 import sharp from 'sharp'
 import { categorias, marca, productos } from '../src/data/seed.js'
 
@@ -138,9 +137,6 @@ async function armar() {
   await sharp(join(pub, marca.ogianco)).png().toFile(join(temp, 'ogianco.png'))
   await sharp(join(pub, marca.logo)).png().toFile(join(temp, 'logo.png'))
   const logoPng = pathToFileURL(join(temp, 'logo.png')).href
-  const qrOpc = { type: 'svg', margin: 2, errorCorrectionLevel: 'M', color: { dark: '#140a05', light: '#ffffff' } }
-  const qrBot = await QRCode.toString(`https://wa.me/${marca.whatsappBot}`, qrOpc)
-  const qrSitio = await QRCode.toString(SITIO, qrOpc)
 
   const tapa = `
     <section class="pagina tapa">
@@ -197,17 +193,14 @@ async function armar() {
     <section class="pagina contra">
       <img class="contra-logo" src="${logoPng}" alt="Nuevo Munich">
       <h2>¿Hacemos <em>tu pedido?</em></h2>
-      <div class="qrs">
-        <a href="https://wa.me/${marca.whatsappBot}"><span class="qr">${qrBot}</span><b>Asistente virtual</b><i>WhatsApp ${telVisible(marca.whatsappBot)}</i></a>
-        <a href="${SITIO}"><span class="qr">${qrSitio}</span><b>Catálogo online</b><i>${SITIO.replace('https://', '')}</i></a>
+      <p class="contra-bajada">Tocá para escribirnos o seguirnos</p>
+      <div class="botones">
+        <a class="boton verde" href="${esc(wa(marca.whatsappBot, '¡Hola Nuevo Munich! Vengo del catálogo en PDF.'))}"><b>Hacer un pedido por WhatsApp</b><i>Asistente virtual · ${telVisible(marca.whatsappBot)}</i></a>
+        <a class="boton" href="${esc(wa(marca.whatsapp, '¡Hola Nuevo Munich! Vengo del catálogo en PDF.'))}"><b>Hablar con ventas</b><i>${telVisible(marca.whatsapp)}</i></a>
+        <a class="boton" href="${marca.instagram}"><b>Seguinos en Instagram</b><i>${marca.instagramUsuario}</i></a>
+        <a class="boton" href="${SITIO}"><b>Ver el catálogo online</b><i>${SITIO.replace('https://', '')}</i></a>
       </div>
-      <ul class="contactos">
-        <li><b>Ventas por WhatsApp</b><a href="https://wa.me/${marca.whatsapp}">${telVisible(marca.whatsapp)}</a></li>
-        <li><b>Teléfono</b><a href="tel:+543514998803">${marca.telefono}</a></li>
-        <li><b>Email</b><a href="mailto:${marca.email}">${marca.email}</a></li>
-        <li><b>Instagram</b><a href="${marca.instagram}">${marca.instagramUsuario}</a></li>
-        <li><b>Facebook</b><a href="${marca.facebook}">Nuevo Munich</a></li>
-      </ul>
+      <p class="contactos"><a href="tel:+543514998803">Tel. ${marca.telefono}</a> · <a href="mailto:${marca.email}">${marca.email}</a> · <a href="${marca.facebook}">Facebook</a></p>
       <p class="firma">Nuevo Munich SRL · Fiambres artesanales · Córdoba, Argentina · Desde 1972</p>
     </section>`
 
@@ -302,15 +295,14 @@ em{font-style:italic}
 .contra-logo{height:34mm}
 .contra h2{font-size:45pt;line-height:1;margin-top:9mm}
 .contra h2 em{color:var(--oro)}
-.qrs{display:flex;gap:14mm;margin-top:13mm}
-.qrs a{display:flex;flex-direction:column;align-items:center;width:62mm}
-.qr{display:block;width:50mm;height:50mm;background:#fff;border-radius:3mm;padding:1.5mm}
-.qr svg{display:block;width:100%;height:100%}
-.qrs b{font-family:'Cormorant Unicase',serif;font-weight:400;font-size:17pt;margin-top:4mm;line-height:1}
-.qrs i{font-style:normal;font-size:8.2pt;margin-top:1.5mm;color:rgb(244 235 221 / .7)}
-.contactos{list-style:none;margin-top:14mm;width:100%;border-top:.25mm solid rgb(255 255 255 / .15)}
-.contactos li{display:flex;justify-content:space-between;gap:6mm;padding:3.2mm 0;border-bottom:.25mm solid rgb(255 255 255 / .15);font-size:10pt}
-.contactos b{font-weight:300;color:rgb(244 235 221 / .65)}
+.contra-bajada{margin-top:4mm;font-size:12pt;font-weight:300;color:rgb(244 235 221 / .8)}
+.botones{display:flex;flex-direction:column;gap:5mm;width:100%;margin-top:11mm}
+.boton{display:flex;flex-direction:column;align-items:center;justify-content:center;height:27mm;border-radius:14mm;border:.4mm solid var(--oro);color:var(--crema)}
+.boton b{font-family:'Cormorant Unicase',serif;font-weight:600;font-size:19pt;line-height:1.1}
+.boton i{font-style:normal;font-size:10pt;margin-top:1mm;color:rgb(244 235 221 / .75)}
+.boton.verde{background:#25D366;border-color:#25D366;color:var(--humo)}
+.boton.verde i{color:rgb(20 16 13 / .8)}
+.contactos{margin-top:11mm;font-size:10.5pt;color:rgb(244 235 221 / .8)}
 .firma{margin-top:auto;font-size:8pt;color:rgb(244 235 221 / .5)}
 </style></head><body>${tapa}${indice}${cuerpo.join('')}${foodtruck}${contra}</body></html>`
 }

@@ -9,8 +9,8 @@ Catálogo online de Nuevo Munich (fiambres artesanales desde 1972). React + Vite
 - Detalle de producto con galería, ingredientes, sugerencia, presentaciones, cantidad, relacionados y link compartible (`#p=slug`)
 - Buscador ⌘K / Ctrl+K / "/" (sin tildes, con teclado)
 - "Mi pedido" pide nombre y entrega, y manda el mensaje agrupado por categoría al asistente virtual (WhatsApp 351 701-0545). Las consultas de un producto van a ventas (351 384-4802)
-- Catálogo en PDF para descargar, con índice, QR y enlaces a WhatsApp
-- En celular: barra inferior estilo app, menú desplegable desde abajo y scroll nativo
+- Catálogo en PDF para descargar, con índice y botones a WhatsApp e Instagram
+- En celular: menú hamburguesa arriba y scroll nativo
 - Estilo inspirado en el envase nuevo: negro con dibujos de comida, degradado dorado y franja roja y dorada
 - Sección Food Truck (Superpancho Premium, Picada) con WhatsApp de reservas 351 814-5265
 - Historia, contacto y redes
