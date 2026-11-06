@@ -59,3 +59,21 @@ Importar el repo de GitHub → Framework: Vite → Deploy. Las variables `VITE_S
 ## Marca
 Colores: rojo `#C04B54`, marrón `#5A270D`, dorado `#FFCC00` (en `src/index.css`, bloque `@theme`).
 Tipografías: Cormorant Unicase (títulos) e Inria Sans (texto), las mismas de nuevomunich.com.ar.
+
+## Validación del pedido por email
+
+Antes de mandar el pedido por WhatsApp, el cliente recibe un código de 6 dígitos por mail
+(`api/codigo.js`) y lo ingresa en el catálogo (`api/confirmar.js`). Al validarlo se asigna un
+número de pedido (NM-AAMMDD-XXXX) y se manda el resumen por mail.
+
+Variables de entorno en Vercel (Settings → Environment Variables):
+
+| Variable | Valor |
+|---|---|
+| `GMAIL_USER` | cuenta Gmail que envía los mails |
+| `GMAIL_APP_PASSWORD` | contraseña de aplicación de esa cuenta (requiere verificación en 2 pasos) |
+| `PEDIDOS_EMAIL` | opcional: recibe una copia de cada pedido (ej. ventas@nuevomunich.com.ar) |
+| `CODIGO_SECRET` | opcional: clave para firmar los códigos |
+
+Si faltan `GMAIL_USER` o `GMAIL_APP_PASSWORD`, el catálogo salta la validación y el pedido sale
+directo por WhatsApp como antes.

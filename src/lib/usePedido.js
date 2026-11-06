@@ -38,7 +38,7 @@ export function linkWhatsApp(texto, numero = marca.whatsapp) {
 }
 
 // Mensaje del pedido, agrupado por categoría en el orden del catálogo.
-export function mensajePedido(items, { nombre = '', entrega = 'Retiro en local', direccion = '', comentario = '' } = {}) {
+export function mensajePedido(items, { numero = '', nombre = '', email = '', telefono = '', tipo = '', razonSocial = '', cuit = '', entrega = 'Retiro en local', direccion = '', localidad = '', horario = '', comentario = '' } = {}) {
   const grupos = categorias
     .slice()
     .sort((a, b) => a.orden - b.orden)
@@ -52,17 +52,23 @@ export function mensajePedido(items, { nombre = '', entrega = 'Retiro en local',
     .join('\n\n')
 
   const unidades = items.reduce((a, i) => a + i.cantidad, 0)
+  const t = (v) => String(v || '').trim()
   const lineas = [
-    '🛒 *NUEVO PEDIDO · CATÁLOGO WEB*',
+    numero ? `🛒 *NUEVO PEDIDO ${numero}*` : '🛒 *NUEVO PEDIDO · CATÁLOGO WEB*',
+    numero ? '✅ Email verificado' : false,
     '',
-    nombre.trim() ? `👤 *Cliente:* ${nombre.trim()}` : false,
+    t(nombre) ? `👤 *Cliente:* ${t(nombre)}` : false,
+    tipo === 'Comercio' && t(razonSocial) ? `🏪 *Comercio:* ${t(razonSocial)}${t(cuit) ? ` · CUIT ${t(cuit)}` : ''}` : false,
+    t(telefono) ? `📱 *WhatsApp:* ${t(telefono)}` : false,
+    t(email) ? `✉️ *Email:* ${t(email)}` : false,
     `📦 *Entrega:* ${entrega}`,
-    entrega === 'Delivery' && direccion.trim() ? `📍 *Dirección:* ${direccion.trim()}` : false,
+    entrega === 'Delivery' && t(direccion) ? `📍 *Dirección:* ${[t(direccion), t(localidad)].filter(Boolean).join(', ')}` : false,
+    t(horario) ? `🕒 *Horario preferido:* ${t(horario)}` : false,
     '',
     detalle,
     '',
     `🧾 *Total:* ${unidades} ${unidades === 1 ? 'unidad' : 'unidades'} en ${items.length} ${items.length === 1 ? 'producto' : 'productos'}`,
-    comentario.trim() ? `📝 *Comentarios:* ${comentario.trim()}` : false,
+    t(comentario) ? `📝 *Comentarios:* ${t(comentario)}` : false,
     '',
     '¿Me confirman disponibilidad y precio? Gracias.',
   ]
