@@ -23,13 +23,16 @@ export default function Hero() {
   return (
     <section id="top" className="relative flex flex-col bg-humo sm:min-h-[100svh] ancho:block ancho:h-[100svh] ancho:min-h-[420px]">
       <div className="relative mt-20 aspect-[4/3] w-full shrink-0 overflow-hidden sm:aspect-video ancho:absolute ancho:inset-0 ancho:mt-0 ancho:aspect-auto ancho:h-full">
-        <motion.img
-          src={marca.hero} alt="Trío de panchos y salchicha con piel tipo Frankfurt Nuevo Munich" fetchPriority="high"
+        <picture>
+          <source media="(min-width: 640px)" srcSet={marca.hero} />
+          <motion.img
+          src={marca.heroMovil} alt="Trío de panchos y salchicha con piel tipo Frankfurt Nuevo Munich" fetchPriority="high"
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1.6, ease }}
           className="h-full w-full origin-left object-cover object-[left_35%] sm:object-[left_top]"
         />
+        </picture>
         <Humo />
         <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-humo to-transparent ancho:h-28 ancho:from-humo/70" />
         <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-humo to-transparent ancho:h-20" />

@@ -1,13 +1,27 @@
 import { useEffect, useRef } from 'react'
 
-// Humo que sube de los panchos de la foto principal.
-const FOTO = { ancho: 1672, alto: 941 }
-// Dónde está cada pancho en la foto (fracción del ancho y del alto), con su dispersión.
-const FOCOS = [
-  { x: .105, y: .30, dx: .045, dy: .10 },
-  { x: .245, y: .37, dx: .045, dy: .09 },
-  { x: .375, y: .37, dx: .045, dy: .09 },
-]
+// Humo que sube de los panchos de la foto principal (solo de los panchos, no del envase).
+// Hay dos fotos: la de celular (original 4:3) y la de pantalla ancha (16:9 con fondo extendido).
+// focos: dónde está cada pancho (fracción del ancho y del alto) y su dispersión.
+// escala: tamaño del humo relativo al ancho de la foto (en la ancha los panchos ocupan menos).
+const FOTOS = {
+  movil: {
+    ancho: 1280, alto: 960, escala: 1,
+    focos: [
+      { x: .12, y: .26, dx: .04, dy: .05 },
+      { x: .26, y: .33, dx: .04, dy: .05 },
+      { x: .40, y: .34, dx: .04, dy: .05 },
+    ],
+  },
+  ancha: {
+    ancho: 1920, alto: 1080, escala: .64,
+    focos: [
+      { x: .044, y: .30, dx: .025, dy: .045 },
+      { x: .133, y: .36, dx: .025, dy: .045 },
+      { x: .222, y: .37, dx: .025, dy: .045 },
+    ],
+  },
+}
 const azar = (a, b) => a + Math.random() * (b - a)
 
 // Voluta: varias nubecitas blandas a lo largo de una línea ondulada, para que no parezca una esfera.
@@ -47,7 +61,7 @@ export default function Humo() {
     const maximo = tactil ? 22 : 36
     const pasoMinimo = tactil ? 1000 / 30 : 0
     const vecino = lienzo.parentElement.querySelector('img')
-    const caja = { w: 0, h: 0, escala: 1, ox: 0, oy: 0 }
+    const caja = { w: 0, h: 0, escala: 1, ox: 0, oy: 0, foto: FOTOS.movil }
 
     const medir = () => {
       const r = lienzo.parentElement.getBoundingClientRect()
@@ -56,18 +70,20 @@ export default function Humo() {
       lienzo.height = Math.round(r.height * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       // Repite el cálculo de object-fit: cover para ubicar los panchos en cualquier pantalla
-      const escala = Math.max(r.width / FOTO.ancho, r.height / FOTO.alto)
+      const foto = (vecino.currentSrc || vecino.src).includes('hero-movil') ? FOTOS.movil : FOTOS.ancha
+      const escala = Math.max(r.width / foto.ancho, r.height / foto.alto)
       const [px, py] = getComputedStyle(vecino).objectPosition.split(' ').map((v) => parseFloat(v) / 100)
-      Object.assign(caja, { w: r.width, h: r.height, escala, ox: (r.width - FOTO.ancho * escala) * (px || 0), oy: (r.height - FOTO.alto * escala) * (py || 0) })
+      Object.assign(caja, { w: r.width, h: r.height, escala, foto, ox: (r.width - foto.ancho * escala) * (px || 0), oy: (r.height - foto.alto * escala) * (py || 0) })
     }
 
     const nueva = (edad = 0) => {
-      const f = FOCOS[Math.floor(Math.random() * FOCOS.length)]
-      const anchoFoto = FOTO.ancho * caja.escala
+      const { focos, ancho, alto, escala: k } = caja.foto
+      const f = focos[Math.floor(Math.random() * focos.length)]
+      const anchoFoto = ancho * caja.escala * k
       const vida = azar(5.5, 9.5)
       return {
-        x: caja.ox + anchoFoto * (f.x + azar(-f.dx, f.dx)),
-        y: caja.oy + FOTO.alto * caja.escala * (f.y + azar(-f.dy, f.dy)),
+        x: caja.ox + ancho * caja.escala * (f.x + azar(-f.dx, f.dx)),
+        y: caja.oy + alto * caja.escala * (f.y + azar(-f.dy, f.dy)),
         vy: anchoFoto * azar(.014, .028),
         deriva: anchoFoto * azar(.004, .012),
         fase: azar(0, 6.28),
@@ -117,11 +133,14 @@ export default function Humo() {
     }
     raf = requestAnimationFrame(cuadro)
 
+    // Al cambiar de foto (girar el celular, achicar la ventana) se recalcula y se rearma el humo
+    const alCargar = () => { medir(); humo = humo.map(() => { const p = nueva(); p.edad = azar(0, p.vida); return p }) }
+    vecino.addEventListener('load', alCargar)
     const ro = new ResizeObserver(medir)
     ro.observe(lienzo.parentElement)
     const io = new IntersectionObserver(([e]) => { vista.dentro = e.isIntersecting })
     io.observe(lienzo)
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); io.disconnect() }
+    return () => { cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); vecino.removeEventListener('load', alCargar) }
   }, [])
 
   return <canvas ref={ref} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full" />

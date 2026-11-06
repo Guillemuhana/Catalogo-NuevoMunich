@@ -417,7 +417,8 @@ export const productos = [
 export const marca = {
   logo: 'img/marca/logo.webp',
   ogianco: 'img/marca/ogianco.webp',
-  hero: 'img/marca/hero.webp',
+  hero: 'img/marca/hero.webp',          // pantalla ancha (16:9, con lugar para el texto)
+  heroMovil: 'img/marca/hero-movil.webp', // celular (4:3, la foto original)
   oktoberfest: ['img/marca/oktoberfest-1.webp', 'img/marca/oktoberfest-2.webp', 'img/marca/oktoberfest-3.webp', 'img/marca/oktoberfest-4.webp', 'img/marca/oktoberfest-5.webp'],
   envaseNuevo: 'img/marca/envase-frankfurt.webp',
   foodtruck: ['img/marca/foodtruck-1.webp', 'img/marca/foodtruck-2.webp'],
