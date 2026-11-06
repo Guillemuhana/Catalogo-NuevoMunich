@@ -2,6 +2,8 @@
 // Las imágenes viven en public/img/. Si editás algo, regenerá el SQL:
 //   node scripts/generar-seed.mjs > supabase/seed.sql
 
+import { etiquetas } from './nutricion.js'
+
 export const categorias = [
   { slug: 'feteados', nombre: 'Feteados', bajada: 'Listos para servir. 100 g aprox., envasados al vacío.', imagen_url: 'img/categorias/feteados.webp', banner_url: 'img/banners/feteados.webp', orden: 1 },
   { slug: 'jamones', nombre: 'Jamones', bajada: 'Piezas enteras y fracciones para fiambrería y mesa.', imagen_url: 'img/categorias/jamones.webp', banner_url: 'img/banners/jamones.webp', orden: 2 },
@@ -12,7 +14,7 @@ export const categorias = [
   { slug: 'especialidades', nombre: 'Especialidades', bajada: 'Recetas austríacas y alemanas heredadas desde 1972.', imagen_url: 'img/categorias/especialidades.webp', banner_url: 'img/banners/especialidades.webp', orden: 7 },
 ]
 
-const p = (categoria, nombre, presentaciones = [], extra = {}) => ({
+const base = (categoria, nombre, presentaciones = [], extra = {}) => ({
   slug: (categoria + '-' + nombre)
     .toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -29,6 +31,12 @@ const p = (categoria, nombre, presentaciones = [], extra = {}) => ({
   activo: true,
   ...extra,
 })
+
+// La etiqueta del envase manda sobre el texto de la web.
+const p = (...args) => {
+  const producto = base(...args)
+  return { ...producto, ...etiquetas[producto.slug] }
+}
 
 const FET = ['100 g aprox. · al vacío']
 

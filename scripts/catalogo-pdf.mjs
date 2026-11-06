@@ -94,7 +94,8 @@ async function ficha(p) {
         <h3><a href="${esc(link)}">${esc(p.nombre)}</a></h3>
         ${p.presentaciones.length ? `<p class="pres">${p.presentaciones.map((x) => `<span>${esc(x)}</span>`).join('')}</p>` : ''}
         ${p.descripcion ? `<p class="dato">${esc(p.descripcion)}</p>` : ''}
-        <p class="dato"><b>Ingredientes</b>${esc(p.ingredientes)}</p>
+        ${p.ingredientes ? `<p class="dato"><b>Ingredientes</b>${esc(p.ingredientes.replace(/ \*Harina de trigo enriquecida.*$/, ''))}</p>` : ''}
+        ${p.alergenos ? `<p class="dato alergeno">${esc(p.alergenos)}</p>` : ''}
         <p class="dato"><b>Sugerencia</b>${esc(p.sugerencias)}</p>
       </div>
     </article>`
@@ -263,13 +264,14 @@ em{font-style:italic}
 .foto{display:block;flex:1;min-height:0;background:#fff}
 .foto img{width:100%;height:100%;object-fit:contain;display:block}
 .clasico{position:absolute;top:2mm;left:2mm;background:var(--oro);color:var(--humo);font-size:6.5pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.7mm 2mm;border-radius:5mm}
-.txt{flex:none;height:54mm;padding:2.8mm 3.2mm 2.4mm;border-top:.25mm solid #f1e9dc;overflow:hidden}
-.grilla-alta .txt{height:54mm}
+.txt{flex:none;height:64mm;padding:2.8mm 3.2mm 2.4mm;border-top:.25mm solid #f1e9dc;overflow:hidden}
+.grilla-alta .txt{height:64mm}
 .txt h3{font-size:13pt;line-height:1.05;color:var(--tinta)}
 .pres{margin-top:1.5mm;display:flex;flex-wrap:wrap;gap:.8mm}
 .pres span{font-size:6.6pt;line-height:1.1;padding:.6mm 1.5mm;border-radius:5mm;background:#f5ecdc;color:#5a270d;white-space:nowrap}
 .dato{margin-top:1.6mm;font-size:7.3pt;line-height:1.27;font-weight:300;color:#3d2a1f}
 .dato b{display:block;font-size:5.8pt;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--munich);margin-bottom:.2mm}
+.alergeno{font-weight:700;text-transform:uppercase;color:#a3202f}
 .relleno{border-radius:3mm;overflow:hidden;min-height:0;background:var(--carbon)}
 .relleno img{width:100%;height:100%;object-fit:cover;display:block}
 

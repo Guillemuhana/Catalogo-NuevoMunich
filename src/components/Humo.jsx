@@ -100,12 +100,12 @@ export default function Humo() {
     medir()
     // Arranca ya formado, sin esperar a que suba el primero
     let humo = Array.from({ length: maximo }, () => { const p = nueva(); p.edad = azar(0, p.vida); return p })
-    let raf = 0
+    const anim = { raf: 0 }
     let previo = 0
     const vista = { dentro: true }
 
     const cuadro = (ahora) => {
-      raf = requestAnimationFrame(cuadro)
+      anim.raf = requestAnimationFrame(cuadro)
       if (!vista.dentro || document.hidden) { previo = ahora; return }
       const delta = ahora - previo
       if (delta < pasoMinimo) return
@@ -131,7 +131,7 @@ export default function Humo() {
         ctx.restore()
       }
     }
-    raf = requestAnimationFrame(cuadro)
+    anim.raf = requestAnimationFrame(cuadro)
 
     // Al cambiar de foto (girar el celular, achicar la ventana) se recalcula y se rearma el humo
     const alCargar = () => { medir(); humo = humo.map(() => { const p = nueva(); p.edad = azar(0, p.vida); return p }) }
@@ -140,7 +140,7 @@ export default function Humo() {
     ro.observe(lienzo.parentElement)
     const io = new IntersectionObserver(([e]) => { vista.dentro = e.isIntersecting })
     io.observe(lienzo)
-    return () => { cancelAnimationFrame(raf); ro.disconnect(); io.disconnect(); vecino.removeEventListener('load', alCargar) }
+    return () => { cancelAnimationFrame(anim.raf); ro.disconnect(); io.disconnect(); vecino.removeEventListener('load', alCargar) }
   }, [])
 
   return <canvas ref={ref} aria-hidden className="pointer-events-none absolute inset-0 h-full w-full" />

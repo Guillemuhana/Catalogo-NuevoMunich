@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, Minus, Plus, X, MessageCircle, ShoppingBag } from 'lucide-react'
 import ProductImage from './ProductImage'
+import FichaNutricional from './FichaNutricional'
 import { linkWhatsApp } from '../lib/usePedido'
 import { fotosDe, miniatura } from '../lib/data'
 
@@ -83,7 +84,6 @@ function Detalle({ producto, categoria, relacionados, onCerrar, onAgregar, onAbr
           <h2 className="pr-10 font-display text-4xl leading-[1] text-crema md:text-5xl">{producto.nombre}</h2>
 
           {texto && <p className="mt-4 leading-relaxed font-light text-crema/80">{texto}</p>}
-          {producto.ingredientes && <Dato titulo="Ingredientes">{producto.ingredientes}</Dato>}
           {producto.sugerencias && <Dato titulo="Sugerencia">{producto.sugerencias}</Dato>}
 
           {pres.length > 0 && (
@@ -117,6 +117,8 @@ function Detalle({ producto, categoria, relacionados, onCerrar, onAgregar, onAbr
               <MessageCircle size={16} /> Consultar por WhatsApp
             </a>
           </div>
+
+          <FichaNutricional producto={producto} />
 
           {relacionados.length > 0 && (
             <div className="mt-9 border-t border-white/5 pt-6">
