@@ -64,6 +64,14 @@ const fuente = (familia, paquete, peso) => {
   return `@font-face{font-family:'${familia}';font-weight:${peso};src:url('${f}') format('woff2')}`
 }
 
+const ENVASES_TAPA = [
+  'feteados-bondiola',
+  'arrollados-arrollado-de-pollo',
+  'jamones-jamon-cocido-tipo-bavaro',
+  'salames-salame-tipo-colonia',
+  'linea-ogianco-matambre-arrollado-ogianco',
+]
+
 const POR_PAGINA = 6
 const paginas = []
 for (const c of categorias.slice().sort((a, b) => a.orden - b.orden)) {
@@ -139,9 +147,18 @@ async function armar() {
   await sharp(join(pub, marca.logo)).png().toFile(join(temp, 'logo.png'))
   const logoPng = pathToFileURL(join(temp, 'logo.png')).href
 
+  // La foto de la tapa muestra salchichas: la franja suma envases del resto de las líneas.
+  const envasesTapa = await Promise.all(ENVASES_TAPA.map(async (slug) => {
+    const p = productos.find((x) => x.slug === slug)
+    if (!p) throw new Error(`Envase de tapa inexistente: ${slug}`)
+    const c = categorias.find((x) => x.slug === p.categoria)
+    return `<a href="#cat-${c.slug}"><img src="${await jpg(p.imagenes[0], 420, 84)}" alt="${esc(p.nombre)}"><span>${esc(c.nombre)}</span></a>`
+  }))
+
   const tapa = `
     <section class="pagina tapa">
       <img class="tapa-foto" src="${await tapaImg(marca.hero)}" alt="">
+      <div class="tapa-envases">${envasesTapa.join('')}</div>
       <div class="tapa-txt">
         <img class="tapa-logo" src="${logoPng}" alt="Nuevo Munich">
         <small>Córdoba · Desde 1972</small>
@@ -224,7 +241,11 @@ em{font-style:italic}
 
 .tapa{background:var(--humo);color:var(--crema)}
 .tapa-foto{position:absolute;top:0;left:0;width:100%;height:178mm;display:block}
-.tapa-txt{position:absolute;left:16mm;right:16mm;top:176mm}
+.tapa-envases{position:absolute;left:16mm;right:16mm;top:135mm;display:grid;grid-template-columns:repeat(5,1fr);gap:3mm}
+.tapa-envases a{display:block;background:#fff;border-radius:2.5mm;overflow:hidden}
+.tapa-envases img{display:block;width:100%;height:31mm;object-fit:contain}
+.tapa-envases span{display:block;padding:1.3mm 1mm;background:var(--carbon);color:var(--crema);font-size:7pt;letter-spacing:.06em;text-align:center;white-space:nowrap}
+.tapa-txt{position:absolute;left:16mm;right:16mm;top:180mm}
 .tapa-logo{height:27mm;margin:0 0 7mm -2mm;display:block}
 .tapa-txt small{display:block;font-size:9pt;letter-spacing:.38em;text-transform:uppercase;color:var(--oro);margin-bottom:4mm}
 .tapa-txt h1{font-size:50pt;line-height:.98;color:var(--crema)}
