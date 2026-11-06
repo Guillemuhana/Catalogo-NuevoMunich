@@ -146,14 +146,19 @@ body { font-family: var(--font-sans); overflow-x: clip; }
 .no-scrollbar { scrollbar-width: none; }
 
 /* Gorro de tela: copa abullonada, pliegues y banda satinada. */
-.gorro-chef {
+.recetas-inicial {
   position: relative;
+  display: inline-block;
+}
+.gorro-chef {
+  position: absolute;
+  bottom: calc(100% - 7px);
+  left: -7px;
   display: inline-block;
   width: 32px;
   height: 34px;
-  margin-right: 3px;
   flex-shrink: 0;
-  transform: rotate(-9deg);
+  transform: scale(.72) rotate(-16deg);
   transform-origin: 50% 85%;
   filter: drop-shadow(0 3px 3px rgb(0 0 0 / .35));
   transition: transform .55s cubic-bezier(.22, 1, .36, 1), filter .55s;
@@ -189,13 +194,13 @@ body { font-family: var(--font-sans); overflow-x: clip; }
   background: linear-gradient(100deg, #ccc3b2, #fffdf5 30%, #f5f0e5 62%, #b9ae98);
   box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgb(96 73 34 / .25), 0 -1px 2px rgb(104 87 53 / .18);
 }
-button:is(:hover, :focus-visible) > .gorro-chef {
-  transform: translateY(-3px) rotate(5deg);
+button:is(:hover, :focus-visible) .gorro-chef {
+  transform: translateY(-2px) scale(.72) rotate(-6deg);
   filter: drop-shadow(0 4px 6px rgb(255 193 70 / .3));
 }
 @media (prefers-reduced-motion: reduce) {
   .gorro-chef { transition: none; }
-  button:is(:hover, :focus-visible) > .gorro-chef { transform: rotate(-9deg); }
+  button:is(:hover, :focus-visible) .gorro-chef { transform: scale(.72) rotate(-16deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
