@@ -16,8 +16,8 @@ export default function Historia() {
   const x = useTransform(scrollYProgress, [0, 1], ['10%', '-30%'])
 
   return (
-    <section id="historia" ref={ref} className="rautenmuster relative mt-32 overflow-hidden border-y border-white/5 bg-carbon py-28 md:py-40">
-      <motion.p style={{ x }} className="pointer-events-none absolute top-10 left-0 font-display text-[22vw] leading-none whitespace-nowrap text-outline opacity-20">
+    <section id="historia" ref={ref} className="doodles relative mt-20 md:mt-32 overflow-hidden border-y border-white/5 bg-carbon py-28 md:py-40">
+      <motion.p style={{ x }} className="pointer-events-none absolute top-10 left-0 hidden font-display md:block text-[22vw] leading-none whitespace-nowrap text-outline opacity-20">
         Tradition seit 1972
       </motion.p>
 
@@ -32,7 +32,7 @@ export default function Historia() {
         <div className="flex flex-col justify-center">
           <p className="mb-5 flex items-center gap-3 text-[11px] tracking-[.4em] text-oro uppercase"><span className="h-px w-10 bg-oro" />Nuestra historia</p>
           <h2 className="font-display text-5xl leading-[.95] md:text-7xl">
-            Una empresa <span className="italic text-munich">familiar</span>, un oficio heredado.
+            Una empresa <span className="texto-oro pr-[.08em] italic">familiar</span>, un oficio heredado.
           </h2>
           <div className="mt-12 space-y-8">
             {hitos.map((h, i) => (

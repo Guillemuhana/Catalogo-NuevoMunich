@@ -1,10 +1,31 @@
 import { motion, AnimatePresence } from 'motion/react'
 import { Minus, Plus, X, Trash2, MessageCircle } from 'lucide-react'
+import { useState } from 'react'
 import { linkWhatsApp, mensajePedido } from '../lib/usePedido'
+import { marca } from '../data/seed'
 import { miniatura } from '../lib/data'
+
+const leerNombre = () => {
+  try { return localStorage.getItem('nm-cliente') || '' } catch { return '' }
+}
+const campo = 'w-full rounded-xl border border-white/10 bg-humo/60 px-3.5 py-3 text-base text-crema outline-none transition placeholder:text-crema/35 focus:border-oro/60 md:text-sm'
 
 export default function PedidoDrawer({ pedido, onCerrar }) {
   const { items, cambiar, vaciar, total } = pedido
+  const [nombre, setNombre] = useState(leerNombre)
+  const [entrega, setEntrega] = useState('Retiro en local')
+  const [direccion, setDireccion] = useState('')
+  const [comentario, setComentario] = useState('')
+  const [revisar, setRevisar] = useState(false)
+
+  const faltaNombre = !nombre.trim()
+  const faltaDireccion = entrega === 'Delivery' && !direccion.trim()
+  const enviar = (e) => {
+    if (faltaNombre || faltaDireccion) { e.preventDefault(); setRevisar(true); return }
+    try { localStorage.setItem('nm-cliente', nombre.trim()) } catch { /* sin storage */ }
+  }
+  const link = linkWhatsApp(mensajePedido(items, { nombre, entrega, direccion, comentario }), marca.whatsappBot)
+
   return (
     <motion.div className="fixed inset-0 z-50">
       <motion.div onClick={onCerrar} className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -25,7 +46,7 @@ export default function PedidoDrawer({ pedido, onCerrar }) {
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-6">
           {items.length === 0 ? (
             <div className="flex h-full flex-col items-center justify-center text-center">
               <span className="font-display text-6xl text-outline">vacío</span>
@@ -56,14 +77,38 @@ export default function PedidoDrawer({ pedido, onCerrar }) {
               </AnimatePresence>
             </ul>
           )}
+
+          {items.length > 0 && (
+            <div className="mt-6 space-y-3 border-t border-white/5 pt-6">
+              <p className="text-[11px] tracking-[.3em] text-crema/50 uppercase">Tus datos</p>
+              <div>
+                <input value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Tu nombre o comercio" aria-label="Tu nombre o comercio" autoComplete="name" className={campo} />
+                {revisar && faltaNombre && <p className="mt-1 text-xs text-oro">Contanos a nombre de quién va el pedido.</p>}
+              </div>
+              <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Forma de entrega">
+                {['Retiro en local', 'Delivery'].map((o) => (
+                  <button key={o} type="button" role="radio" aria-checked={entrega === o} onClick={() => setEntrega(o)}
+                    className={`h-11 rounded-xl border text-sm transition ${entrega === o ? 'border-oro bg-oro font-bold text-humo' : 'border-white/10 text-crema/75 hover:border-crema/40'}`}>{o}</button>
+                ))}
+              </div>
+              {entrega === 'Delivery' && (
+                <div>
+                  <input value={direccion} onChange={(e) => setDireccion(e.target.value)} placeholder="Dirección de entrega" aria-label="Dirección de entrega" autoComplete="street-address" className={campo} />
+                  {revisar && faltaDireccion && <p className="mt-1 text-xs text-oro">Necesitamos la dirección para el delivery.</p>}
+                </div>
+              )}
+              <textarea value={comentario} onChange={(e) => setComentario(e.target.value)} rows={2} placeholder="Comentarios (opcional)" aria-label="Comentarios" className={`${campo} resize-none`} />
+            </div>
+          )}
         </div>
 
         {items.length > 0 && (
-          <div className="space-y-3 border-t border-white/5 p-6">
-            <a href={linkWhatsApp(mensajePedido(items))} target="_blank" rel="noreferrer"
+          <div className="space-y-2 border-t border-white/5 p-5">
+            <a href={link} onClick={enviar} target="_blank" rel="noreferrer"
               className="flex h-14 items-center justify-center gap-2 rounded-full bg-[#25D366] text-sm font-bold tracking-[.12em] text-humo uppercase transition hover:brightness-110">
               <MessageCircle size={18} /> Enviar pedido por WhatsApp
             </a>
+            <p className="text-center text-[11px] text-crema/45">Llega a nuestro asistente virtual, ordenado por categoría.</p>
             <button onClick={vaciar} className="flex w-full items-center justify-center gap-2 py-2 text-xs text-crema/40 transition hover:text-munich">
               <Trash2 size={13} /> Vaciar pedido
             </button>

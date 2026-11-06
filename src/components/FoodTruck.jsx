@@ -23,7 +23,7 @@ export default function FoodTruck() {
   const wa = `https://wa.me/${marca.whatsappFoodTruck}?text=${encodeURIComponent('¡Hola! Quiero consultar por el Food Truck de Nuevo Munich para un evento.')}`
 
   return (
-    <section id="foodtruck" ref={ref} className="relative mx-auto mt-32 max-w-7xl px-5 md:px-8">
+    <section id="foodtruck" ref={ref} className="relative mx-auto mt-20 max-w-7xl md:mt-32 px-5 md:px-8">
       <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-munich-deep via-munich to-cuero p-8 md:p-16">
         <div className="absolute inset-0 rautenmuster opacity-60" />
         <div className="relative grid items-center gap-12 lg:grid-cols-[1.1fr_.9fr]">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { marca } from '../data/seed'
+import { categorias, marca } from '../data/seed'
 
 const KEY = 'nm-pedido-v2'
 const leer = () => {
@@ -32,11 +32,39 @@ export function usePedido() {
   return { items, agregar, cambiar, vaciar, total }
 }
 
-export function linkWhatsApp(texto) {
-  return `https://wa.me/${marca.whatsapp}?text=${encodeURIComponent(texto)}`
+// Por defecto va a ventas; el pedido armado y el chat van al asistente virtual.
+export function linkWhatsApp(texto, numero = marca.whatsapp) {
+  return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`
 }
 
-export function mensajePedido(items) {
-  const lineas = items.map((i) => `• ${i.cantidad} × ${i.nombre}${i.presentacion ? ` (${i.presentacion})` : ''}`)
-  return `¡Hola Nuevo Munich! 👋 Quiero hacer este pedido desde el catálogo:\n\n${lineas.join('\n')}\n\n¿Me confirman disponibilidad y precio? Gracias.`
+// Mensaje del pedido, agrupado por categoría en el orden del catálogo.
+export function mensajePedido(items, { nombre = '', entrega = 'Retiro en local', direccion = '', comentario = '' } = {}) {
+  const grupos = categorias
+    .slice()
+    .sort((a, b) => a.orden - b.orden)
+    .map((c) => ({ titulo: c.nombre, lista: items.filter((i) => i.categoria === c.slug) }))
+  const otros = items.filter((i) => !categorias.some((c) => c.slug === i.categoria))
+  if (otros.length) grupos.push({ titulo: 'Otros', lista: otros })
+
+  const detalle = grupos
+    .filter((g) => g.lista.length)
+    .map((g) => `*${g.titulo.toUpperCase()}*\n${g.lista.map((i) => `• ${i.cantidad} × ${i.nombre}${i.presentacion ? ` (${i.presentacion})` : ''}`).join('\n')}`)
+    .join('\n\n')
+
+  const unidades = items.reduce((a, i) => a + i.cantidad, 0)
+  const lineas = [
+    '🛒 *NUEVO PEDIDO · CATÁLOGO WEB*',
+    '',
+    nombre.trim() ? `👤 *Cliente:* ${nombre.trim()}` : false,
+    `📦 *Entrega:* ${entrega}`,
+    entrega === 'Delivery' && direccion.trim() ? `📍 *Dirección:* ${direccion.trim()}` : false,
+    '',
+    detalle,
+    '',
+    `🧾 *Total:* ${unidades} ${unidades === 1 ? 'unidad' : 'unidades'} en ${items.length} ${items.length === 1 ? 'producto' : 'productos'}`,
+    comentario.trim() ? `📝 *Comentarios:* ${comentario.trim()}` : false,
+    '',
+    '¿Me confirman disponibilidad y precio? Gracias.',
+  ]
+  return lineas.filter((l) => l !== false && l !== undefined).join('\n').replace(/\n{3,}/g, '\n\n')
 }

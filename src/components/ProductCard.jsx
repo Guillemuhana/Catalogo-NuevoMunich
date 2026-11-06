@@ -18,7 +18,12 @@ export default function ProductCard({ producto, categoria, index, onAbrir, onAgr
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: .6, ease: [.22, 1, .36, 1], delay: (index % 4) * .05 }}
       onMouseEnter={() => setActiva(true)}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[.07] bg-carbon transition duration-300 hover:-translate-y-1 hover:border-oro/40 hover:shadow-2xl hover:shadow-black/50"
+      onMouseMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect()
+        e.currentTarget.style.setProperty('--x', `${e.clientX - r.left}px`)
+        e.currentTarget.style.setProperty('--y', `${e.clientY - r.top}px`)
+      }}
+      className="borde-luz group relative flex h-full flex-col overflow-hidden rounded-2xl border border-white/[.07] bg-carbon transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-black/60"
     >
       <div className="relative aspect-square overflow-hidden bg-white">
         <ProductImage producto={producto} categoria={categoria} />
@@ -26,9 +31,9 @@ export default function ProductCard({ producto, categoria, index, onAbrir, onAgr
           <img src={miniatura(alterna)} alt="" aria-hidden decoding="async"
             className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         )}
-        {producto.destacado && (
+        {(producto.nuevo || producto.destacado) && (
           <span className="absolute bottom-2.5 left-2.5 flex items-center gap-1 rounded-full bg-oro px-2.5 py-1 text-[10px] font-bold tracking-wider text-humo uppercase shadow-md">
-            <Star size={10} fill="currentColor" /> Clásico
+            {producto.nuevo ? 'Nuevo envase' : <><Star size={10} fill="currentColor" /> Clásico</>}
           </span>
         )}
       </div>
@@ -45,7 +50,7 @@ export default function ProductCard({ producto, categoria, index, onAbrir, onAgr
             {pres.length > 1 && <span className="block text-crema/40">+{pres.length - 1} {pres.length === 2 ? 'opción' : 'opciones'}</span>}
           </p>
           <button
-            onClick={() => onAgregar(producto, pres[0])}
+            onClick={(e) => onAgregar(producto, pres[0], 1, e.currentTarget.closest('article').querySelector('img')?.getBoundingClientRect())}
             aria-label={`Agregar ${producto.nombre} al pedido`}
             className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema transition duration-300 hover:rotate-90 hover:border-munich hover:bg-munich md:h-10 md:w-10"
           >

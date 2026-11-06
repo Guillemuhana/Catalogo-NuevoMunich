@@ -264,10 +264,14 @@ export const productos = [
     ],
   }),
   p('salchichas', 'Salchicha Tipo Frankfurt', ['3 unidades · 280 g', '5 unidades · 400 g', '20 unidades · 1,8 kg', '50 unidades · 4,5 kg'], {
+    descripcion: 'Con piel. Nuevo envase. Libre de gluten.',
+    nuevo: true,
+    sinGluten: true,
     ingredientes: 'Carne vacuna, carne de cerdo, tocino, pimiento, ajo, luego de ser cocida es ahumada.',
     sugerencias: 'Se puede servir acompañada de mostaza, con unos panecillos y pasta de rábanos. Ideal para el auténtico superpancho alemán.',
     destacado: true,
     imagenes: [
+      'img/productos/salchichas-salchicha-tipo-frankfurt/nuevo.webp',
       'img/productos/salchichas-salchicha-tipo-frankfurt/1.webp',
       'img/productos/salchichas-salchicha-tipo-frankfurt/2.webp',
       'img/productos/salchichas-salchicha-tipo-frankfurt/3.webp',
@@ -413,13 +417,18 @@ export const marca = {
   logo: 'img/marca/logo.webp',
   ogianco: 'img/marca/ogianco.webp',
   hero: 'img/marca/hero.webp',
-  oktoberfest: ['img/marca/oktoberfest-1.webp', 'img/marca/oktoberfest-2.webp'],
+  oktoberfest: ['img/marca/oktoberfest-1.webp', 'img/marca/oktoberfest-2.webp', 'img/marca/oktoberfest-3.webp', 'img/marca/oktoberfest-4.webp', 'img/marca/oktoberfest-5.webp'],
+  envaseNuevo: 'img/marca/envase-frankfurt.webp',
   foodtruck: ['img/marca/foodtruck-1.webp', 'img/marca/foodtruck-2.webp'],
-  whatsapp: '5493513844802',
+  catalogoPdf: 'catalogo-nuevo-munich.pdf',
+  catalogoTapa: 'img/marca/catalogo-tapa.webp',
+  whatsapp: '5493513844802',      // ventas
+  whatsappBot: '5493517010545',   // asistente virtual (chatbot)
   whatsappFoodTruck: '5493518145265',
   telefono: '351 499-8803',
   email: 'ventas@nuevomunich.com.ar',
   instagram: 'https://www.instagram.com/nuevomunich/',
+  instagramUsuario: '@nuevomunich',
   facebook: 'https://www.facebook.com/NuevoMunichSRL',
   web: 'https://nuevomunich.com.ar/',
 }

@@ -30,6 +30,7 @@ export default function CategorySection({ categoria, productos, numero, onAbrir,
           </h2>
           {categoria.bajada && <p className="mt-2 text-sm font-light text-crema/80 md:mt-3 md:text-base">{categoria.bajada}</p>}
         </div>
+        <span className="franja absolute inset-x-0 bottom-0" />
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3 xl:grid-cols-4">

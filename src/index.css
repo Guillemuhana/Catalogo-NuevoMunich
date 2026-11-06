@@ -1,9 +1,9 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-humo: #140a05;      /* fondo ahumadero */
-  --color-carbon: #1e110a;
-  --color-roble: #2b1910;
+  --color-humo: #14100d;      /* negro del envase nuevo */
+  --color-carbon: #1d1815;
+  --color-roble: #2b2420;
   --color-cuero: #5a270d;     /* marrón de marca */
   --color-munich: #c04b54;    /* rojo de marca */
   --color-munich-deep: #a3202f;
@@ -15,11 +15,16 @@
   --font-sans: 'Inria Sans', system-ui, sans-serif;
 
   --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-lento: marquee 55s linear infinite;
+  --animate-marquee-inverso: marquee 60s linear infinite reverse;
   --animate-spin-slow: spin 22s linear infinite;
 }
 
 /* Pantalla apaisada con lugar para poner el texto al lado de la foto del hero */
 @custom-variant ancho (@media (min-aspect-ratio: 7/5) and (min-width: 640px));
+
+/* Celular y tablet con altura suficiente: barra inferior estilo app */
+@custom-variant con-barra (@media (max-width: 1023px) and (min-height: 481px));
 
 /* La foto cubre la pantalla y la comida termina en el 60 % de su ancho. Como la foto es 16:9,
    su ancho real es el mayor entre 100vw y 177.7vh: de ahí sale dónde empieza la zona libre. */
@@ -41,7 +46,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
-body { font-family: var(--font-sans); overflow-x: hidden; }
+body { font-family: var(--font-sans); overflow-x: clip; }
 
 ::selection { background: var(--color-munich); color: var(--color-crema); }
 
@@ -64,6 +69,71 @@ body { font-family: var(--font-sans); overflow-x: hidden; }
   color: transparent;
 }
 
+/* --- Estilo del envase nuevo --- */
+
+/* Dorado a naranja, como "FRANKFURT" en el paquete */
+.texto-oro {
+  background: linear-gradient(100deg, #ffd84d 0%, #ffb100 48%, #f07c00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.texto-instagram {
+  background: linear-gradient(100deg, #f9ce34, #ee2a7b 55%, #a23bd6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Franja roja y dorada que cruza el paquete */
+.franja {
+  display: block;
+  height: 5px;
+  background: linear-gradient(to right, #c8102e 0 50%, #f7a600 50% 100%);
+}
+
+/* Dibujos de comida en línea blanca, como el fondo del paquete */
+.doodles {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' fill='none' stroke='%23ffffff' stroke-opacity='.075' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='18' y='26' width='64' height='20' rx='10' transform='rotate(-20 50 36)'/%3E%3Cpath d='M15 48l-6 5M84 24l6-5'/%3E%3Ccircle cx='150' cy='40' r='23'/%3E%3Ccircle cx='150' cy='40' r='3'/%3E%3Ccircle cx='140' cy='30' r='2.5'/%3E%3Ccircle cx='161' cy='32' r='2'/%3E%3Ccircle cx='159' cy='50' r='2.5'/%3E%3Cpath d='M212 18v42M204 18v12a8 8 0 0 0 16 0V18'/%3E%3Cpath d='M40 104c14-14 36-14 46 2 9 15-3 33-21 33-13 0-21-6-25-14s-7-14 0-21z'/%3E%3Ccircle cx='64' cy='118' r='6'/%3E%3Cpath d='M130 90c20 8 30 28 24 52-20-8-30-28-24-52zM133 98l18 40'/%3E%3Cpath d='M197 96c0 18 8 28 20 34-12 0-26-6-28-22-1-6 3-12 8-12z'/%3E%3Cpath d='M197 96l-3-8 7-1'/%3E%3Cpath d='M20 186h62l-7 30H27zM27 186c0-11 8-18 24-18s24 7 24 18'/%3E%3Cpath d='M118 216c13-30 34-30 47 0M141 216v-30M141 194l-9-9M141 194l9-9M141 204l-12-9M141 204l12-9'/%3E%3Crect x='190' y='178' width='38' height='38' rx='5' transform='rotate(12 209 197)'/%3E%3Cpath d='M197 196l22 5M196 206l22 5'/%3E%3C/svg%3E");
+}
+
+/* Borde dorado que sigue al mouse */
+.borde-luz::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(240px circle at var(--x, 50%) var(--y, 50%), #ffc21a, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity .3s;
+  pointer-events: none;
+}
+.borde-luz:hover::before { opacity: 1; }
+
+/* Brasas del hero */
+.brasa {
+  position: absolute;
+  bottom: -10px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #ffb347;
+  box-shadow: 0 0 8px 2px rgb(255 140 30 / .75);
+  opacity: 0;
+  animation: brasa 9s linear infinite;
+}
+@keyframes brasa {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  12% { opacity: .9; }
+  70% { opacity: .5; }
+  100% { transform: translate(-46px, -85vh) scale(.3); opacity: 0; }
+}
+
 /* Patrón rombos bávaros, muy sutil */
 .rautenmuster {
   background-image:
@@ -79,5 +149,11 @@ body { font-family: var(--font-sans); overflow-x: hidden; }
 .no-scrollbar { scrollbar-width: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .grain::after, .animate-marquee, .animate-spin-slow { animation: none; }
+  .grain::after, .animate-marquee, .animate-marquee-lento, .animate-marquee-inverso, .animate-spin-slow, .brasa { animation: none; }
+  .brasa { display: none; }
+}
+
+/* En celular el grano animado gasta batería y casi no se nota */
+@media (max-width: 767px) {
+  .grain::after { display: none; }
 }

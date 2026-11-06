@@ -4,6 +4,14 @@ import { marca } from '../data/seed'
 
 // Las piezas de categoría ya traen el nombre en la cinta roja: van tal cual, sin texto encima.
 export default function Categorias({ categorias }) {
+  // Las tarjetas se inclinan siguiendo el mouse
+  const inclinar = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.style.setProperty('--rx', `${((e.clientY - r.top) / r.height - .5) * -9}deg`)
+    e.currentTarget.style.setProperty('--ry', `${((e.clientX - r.left) / r.width - .5) * 9}deg`)
+  }
+  const soltar = (e) => { e.currentTarget.style.setProperty('--rx', '0deg'); e.currentTarget.style.setProperty('--ry', '0deg') }
+
   return (
     <section id="categorias" className="mx-auto max-w-7xl px-5 pt-16 md:px-8 md:pt-24">
       <p className="mb-4 flex items-center gap-3 text-[11px] tracking-[.4em] text-oro uppercase"><span className="h-px w-10 bg-oro" />Nuestros productos</p>
@@ -14,6 +22,7 @@ export default function Categorias({ categorias }) {
           const oscura = c.slug === 'linea-ogianco'
           return (
             <motion.button key={c.slug} onClick={() => irA(`#cat-${c.slug}`, -80)} aria-label={`Ver ${c.nombre}`}
+              onMouseMove={inclinar} onMouseLeave={soltar} style={{ transform: 'perspective(800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))' }}
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: .6, delay: (i % 4) * .06, ease: [.22, 1, .36, 1] }}
               className={`group aspect-[3/2] overflow-hidden rounded-2xl border transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/50 ${oscura ? 'border-white/10 bg-roble hover:border-oro/40' : 'border-transparent bg-white'}`}>

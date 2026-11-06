@@ -13,7 +13,12 @@ import SearchOverlay from './components/SearchOverlay'
 import Historia from './components/Historia'
 import FoodTruck from './components/FoodTruck'
 import Footer from './components/Footer'
-import { cargarCatalogo } from './lib/data'
+import Clasicos from './components/Clasicos'
+import NuevoEnvase from './components/NuevoEnvase'
+import Instagram from './components/Instagram'
+import CatalogoPdf from './components/CatalogoPdf'
+import { BotonBot, Manifiesto, Progreso } from './components/Efectos'
+import { cargarCatalogo, fotosDe, miniatura } from './lib/data'
 import { iniciarScroll, pausarScroll } from './lib/scroll'
 import { usePedido } from './lib/usePedido'
 import { marca } from './data/seed'
@@ -36,6 +41,7 @@ export default function App() {
   const [verPedido, setVerPedido] = useState(false)
   const [verBuscar, setVerBuscar] = useState(false)
   const [toast, setToast] = useState(null)
+  const [vuelos, setVuelos] = useState([])
   const pedido = usePedido()
 
   useEffect(() => iniciarScroll(), [])
@@ -94,8 +100,12 @@ export default function App() {
     document.documentElement.style.overflow = hayOverlay ? 'hidden' : ''
   }, [hayOverlay])
 
-  const agregar = useCallback((producto, presentacion, cantidad = 1) => {
+  const agregar = useCallback((producto, presentacion, cantidad = 1, origen) => {
     pedido.agregar(producto, presentacion, cantidad)
+    // La foto del producto vuela hasta la bolsa
+    const bolsa = document.querySelector('button[aria-label="Mi pedido"]')?.getBoundingClientRect()
+    if (origen && bolsa && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+      setVuelos((v) => [...v, { id: Date.now() + Math.random(), src: miniatura(fotosDe(producto)[0]), origen, bolsa }])
     setToast({ id: Date.now(), texto: `${cantidad} × ${producto.nombre}` })
   }, [pedido])
 
@@ -107,8 +117,18 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-    <div className="grain">
+    <div className="grain con-barra:pb-[calc(4.5rem+env(safe-area-inset-bottom))]">
       <AnimatePresence>{intro && <Intro key="intro" />}</AnimatePresence>
+      <Progreso />
+      {data && <BotonBot />}
+      {vuelos.map((v) => (
+        <motion.img key={v.id} src={v.src} alt="" aria-hidden
+          initial={{ left: v.origen.left, top: v.origen.top, width: v.origen.width, height: v.origen.height, opacity: 1, borderRadius: 16 }}
+          animate={{ left: v.bolsa.left + 8, top: v.bolsa.top + 8, width: 28, height: 28, opacity: .4, borderRadius: 99 }}
+          transition={{ duration: .75, ease: [.5, 0, .2, 1] }}
+          onAnimationComplete={() => setVuelos((l) => l.filter((x) => x.id !== v.id))}
+          className="pointer-events-none fixed z-[48] object-cover shadow-2xl" />
+      ))}
 
       <Header total={pedido.total} listo={!!data} onBuscar={() => setVerBuscar(true)} onPedido={() => setVerPedido(true)} />
 
@@ -117,6 +137,9 @@ export default function App() {
           <Hero />
           <Marquee items={categorias.map((c) => c.nombre)} />
           <Categorias categorias={categorias} />
+          <CatalogoPdf />
+          <NuevoEnvase producto={productos.find((p) => p.nuevo)} onAbrir={setAbierto} />
+          <Clasicos productos={productos} onAbrir={setAbierto} />
 
           <main id="catalogo" className="mt-16 scroll-mt-20 md:mt-24">
             <CategoryNav categorias={categorias} activa={activa} conteo={conteo} />
@@ -129,7 +152,9 @@ export default function App() {
           </main>
 
           <FoodTruck />
+          <div className="mt-20 md:mt-32"><Manifiesto /></div>
           <Historia />
+          <Instagram />
           <Footer />
 
           <AnimatePresence>
@@ -152,7 +177,7 @@ export default function App() {
           <motion.button key={toast.id} onClick={() => { setToast(null); setVerPedido(true) }}
             initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 80, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-            className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/10 bg-crema py-2 pr-5 pl-2 text-sm text-humo shadow-2xl">
+            className="fixed bottom-6 left-1/2 z-50 flex con-barra:bottom-[calc(5.25rem+env(safe-area-inset-bottom))] -translate-x-1/2 items-center gap-3 rounded-full border border-white/10 bg-crema py-2 pr-5 pl-2 text-sm text-humo shadow-2xl">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-munich text-crema"><Check size={16} /></span>
             <span className="max-w-[55vw] truncate">{toast.texto}</span>
             <span className="text-xs font-bold tracking-wider text-munich uppercase">Ver pedido</span>

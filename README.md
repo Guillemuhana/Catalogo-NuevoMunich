@@ -8,7 +8,10 @@ Catálogo online de Nuevo Munich (fiambres artesanales desde 1972). React + Vite
 - Cards con la foto del envase; al pasar el mouse aparece la foto de ambiente
 - Detalle de producto con galería, ingredientes, sugerencia, presentaciones, cantidad, relacionados y link compartible (`#p=slug`)
 - Buscador ⌘K / Ctrl+K / "/" (sin tildes, con teclado)
-- "Mi pedido" que arma el mensaje y lo manda por WhatsApp (ventas: 351 384-4802)
+- "Mi pedido" pide nombre y entrega, y manda el mensaje agrupado por categoría al asistente virtual (WhatsApp 351 701-0545). Las consultas de un producto van a ventas (351 384-4802)
+- Catálogo en PDF para descargar, con índice, QR y enlaces a WhatsApp
+- En celular: barra inferior estilo app, menú desplegable desde abajo y scroll nativo
+- Estilo inspirado en el envase nuevo: negro con dibujos de comida, degradado dorado y franja roja y dorada
 - Sección Food Truck (Superpancho Premium, Picada) con WhatsApp de reservas 351 814-5265
 - Historia, contacto y redes
 - Si Supabase no está configurado, usa `src/data/seed.js`
@@ -26,6 +29,13 @@ Están en `public/img/`, optimizadas en WebP, y no dependen de ningún servicio 
 - `categorias/`: piezas de categoría con la cinta roja. Traen el nombre en la imagen, así que van solo en las tarjetas sobre fondo blanco.
 - `banners/`: fotos de ambiente para el encabezado de cada categoría.
 - `marca/`: logo, ícono, hero, food truck y Oktoberfest.
+
+## Catálogo PDF
+Después de cambiar productos o fotos en `src/data/seed.js`, regeneralo y subí el resultado:
+```bash
+npm run catalogo
+```
+Crea `public/catalogo-nuevo-munich.pdf` usando el Chrome de la PC (o `CHROME_PATH`). Si un texto no entra en su ficha, el script avisa y no genera el archivo.
 
 ## Supabase (opcional)
 1. SQL Editor → correr `supabase/schema.sql` (tablas, RLS de solo lectura y bucket `productos`).

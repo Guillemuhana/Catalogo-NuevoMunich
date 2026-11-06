@@ -3,7 +3,8 @@ import Lenis from 'lenis'
 let lenis = null
 
 export function iniciarScroll() {
-  if (lenis || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => {}
+  // En pantallas táctiles queda el scroll nativo: es el que el dedo espera y el más fluido.
+  if (lenis || window.matchMedia('(prefers-reduced-motion: reduce), (pointer: coarse)').matches) return () => {}
   lenis = new Lenis({ duration: 1.15, easing: (t) => 1 - Math.pow(1 - t, 4) })
   let raf
   const loop = (t) => { lenis.raf(t); raf = requestAnimationFrame(loop) }

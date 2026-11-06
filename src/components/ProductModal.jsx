@@ -166,7 +166,7 @@ export default function ProductModal({ producto, categoria, relacionados, onCerr
         </button>
 
         <div ref={caja} data-lenis-prevent
-          className="grid max-h-[92svh] grid-cols-1 overflow-y-auto rounded-t-3xl border border-white/10 bg-carbon md:grid-cols-2 md:rounded-3xl [&>*]:min-w-0">
+          className="grid max-h-[92svh] grid-cols-1 overflow-y-auto overscroll-contain rounded-t-3xl border border-white/10 bg-carbon md:grid-cols-2 md:rounded-3xl [&>*]:min-w-0">
           <div className="md:sticky md:top-0 md:self-start">
             <Galeria key={producto.slug} producto={producto} categoria={categoria} />
           </div>
