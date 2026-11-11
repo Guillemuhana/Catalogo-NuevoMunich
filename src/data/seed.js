@@ -8,7 +8,7 @@ export const categorias = [
   { slug: 'feteados', nombre: 'Feteados', bajada: 'Listos para servir. 100 g aprox., envasados al vacío.', imagen_url: 'img/categorias/feteados.webp', banner_url: 'img/banners/feteados.webp', orden: 1 },
   { slug: 'jamones', nombre: 'Jamones', bajada: 'Piezas enteras y fracciones para fiambrería y mesa.', imagen_url: 'img/categorias/jamones.webp', banner_url: 'img/banners/jamones.webp', orden: 2 },
   { slug: 'arrollados', nombre: 'Arrollados', bajada: 'Clásicos de mesa, en fracción o unidad completa.', imagen_url: 'img/categorias/arrollados.webp', banner_url: 'img/banners/arrollados.webp', orden: 3 },
-  { slug: 'salames', nombre: 'Salames', bajada: 'Picado grueso y fino, ahumados y tipo colonia.', imagen_url: 'img/categorias/salames.webp', banner_url: 'img/banners/salames.webp', orden: 4 },
+  { slug: 'salames', nombre: 'Salames', bajada: 'Picado grueso y fino, ahumados, tipo colonia y pepperoni.', imagen_url: 'img/categorias/salames.webp', banner_url: 'img/banners/salames.webp', orden: 4 },
   { slug: 'linea-ogianco', nombre: 'Línea Ogianco', bajada: 'Arrollados y salchichas de la línea Ogianco.', imagen_url: 'img/categorias/linea-ogianco.webp', banner_url: 'img/banners/linea-ogianco.webp', orden: 5 },
   { slug: 'salchichas', nombre: 'Salchichas', bajada: 'De Viena a Frankfurt: la tradición del embutido centroeuropeo.', imagen_url: 'img/categorias/salchichas.webp', banner_url: 'img/banners/salchichas.webp', orden: 6 },
   { slug: 'especialidades', nombre: 'Especialidades', bajada: 'Recetas austríacas y alemanas heredadas desde 1972.', imagen_url: 'img/categorias/especialidades.webp', banner_url: 'img/banners/especialidades.webp', orden: 7 },
@@ -221,6 +221,15 @@ export const productos = [
       'img/productos/salames-salame-holstein-ahumado-picado-fino/3.webp',
       'img/productos/salames-salame-holstein-ahumado-picado-fino/4.webp',
       'img/productos/salames-salame-holstein-ahumado-picado-fino/5.webp',
+    ],
+  }),
+  p('salames', 'Salame Pepperoni', ['Unidad · aprox. 200 g'], {
+    ingredientes: 'Carne de cerdo, tocino, ají molido, pimiento de Cayena y pimentón, entre las especias que se destacan.',
+    sugerencias: 'A diferencia de los salames tradicionales, al probarlo se destaca el sabor exquisito del toque final del pimentón. Ideal para pizzas.',
+    imagenes: [
+      'img/productos/salames-salame-pepperoni/1.webp',
+      'img/productos/salames-salame-pepperoni/2.webp',
+      'img/productos/salames-salame-pepperoni/3.webp',
     ],
   }),
   // linea-ogianco

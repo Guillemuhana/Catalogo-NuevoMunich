@@ -18,8 +18,9 @@ import Recetas from './components/Recetas'
 import NuevoEnvase from './components/NuevoEnvase'
 import Instagram from './components/Instagram'
 import CatalogoPdf from './components/CatalogoPdf'
+import PopupNovedad from './components/PopupNovedad'
 import { BotonBot, Manifiesto, Progreso } from './components/Efectos'
-import { cargarCatalogo, fotosDe, miniatura } from './lib/data'
+import { cargarCatalogo, fotosDe, miniatura, normalizar } from './lib/data'
 import { iniciarScroll, pausarScroll } from './lib/scroll'
 import { usePedido } from './lib/usePedido'
 import { marca } from './data/seed'
@@ -43,6 +44,8 @@ export default function App() {
   const [verBuscar, setVerBuscar] = useState(false)
   const [toast, setToast] = useState(null)
   const [vuelos, setVuelos] = useState([])
+  const [verPopup, setVerPopup] = useState(true)
+  const cerrarPopup = useCallback(() => setVerPopup(false), [])
   const pedido = usePedido()
 
   useEffect(() => iniciarScroll(), [])
@@ -120,6 +123,8 @@ export default function App() {
     <MotionConfig reducedMotion="user">
     <div className="grain">
       <AnimatePresence>{intro && <Intro key="intro" />}</AnimatePresence>
+      <AnimatePresence>{!intro && verPopup && <PopupNovedad key="popup" onCerrar={cerrarPopup} onAbrir={setAbierto}
+        producto={productos.find((p) => normalizar(p.nombre).includes('pepperoni'))} />}</AnimatePresence>
       <Progreso />
       {data && <BotonBot />}
       {vuelos.map((v) => (
