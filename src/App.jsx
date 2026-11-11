@@ -17,7 +17,7 @@ import Footer from './components/Footer'
 import Clasicos from './components/Clasicos'
 import Recetas from './components/Recetas'
 import NuevoEnvase from './components/NuevoEnvase'
-import Instagram from './components/Instagram'
+import Instagram, { PestanaInstagram } from './components/Instagram'
 import CatalogoPdf from './components/CatalogoPdf'
 import PopupNovedad from './components/PopupNovedad'
 import { BotonBot, Manifiesto, Progreso } from './components/Efectos'
@@ -128,6 +128,7 @@ export default function App() {
         producto={productos.find((p) => normalizar(p.nombre).includes('pepperoni'))} />}</AnimatePresence>
       <Progreso />
       {data && <BotonBot />}
+      {data && <PestanaInstagram />}
       {vuelos.map((v) => (
         <motion.img key={v.id} src={v.src} alt="" aria-hidden
           initial={{ left: v.origen.left, top: v.origen.top, width: v.origen.width, height: v.origen.height, opacity: 1, borderRadius: 16 }}

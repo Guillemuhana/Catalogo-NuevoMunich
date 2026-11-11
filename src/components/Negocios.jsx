@@ -1,9 +1,52 @@
-import { motion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useEffect, useState } from 'react'
 import { Check, MapPin } from 'lucide-react'
 import { marca } from '../data/seed'
 
 const zonas = ['Mendoza', 'San Juan', 'Córdoba', 'Patagonia']
 const ventajas = ['Amplia variedad de productos', 'Calidad garantizada', 'Atención personalizada', 'Respaldo de una marca con trayectoria']
+
+const fotos = [
+  { src: marca.negocios, alt: 'Trío de panchos con salchichas Nuevo Munich sobre una tabla' },
+  { src: 'img/marca/negocios-2.webp', alt: 'Panchos Nuevo Munich con una cerveza' },
+  { src: 'img/productos/salames-salame-pepperoni/3.webp', alt: 'Pizza con Salame Pepperoni Nuevo Munich' },
+  { src: marca.foodtruck[1], alt: 'Atención en la barra del food truck de Nuevo Munich' },
+  { src: marca.oktoberfest[0], alt: 'Parrilla con productos Nuevo Munich en la Fiesta de la Cerveza' },
+  { src: marca.oktoberfest[4], alt: 'Plato de salchichas Nuevo Munich listo para servir' },
+]
+const INTERVALO = 3500
+
+// Fotos que pasan solas; se pausa con el puntero encima y se puede elegir con los puntos.
+function Carrusel() {
+  const [i, setI] = useState(0)
+  const [pausa, setPausa] = useState(false)
+  useEffect(() => {
+    if (pausa) return
+    const t = setTimeout(() => setI((x) => (x + 1) % fotos.length), INTERVALO)
+    return () => clearTimeout(t)
+  }, [i, pausa])
+
+  return (
+    <div onPointerEnter={() => setPausa(true)} onPointerLeave={() => setPausa(false)}
+      className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-humo shadow-2xl shadow-black/40">
+      <AnimatePresence initial={false}>
+        <motion.img key={i} src={fotos[i].src} alt={fotos[i].alt} decoding="async"
+          initial={{ opacity: 0, scale: 1.06 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+          transition={{ opacity: { duration: .9 }, scale: { duration: INTERVALO / 1000 + 1, ease: 'linear' } }}
+          className="absolute inset-0 h-full w-full object-cover" />
+      </AnimatePresence>
+      {/* Precarga de las fotos para que el cambio sea inmediato */}
+      <div hidden>{fotos.map((f) => <img key={f.src} src={f.src} alt="" />)}</div>
+      <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
+      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+        {fotos.map((f, n) => (
+          <button key={f.src} onClick={() => setI(n)} aria-label={`Ver foto ${n + 1}`}
+            className={`h-2 rounded-full transition-all ${n === i ? 'w-6 bg-oro' : 'w-2 bg-white/60 hover:bg-white'}`} />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 const telVisible = (n) => `${n.slice(-10, -7)}-${n.slice(-7, -4)} ${n.slice(-4)}`
 
@@ -52,9 +95,9 @@ export default function Negocios() {
           </p>
         </div>
 
-        <motion.img src={marca.negocios} alt="Trío de panchos con salchichas Nuevo Munich sobre una tabla" loading="lazy" decoding="async"
-          initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}
-          className="aspect-[4/3] w-full rounded-2xl object-cover object-[30%_60%] shadow-2xl shadow-black/40" />
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
+          <Carrusel />
+        </motion.div>
       </div>
     </section>
   )

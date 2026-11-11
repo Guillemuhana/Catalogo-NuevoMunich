@@ -97,10 +97,6 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
           </nav>
 
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-            <a href={marca.instagram} target="_blank" rel="noreferrer" aria-label="Instagram de Nuevo Munich"
-              className="hidden h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-humo/30 text-crema transition hover:border-transparent hover:bg-gradient-to-tr hover:from-[#f9ce34] hover:via-[#ee2a7b] hover:to-[#6228d7] hover:text-white lg:flex">
-              <IconoInstagram size={18} />
-            </a>
             <button onClick={onBuscar} aria-label="Buscar productos"
               className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-white/15 bg-humo/40 text-crema transition hover:border-oro/60 hover:text-oro lg:w-auto lg:px-4">
               <Search size={18} />
