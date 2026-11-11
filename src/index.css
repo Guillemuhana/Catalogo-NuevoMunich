@@ -217,3 +217,56 @@ button:is(:hover, :focus-visible) .gorro-chef {
 
 /* Barra de cuenta regresiva del popup de bienvenida */
 @keyframes popup-cuenta { from { transform: scaleX(1) } to { transform: scaleX(0) } }
+
+/* Luz de cine en la foto principal (LuzCine.jsx). --fx/--fy: centro de la comida en cada foto. */
+.luz-cine { --fx: 26%; --fy: 36%; }
+@media (min-width: 640px) { .luz-cine { --fx: 15%; --fy: 38%; } }
+@variant ancho { .luz-cine { --fx: calc(max(100vw, 177.7vh) * .14); --fy: calc(max(56.25vw, 100vh) * .38); } }
+
+.luz-brasa {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  background: radial-gradient(ellipse 30% 28% at var(--fx) var(--fy), rgb(255 150 60 / .22), rgb(255 105 25 / .08) 45%, transparent 75%);
+  animation: titilar 3.4s infinite;
+}
+@keyframes titilar {
+  0% { opacity: .72 } 7% { opacity: .95 } 11% { opacity: .68 } 19% { opacity: 1 } 31% { opacity: .8 }
+  39% { opacity: .93 } 52% { opacity: .7 } 61% { opacity: 1 } 74% { opacity: .78 } 85% { opacity: .96 } 100% { opacity: .72 }
+}
+
+.rayos { position: absolute; inset: 0; overflow: hidden; mix-blend-mode: screen; }
+.rayo {
+  position: absolute;
+  top: -35%;
+  left: var(--x);
+  width: var(--w);
+  height: 170%;
+  background: linear-gradient(180deg, rgb(255 228 185 / .30), rgb(255 210 150 / .12) 45%, transparent 80%);
+  filter: blur(12px);
+  transform-origin: top center;
+  animation: rayo var(--d) ease-in-out var(--del) infinite alternate;
+}
+@keyframes rayo {
+  0% { transform: rotate(19deg) translateX(-4%); opacity: .45; }
+  100% { transform: rotate(26deg) translateX(4%); opacity: 1; }
+}
+.mota {
+  position: absolute;
+  border-radius: 50%;
+  background: rgb(255 236 205 / .85);
+  box-shadow: 0 0 4px rgb(255 220 170 / .8);
+  opacity: 0;
+  animation: mota var(--d) linear var(--del) infinite;
+}
+@keyframes mota {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15% { opacity: .7; }
+  50% { transform: translate(18px, -26px); opacity: .35; }
+  80% { opacity: .65; }
+  100% { transform: translate(-10px, -55px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .luz-brasa, .rayo { animation: none; }
+  .mota { display: none; }
+}
