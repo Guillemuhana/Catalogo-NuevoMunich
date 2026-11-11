@@ -9,6 +9,7 @@ import { linkWhatsApp } from '../lib/usePedido'
 const enlaces = [
   { t: 'Catálogo', id: 'catalogo', ir: () => irA('#categorias', -30) },
   { t: 'Recetas', id: 'recetas', icono: ChefHat, ir: () => irA('#recetas', -100) },
+  { t: 'Negocios', id: 'negocios', ir: () => irA('#negocios', -110) },
   { t: 'Food Truck', id: 'foodtruck', ir: () => irA('#foodtruck', -110) },
   { t: 'Historia', id: 'historia', ir: () => irA('#historia', -80) },
   { t: 'Contacto', id: 'contacto', ir: () => irA('#contacto', -80) },
@@ -42,7 +43,7 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
       (es) => es.forEach((e) => { if (e.isIntersecting) setSeccion(e.target.id === 'top' ? null : e.target.id === 'categorias' ? 'catalogo' : e.target.id) }),
       { rootMargin: '-45% 0px -50% 0px' },
     )
-    ;['top', 'categorias', 'catalogo', 'recetas', 'foodtruck', 'historia', 'contacto'].forEach((id) => {
+    ;['top', 'categorias', 'catalogo', 'recetas', 'negocios', 'foodtruck', 'historia', 'contacto'].forEach((id) => {
       const el = document.getElementById(id)
       if (el) io.observe(el)
     })

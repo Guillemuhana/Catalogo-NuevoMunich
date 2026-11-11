@@ -443,6 +443,8 @@ export const marca = {
   catalogoTapa: 'img/marca/catalogo-tapa.webp',
   whatsapp: '5493513844802',      // ventas
   whatsappBot: '5493517010545',   // asistente virtual (chatbot)
+  whatsappComercial: '5493517010545', // equipo comercial (alta de negocios); es el número que publican en Instagram
+  negocios: 'img/marca/negocios.webp',
   whatsappFoodTruck: '5493518145265',
   fabrica: '12 de Octubre 112, Barrio Parque Norte, Juárez Celman, Córdoba',
   telefono: '351 499-8803',

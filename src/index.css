@@ -214,3 +214,6 @@ button:is(:hover, :focus-visible) .gorro-chef {
 @media (max-width: 767px) {
   .grain::after { display: none; }
 }
+
+/* Barra de cuenta regresiva del popup de bienvenida */
+@keyframes popup-cuenta { from { transform: scaleX(1) } to { transform: scaleX(0) } }

@@ -106,7 +106,7 @@ async function paginaProducto({ p, c, primera }, n) {
   const acento = e.acento || e.color
   const link = wa(marca.whatsapp, `¡Hola Nuevo Munich! Quería consultar por ${p.nombre}. ¿Precio y disponibilidad?`)
   const [titulo, bajada] = partirNombre(p.nombre)
-  const tam = titulo.length <= 14 ? 46 : titulo.length <= 22 ? 38 : 31
+  const tam = titulo.length <= 14 ? 44 : titulo.length <= 22 ? 36 : 30
   const envase = p.imagenes[0]
   const ambiente = p.imagenes.length > 1 ? p.imagenes.at(-1) : p.imagenes[0]
   const sellos = (p.sellos || []).map((x) => `<span class="sello"><i>Exceso en</i>${esc(x)}</span>`).join('')
@@ -116,11 +116,11 @@ async function paginaProducto({ p, c, primera }, n) {
     <section class="pagina prod" ${primera ? `id="cat-${c.slug}"` : ''}>
       <img class="fondo" src="${await madera()}" alt="">
       <div class="card ${e.oscura ? 'oscura' : ''}">
-        <div class="p-foto"><img src="${await jpg(ambiente, 1000, 72)}" alt="">
+        <div class="p-foto"><img src="${await jpg(ambiente, 1080, 88)}" alt="">
           <a class="volver" href="#indice">${esc(c.nombre)} · índice</a>
           ${insignia ? `<span class="insignia">${insignia}</span>` : ''}
         </div>
-        <svg class="banda" viewBox="0 0 192 40" preserveAspectRatio="none"><polygon points="0,0 192,0 192,7 0,40" fill="${e.color}"/><polygon points="112,19 192,5.2 192,12" fill="#5a4030"/><line x1="0" y1="40" x2="192" y2="5.2" stroke="#fff" stroke-width=".6"/></svg>
+        <svg class="banda" viewBox="0 0 192 34" preserveAspectRatio="none"><polygon points="0,0 192,0 192,6 0,34" fill="${e.color}"/><polygon points="112,17.7 192,6 192,11.5" fill="#5a4030"/><line x1="0" y1="34" x2="192" y2="6" stroke="#fff" stroke-width=".6"/></svg>
         <div class="nombre"><h2 style="font-size:${tam}pt">${esc(titulo)}</h2>${bajada ? `<span>${esc(bajada)}</span>` : ''}</div>
         <div class="p-cuerpo">
           <div class="col izq">
@@ -133,8 +133,8 @@ async function paginaProducto({ p, c, primera }, n) {
           </div>
           <div class="col der">
             ${p.sugerencias ? `<div class="sug"><h4>Sugerencias</h4><p>${esc(p.sugerencias)}</p></div>` : ''}
-            <a class="envase" href="${esc(link)}"><img src="${await jpg(envase, 560, 80)}" alt=""></a>
-            <a class="wa" href="${esc(link)}">Consultar por WhatsApp</a>
+            <a class="envase" href="${esc(link)}"><img src="${await jpg(envase, 900, 86)}" alt=""></a>
+            <a class="wa" href="${esc(link)}"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>Consultar por WhatsApp</a>
           </div>
         </div>
         <footer class="p-pie">
@@ -312,31 +312,33 @@ em{font-style:italic}
 .p-foto>img{width:100%;height:100%;object-fit:cover;display:block}
 .volver{position:absolute;top:5mm;left:5mm;background:rgb(20 16 13 / .72);color:var(--crema);font-size:7pt;letter-spacing:.14em;text-transform:uppercase;padding:1.4mm 3.5mm;border-radius:5mm}
 .insignia{position:absolute;top:5mm;right:5mm;background:var(--oro);color:var(--humo);font-size:7.5pt;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:1.4mm 3.5mm;border-radius:5mm}
-.banda{position:absolute;left:0;top:132mm;width:192mm;height:40mm;display:block}
-.nombre{position:absolute;left:8mm;top:131mm;max-width:132mm;color:#fff}
-.nombre h2{font-family:'Great Vibes',cursive;font-weight:400;line-height:1;white-space:nowrap}
-.nombre span{display:block;margin-top:-.5mm;padding-left:1mm;font-size:9.5pt;font-weight:700;letter-spacing:.06em;color:rgb(255 255 255 / .9)}
-.p-cuerpo{flex:1;min-height:0;display:grid;grid-template-columns:1fr 64mm;gap:8mm;padding:0 9mm 4mm}
-.col{min-height:0;overflow:hidden}
+.banda{position:absolute;left:0;top:135.8mm;width:192mm;height:34mm;display:block}
+.nombre{position:absolute;left:9mm;top:139mm;max-width:130mm;color:#fff}
+.nombre h2{font-family:'Great Vibes',cursive;font-weight:400;line-height:1.05;white-space:nowrap;text-shadow:0 .3mm 1mm rgb(0 0 0 / .18)}
+.nombre span{display:block;margin-top:.3mm;padding-left:1.2mm;font-size:9pt;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgb(255 255 255 / .92)}
+.p-cuerpo{flex:1;min-height:0;display:grid;grid-template-columns:1fr 66mm;grid-template-rows:minmax(0,1fr);gap:10mm;padding:0 10mm 7mm}
+.col{min-height:0;overflow:hidden;display:flex;flex-direction:column}
 .izq{padding-top:31mm;text-align:center}
-.der{padding-top:11mm;display:flex;flex-direction:column;gap:4mm}
-.p-cat{font-size:12pt;font-weight:700;font-style:italic;letter-spacing:.02em;text-transform:uppercase;color:#8d8d8d;padding-bottom:2mm;border-bottom:.35mm solid currentColor;margin:0 4mm}
-.oscura .p-cat{color:#bdb3a6}
-.izq h3{font-family:'Inria Sans',sans-serif;font-style:italic;font-weight:700;font-size:21pt;line-height:1;margin-top:3.5mm}
-.pres{list-style:none;margin:1.5mm 4mm 0;padding-bottom:3mm;border-bottom:.35mm solid #8d8d8d;font-size:11.5pt;line-height:1.38;font-weight:300}
-.izq h4{text-align:left;margin-top:4mm}
-h4{font-family:'Inria Sans',sans-serif;font-weight:700;font-style:italic;font-size:11pt}
-.ing{text-align:left;margin-top:.8mm;font-size:10.5pt;line-height:1.36;font-weight:300}
-.alergeno{text-align:left;margin-top:2mm;font-size:8.5pt;font-weight:700;text-transform:uppercase;color:#c8102e}
-.sellos{display:flex;gap:1.5mm;margin-top:2.5mm}
-.sello{width:15mm;height:15mm;background:#111;color:#fff;clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:5pt;font-weight:700;line-height:1.05;text-transform:uppercase;padding:1mm}
+.der{padding-top:18mm;gap:4mm}
+.p-cat{font-size:11pt;font-weight:700;font-style:italic;letter-spacing:.08em;text-transform:uppercase;color:#8d8d8d;padding-bottom:2mm;border-bottom:.3mm solid #c9c9c9;margin:0 6mm}
+.oscura .p-cat{color:#bdb3a6;border-color:rgb(244 235 221 / .25)}
+.izq h3{font-family:'Inria Sans',sans-serif;font-style:italic;font-weight:700;font-size:20pt;line-height:1;margin-top:3.5mm}
+.pres{list-style:none;margin:2mm 6mm 0;padding-bottom:3.5mm;border-bottom:.3mm solid #c9c9c9;font-size:calc(11pt * var(--k,1));line-height:1.45;font-weight:300}
+.oscura .pres{border-color:rgb(244 235 221 / .25)}
+h4{font-family:'Inria Sans',sans-serif;font-weight:700;font-style:italic;font-size:10.5pt;letter-spacing:.02em}
+.izq h4{text-align:left;margin:5mm 0 0}
+.ing{text-align:left;margin-top:1.2mm;font-size:calc(10pt * var(--k,1));line-height:1.45;font-weight:300}
+.alergeno{text-align:left;margin-top:2.5mm;font-size:8pt;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#c8102e}
+.sellos{display:flex;gap:2mm;margin-top:auto;padding-top:4mm}
+.sello{width:14mm;height:14mm;background:#111;color:#fff;clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:4.8pt;font-weight:700;line-height:1.05;text-transform:uppercase;padding:1mm}
 .oscura .sello{background:#fff;color:#111}
-.sello i{font-style:normal;font-size:4.2pt;font-weight:400}
-.sug{border:.35mm solid currentColor;border-radius:5mm;padding:3mm 4mm 3.5mm}
-.sug p{margin-top:1mm;font-size:10pt;line-height:1.36;font-weight:300}
-.envase{display:block;height:46mm;border-radius:5mm;overflow:hidden;background:#fff;flex:none}
-.envase img{width:100%;height:100%;object-fit:cover;display:block}
-.wa{display:block;text-align:center;background:#25D366;color:#0f2a19;font-size:8.5pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2.6mm 0;border-radius:6mm}
+.sello i{font-style:normal;font-size:4pt;font-weight:400}
+.sug{border:.3mm solid currentColor;border-radius:4mm;padding:3mm 4mm 3.5mm;flex:none}
+.sug p{margin-top:1.2mm;font-size:9.5pt;line-height:1.45;font-weight:300}
+.envase{display:block;flex:1;min-height:45mm;max-height:72mm;border-radius:4mm;overflow:hidden;background:#fff;box-shadow:0 0 0 .25mm #e6e0d6}
+.envase img{width:100%;height:100%;object-fit:contain;display:block}
+.wa{flex:none;align-self:center;display:inline-flex;align-items:center;gap:1.6mm;background:#25D366;color:#0f2a19;font-size:7pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:1.8mm 4.5mm;border-radius:4mm}
+.wa svg{width:3.4mm;height:3.4mm}
 .p-pie{flex:none;height:15mm;display:grid;grid-template-columns:1fr auto 1fr 9mm;align-items:center;gap:4mm;padding:0 6mm 0 9mm;background:#ececec;color:#6b6b6b;font-size:8.5pt}
 .p-pie a:first-child{font-style:italic}
 .p-pie a:nth-child(3){text-align:right}
@@ -386,6 +388,13 @@ const nav = await puppeteer.launch({ executablePath: CHROME, headless: 'new', ar
 const pag = await nav.newPage()
 await pag.goto(pathToFileURL(archivoHtml).href, { waitUntil: 'networkidle0', timeout: 120000 })
 await pag.evaluate(() => document.fonts.ready)
+
+// Las fichas con mucho texto achican la letra de a poco hasta entrar.
+await pag.evaluate(() => {
+  for (const c of document.querySelectorAll('.izq')) {
+    for (let k = 1; c.scrollHeight > c.clientHeight + 1 && k > .8; k -= .02) c.style.setProperty('--k', k)
+  }
+})
 
 // Si un texto no entra en su ficha o una imagen falla, el catálogo no se publica.
 const fallas = await pag.evaluate(() => [

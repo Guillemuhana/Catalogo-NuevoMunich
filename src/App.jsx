@@ -12,6 +12,7 @@ import PedidoDrawer from './components/PedidoDrawer'
 import SearchOverlay from './components/SearchOverlay'
 import Historia from './components/Historia'
 import FoodTruck from './components/FoodTruck'
+import Negocios from './components/Negocios'
 import Footer from './components/Footer'
 import Clasicos from './components/Clasicos'
 import Recetas from './components/Recetas'
@@ -158,6 +159,7 @@ export default function App() {
           </main>
 
           <Recetas productos={productos} onAbrir={setAbierto} />
+          <Negocios />
           <FoodTruck />
           <div className="mt-20 md:mt-32"><Manifiesto /></div>
           <Historia />
