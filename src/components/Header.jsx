@@ -1,6 +1,7 @@
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { ChefHat, ChevronDown, Download, MessageCircle, Search, ShoppingBag } from 'lucide-react'
+import { ChefHat, ChevronDown, Download, MessageCircle, Plus, Search, ShoppingBag } from 'lucide-react'
+import PanelSumate, { BotonMas, ContenidoSumate } from './PanelSumate'
 import { IconoInstagram } from './Instagram'
 import { categorias, marca } from '../data/seed'
 import { irA, irACategoria, pausarScroll } from '../lib/scroll'
@@ -33,6 +34,8 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
   const [menu, setMenu] = useState(false)
   const [productos, setProductos] = useState(false)
   const [seccion, setSeccion] = useState(null)
+  const [sumate, setSumate] = useState(false)
+  const [sumateMenu, setSumateMenu] = useState(false)
   useMotionValueEvent(scrollY, 'change', (v) => setSolido(v > 60))
 
   // Marca en el menú la sección que se está viendo
@@ -81,7 +84,7 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
 
           <nav className="hidden items-center gap-5 xl:gap-9 lg:flex" aria-label="Principal">
             {enlaces.map((e) => (
-              <button key={e.id} onClick={e.ir} aria-current={seccion === e.id ? 'true' : undefined}
+              <button key={e.id} onClick={() => { setSumate(false); e.ir() }} aria-current={seccion === e.id ? 'true' : undefined}
                 className={`group relative flex items-center gap-1.5 py-2 font-display text-xl tracking-wide whitespace-nowrap transition duration-300 hover:-translate-y-0.5 hover:text-oro xl:text-[1.4rem] ${seccion === e.id ? 'text-oro' : 'text-crema'}`}>
                 {e.id === 'recetas' ? (
                   <span><span className="recetas-inicial">R<span className="gorro-chef" aria-hidden="true">
@@ -94,6 +97,7 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
                 {seccion === e.id && <motion.span layoutId="menu-activo" className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-oro" transition={{ type: 'spring', stiffness: 380, damping: 32 }} />}
               </button>
             ))}
+            <BotonMas abierto={sumate} onClick={() => setSumate((v) => !v)} />
           </nav>
 
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
@@ -118,6 +122,8 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
           </div>
         </div>
       </motion.header>
+
+      <AnimatePresence>{sumate && <PanelSumate key="sumate" onCerrar={() => setSumate(false)} />}</AnimatePresence>
 
       <AnimatePresence>
         {menu && (
@@ -153,6 +159,19 @@ export default function Header({ total, listo, onBuscar, onPedido }) {
                   <span className="flex items-center gap-3">{e.t}{e.icono && <e.icono size={26} className="text-oro" aria-hidden />}</span>
                 </button>
               ))}
+              <button onClick={() => setSumateMenu((v) => !v)} aria-expanded={sumateMenu} className={`${fila} ${sumateMenu ? 'text-oro' : 'text-crema'}`}>
+                <span>Sumate a la familia</span>
+                <motion.span animate={{ rotate: sumateMenu ? 135 : 0 }} transition={{ type: 'spring', stiffness: 260, damping: 16 }}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-oro text-oro"><Plus size={20} strokeWidth={2.6} /></motion.span>
+              </button>
+              <AnimatePresence initial={false}>
+                {sumateMenu && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: .4, ease: [.22, 1, .36, 1] }} className="overflow-hidden border-b border-white/10">
+                    <div className="py-5"><ContenidoSumate compacto /></div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </nav>
 
             <div className="mx-auto w-full max-w-xl shrink-0 space-y-2.5">

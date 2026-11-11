@@ -2,9 +2,8 @@ import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Check, MapPin } from 'lucide-react'
 import { marca } from '../data/seed'
+import { telVisible, ventajas, waNegocios, zonas } from '../lib/negocios'
 
-const zonas = ['Mendoza', 'San Juan', 'Córdoba', 'Patagonia']
-const ventajas = ['Amplia variedad de productos', 'Calidad garantizada', 'Atención personalizada', 'Respaldo de una marca con trayectoria']
 
 const fotos = [
   { src: marca.negocios, alt: 'Trío de panchos con salchichas Nuevo Munich sobre una tabla' },
@@ -17,7 +16,7 @@ const fotos = [
 const INTERVALO = 3500
 
 // Fotos que pasan solas; se pausa con el puntero encima y se puede elegir con los puntos.
-function Carrusel() {
+export function Carrusel() {
   const [i, setI] = useState(0)
   const [pausa, setPausa] = useState(false)
   useEffect(() => {
@@ -48,11 +47,11 @@ function Carrusel() {
   )
 }
 
-const telVisible = (n) => `${n.slice(-10, -7)}-${n.slice(-7, -4)} ${n.slice(-4)}`
 
 // Venta a negocios gastronómicos: el contacto es el equipo comercial.
+
 export default function Negocios() {
-  const wa = `https://wa.me/${marca.whatsappComercial}?text=${encodeURIComponent('¡Hola Nuevo Munich! Tengo un negocio y quiero sumar sus productos.')}`
+  const wa = waNegocios
 
   return (
     <section id="negocios" className="relative mx-auto mt-20 max-w-7xl px-5 md:mt-32 md:px-8">
