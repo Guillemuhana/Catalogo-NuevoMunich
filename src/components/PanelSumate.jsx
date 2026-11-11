@@ -1,9 +1,8 @@
 import { motion } from 'motion/react'
 import { useEffect } from 'react'
-import { Check, MapPin, Plus } from 'lucide-react'
-import { marca } from '../data/seed'
+import { ArrowRight, Check, MapPin, MessageCircle, Plus } from 'lucide-react'
 import { Carrusel } from './Negocios'
-import { telVisible, ventajas, waNegocios, zonas } from '../lib/negocios'
+import { ventajas, waNegocios, zonas } from '../lib/negocios'
 
 // Botón "+" del menú: gira hasta formar una cruz cuando el panel está abierto.
 export function BotonMas({ abierto, onClick, className = '' }) {
@@ -52,10 +51,14 @@ export function ContenidoSumate({ compacto = false }) {
             </motion.li>
           ))}
         </ul>
-        <motion.p {...entrar(7)} className="mt-6 border-t border-crema/10 pt-4 text-sm font-light text-crema/75">
-          Equipo comercial:{' '}
-          <a href={waNegocios} target="_blank" rel="noreferrer" className="font-bold whitespace-nowrap text-oro underline-offset-4 hover:underline">{telVisible(marca.whatsappComercial)}</a>
-        </motion.p>
+        <motion.div {...entrar(7)} className="mt-6 border-t border-crema/10 pt-5">
+          <a href={waNegocios} target="_blank" rel="noreferrer"
+          className="group inline-flex h-12 items-center gap-2.5 rounded-full bg-[#25D366] pr-6 pl-2 text-sm font-bold text-humo shadow-lg shadow-[#25D366]/25 transition hover:-translate-y-0.5 hover:brightness-110">
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-humo/15"><MessageCircle size={17} /></span>
+          Quiero sumarme
+          <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+          </a>
+        </motion.div>
       </div>
       {!compacto && (
         <motion.div initial={{ opacity: 0, scale: .92, rotate: 2 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ delay: .3, type: 'spring', stiffness: 160, damping: 18 }}>

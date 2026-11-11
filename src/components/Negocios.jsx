@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { Check, MapPin } from 'lucide-react'
+import { ArrowRight, Check, MapPin, MessageCircle } from 'lucide-react'
 import { marca } from '../data/seed'
-import { telVisible, ventajas, waNegocios, zonas } from '../lib/negocios'
+import { ventajas, waNegocios, zonas } from '../lib/negocios'
 
 
 const fotos = [
@@ -51,8 +51,6 @@ export function Carrusel() {
 // Venta a negocios gastronómicos: el contacto es el equipo comercial.
 
 export default function Negocios() {
-  const wa = waNegocios
-
   return (
     <section id="negocios" className="relative mx-auto mt-20 max-w-7xl px-5 md:mt-32 md:px-8">
       <div className="relative grid items-center gap-10 overflow-hidden rounded-[2rem] border border-white/10 bg-carbon p-7 md:p-14 lg:grid-cols-[1.1fr_.9fr]">
@@ -88,10 +86,14 @@ export default function Negocios() {
             ))}
           </ul>
 
-          <p className="mt-8 max-w-xl border-t border-crema/10 pt-6 text-sm font-light text-crema/75">
-            Escribinos por mensaje privado o comunicate con nuestro equipo comercial al{' '}
-            <a href={wa} target="_blank" rel="noreferrer" className="font-bold whitespace-nowrap text-oro underline-offset-4 hover:underline">{telVisible(marca.whatsappComercial)}</a>.
-          </p>
+          <div className="mt-8 border-t border-crema/10 pt-7">
+            <a href={waNegocios} target="_blank" rel="noreferrer"
+            className="group inline-flex h-12 items-center gap-2.5 rounded-full bg-[#25D366] pr-6 pl-2 text-sm font-bold text-humo shadow-lg shadow-[#25D366]/25 transition hover:-translate-y-0.5 hover:brightness-110">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-humo/15"><MessageCircle size={17} /></span>
+            Quiero sumarme
+            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+          </a>
+          </div>
         </div>
 
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
