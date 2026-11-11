@@ -1,7 +1,6 @@
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { ArrowUpRight, MessageCircle, X } from 'lucide-react'
-import { marca } from '../data/seed'
+import { X } from 'lucide-react'
 
 const DURACION = 5000
 
@@ -16,7 +15,6 @@ export default function PopupNovedad({ producto, onCerrar, onAbrir }) {
     return () => window.removeEventListener('keydown', k)
   }, [onCerrar])
 
-  const wa = `https://wa.me/${marca.whatsapp}?text=${encodeURIComponent('¡Hola Nuevo Munich! Quiero pedir el nuevo Salame Pepperoni. ¿Precio y disponibilidad?')}`
   const verProducto = () => { onCerrar(); onAbrir(producto) }
 
   return (
@@ -62,24 +60,10 @@ export default function PopupNovedad({ producto, onCerrar, onAbrir }) {
               onAnimationEnd={onCerrar} />
           </div>
 
-          <div className="flex flex-col items-start gap-4 p-5 sm:flex-row sm:items-center sm:justify-between md:px-7">
-            <div>
-              <p className="text-[11px] font-bold tracking-[.3em] text-oro uppercase">Llegó a la familia</p>
-              <p className="mt-1 font-display text-3xl leading-none text-crema md:text-4xl">Salame Pepperoni</p>
-              <p className="mt-1.5 text-sm font-light text-crema/70">Con pimentón y pimiento de Cayena · Ideal para pizzas</p>
-            </div>
-            <div className="flex w-full gap-2 sm:w-auto">
-              {producto && (
-                <button onClick={verProducto}
-                  className="inline-flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-crema px-4 text-xs font-bold tracking-[.08em] whitespace-nowrap text-humo uppercase transition hover:bg-oro sm:flex-none">
-                  Ver producto <ArrowUpRight size={15} />
-                </button>
-              )}
-              <a href={wa} target="_blank" rel="noreferrer"
-                className="inline-flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-[#25D366] px-4 text-xs font-bold tracking-[.08em] whitespace-nowrap text-humo uppercase transition hover:brightness-110 sm:flex-none">
-                <MessageCircle size={15} /> Pedir
-              </a>
-            </div>
+          <div className="p-5 text-center md:px-7">
+            <p className="text-[11px] font-bold tracking-[.3em] text-oro uppercase">Llegó a la familia</p>
+            <p className="mt-1 font-display text-3xl leading-none text-crema md:text-4xl">Salame Pepperoni</p>
+            <p className="mt-1.5 text-sm font-light text-crema/70">Con pimentón y pimiento de Cayena · Ideal para pizzas</p>
           </div>
         </div>
       </motion.div>
