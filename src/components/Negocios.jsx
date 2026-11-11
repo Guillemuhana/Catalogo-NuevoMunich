@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { ArrowRight, Check, MapPin, MessageCircle } from 'lucide-react'
+import { ArrowRight, Check, MapPin } from 'lucide-react'
 import { marca } from '../data/seed'
 import { ventajas, waNegocios, zonas } from '../lib/negocios'
 
@@ -88,10 +88,11 @@ export default function Negocios() {
 
           <div className="mt-8 border-t border-crema/10 pt-7">
             <a href={waNegocios} target="_blank" rel="noreferrer"
-            className="group inline-flex h-12 items-center gap-2.5 rounded-full bg-[#25D366] pr-6 pl-2 text-sm font-bold text-humo shadow-lg shadow-[#25D366]/25 transition hover:-translate-y-0.5 hover:brightness-110">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-humo/15"><MessageCircle size={17} /></span>
-            Quiero sumarme
-            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            className="group relative inline-flex h-13 items-center overflow-hidden rounded-full bg-crema px-7 py-4 text-xs font-bold tracking-[.2em] text-humo uppercase">
+            <span className="relative z-10 flex items-center gap-2 whitespace-nowrap transition-colors duration-500 group-hover:text-crema">
+              Quiero sumarme <ArrowRight size={15} className="transition-transform duration-500 group-hover:translate-x-1" />
+            </span>
+            <span className="absolute inset-0 translate-y-full rounded-full bg-munich transition-transform duration-500 ease-out group-hover:translate-y-0" />
           </a>
           </div>
         </div>
