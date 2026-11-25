@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useAnimate } from 'motion/react'
+import { AnimatePresence, motion, useAnimate, useMotionTemplate, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, Award, BadgeCheck, Minus, PackageCheck, Plus, ShoppingCart, Star, ThumbsUp, Trash2 } from 'lucide-react'
 import { fotosDe, miniatura } from '../lib/data'
@@ -212,6 +212,7 @@ function CajaFrente({ cerrando, total }) {
 function Escenario({ unidades, total, cerrando, escenarioRef, desde }) {
   const [caja, animarCaja] = useAnimate()
   const ultimo = useRef(0)
+  const [polvo, setPolvo] = useState([])
 
   // Pequeño rebote de la caja cuando cae un producto
   useEffect(() => {
@@ -245,7 +246,10 @@ function Escenario({ unidades, total, cerrando, escenarioRef, desde }) {
                       ? { x: [d.dx, d.dx * .3, 0], y: [d.dy, Math.min(d.dy, 0) - d.alto * .3, 0], rotate: [0, rot * 2, rot], scale: [1.15, .95, 1], rotateX: [0, 0, l.inclina] }
                       : { y: 0, opacity: 1, rotate: rot, rotateX: l.inclina }}
                     transition={d ? { duration: .75, times: [0, .55, 1], ease: 'easeInOut' } : { type: 'spring', stiffness: 260, damping: 20 }}
-                    onAnimationComplete={() => { delete desde.current[u.key] }}
+                    onAnimationComplete={() => {
+                      if (desde.current[u.key]) setPolvo((v) => [...v, { id: u.key + Date.now(), x: l.x + corrido }])
+                      delete desde.current[u.key]
+                    }}
                     style={{
                       transformPerspective: 600, originY: 1,
                       // tono de la luz cálida de la escena + sombra propia y de contacto
@@ -258,6 +262,18 @@ function Escenario({ unidades, total, cerrando, escenarioRef, desde }) {
           </AnimatePresence>
         </motion.div>
         <CajaFrente cerrando={cerrando} total={total} />
+        {/* Polvillo de cartón cuando cae un producto */}
+        {polvo.map((p) => (
+          <span key={p.id} className="pointer-events-none absolute" style={{ left: `${p.x}%`, top: '49%' }}>
+            {[-150, -120, -95, -60, -30, -10].map((ang, i) => (
+              <motion.span key={i} className="absolute h-1.5 w-1.5 rounded-full bg-[#e8c99a]"
+                initial={{ x: 0, y: 0, opacity: .9, scale: 1 }}
+                animate={{ x: Math.cos(ang * Math.PI / 180) * (26 + i * 4), y: Math.sin(ang * Math.PI / 180) * (20 + i * 3), opacity: 0, scale: .3 }}
+                transition={{ duration: .6, ease: 'easeOut' }}
+                onAnimationComplete={i === 0 ? () => setPolvo((v) => v.filter((x) => x.id !== p.id)) : undefined} />
+            ))}
+          </span>
+        ))}
       </motion.div>
 
       <AnimatePresence>
@@ -332,61 +348,31 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
 
   return (
     <motion.div id="arma-tu-caja" role="dialog" aria-modal aria-label="Armá tu caja de productos" data-lenis-prevent
-      initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} transition={{ duration: .45, ease: [.22, 1, .36, 1] }}
-      className="fixed inset-0 z-[45] overflow-y-auto overscroll-contain bg-humo">
-      <div className="sticky top-0 z-30 border-b border-white/10 bg-humo/90 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-5 md:px-8">
-          <button onClick={onCerrar} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 px-4 text-sm text-crema transition hover:border-crema/40">
-            <ArrowLeft size={17} /> Volver al catálogo
-          </button>
-          <img src={marca.logo} alt="Nuevo Munich" className="h-9 w-auto md:h-10" />
-        </div>
-      </div>
-    <section className="mx-auto max-w-7xl px-5 pt-8 pb-20 md:px-8 md:pt-12">
-      {/* Encabezado como la pieza de Instagram */}
-      <div className="mb-8 flex flex-col items-start gap-6 md:mb-12 md:flex-row md:items-end md:justify-between">
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .7 }}>
-          <p className="mb-3 flex items-center gap-2.5 text-[11px] tracking-[.4em] text-celeste uppercase"><ShoppingCart size={17} /> Nuevo · Hacé tu pedido</p>
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .4 }}
+      className="fixed inset-0 z-[45] overflow-y-auto overscroll-contain bg-humo lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:overflow-hidden">
+
+      {/* Mesa: la caja es la protagonista. Arriba y fija en celular; mitad izquierda a pantalla completa en compu. */}
+      <Mesa total={total} cerrando={cerrando} onCerrar={onCerrar} onPedir={pedir} onVaciar={() => setCaja([])}>
+        <Escenario unidades={unidades} total={total} cerrando={cerrando} escenarioRef={escenario} desde={desde} />
+      </Mesa>
+
+      {/* Productos para elegir */}
+      <div data-lenis-prevent className="relative min-w-0 px-4 pt-6 pb-28 sm:px-6 lg:h-svh lg:overflow-y-auto lg:overscroll-contain lg:px-10 lg:pt-10 lg:pb-12">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .15 }}>
+          <p className="mb-2 flex items-center gap-2.5 text-[11px] tracking-[.4em] text-celeste uppercase"><ShoppingCart size={16} /> Nuevo · Hacé tu pedido</p>
           <h2 className="font-pincel leading-[1.05] text-white">
-            <span className="flex items-center gap-2 text-5xl md:text-7xl"><Chispas />¡Armá tu</span>
-            <span className="relative mt-1 inline-block -rotate-2 px-4 pt-1 pb-2 text-4xl md:text-6xl">
+            <span className="flex items-center gap-2 text-4xl md:text-5xl xl:text-6xl"><Chispas />¡Armá tu</span>
+            <span className="relative mt-1 inline-block -rotate-2 px-3.5 pt-0.5 pb-1.5 text-3xl md:text-4xl xl:text-5xl">
               <span aria-hidden className="absolute inset-0 -skew-x-6 rounded-[.6rem_1.4rem_.8rem_1.6rem] bg-munich-deep shadow-[0_8px_24px_rgba(0,0,0,.45)]" />
               <span className="relative">caja de productos!</span>
             </span>
           </h2>
-          <p className="mt-4 font-manuscrita text-2xl text-crema/90 md:text-3xl">Elegí tus favoritos y disfrutá la calidad de siempre</p>
+          <p className="mt-3 font-manuscrita text-xl text-crema/90 md:text-2xl">Elegí tus favoritos y disfrutá la calidad de siempre</p>
         </motion.div>
-      </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:gap-10">
-        {/* Caja: arriba y fija en celular, a la derecha y fija en pantalla grande */}
-        <div className="sticky top-16 z-20 -mx-5 lg:order-2 lg:top-24 lg:mx-0 lg:self-start">
-          <div className="relative border-y border-white/10 bg-cover bg-center shadow-2xl shadow-black/50 lg:rounded-[2rem] lg:border"
-            style={{ backgroundImage: `url(${marca.madera})` }}>
-            <div className="absolute inset-0 rounded-[inherit] bg-[radial-gradient(ellipse_at_50%_35%,rgba(255,190,120,.18),transparent_60%),linear-gradient(to_bottom,rgba(0,0,0,.15),rgba(0,0,0,.55))]" />
-            <div className="relative mx-auto w-[min(78vw,36svh)] lg:w-[88%]">
-              <Escenario unidades={unidades} total={total} cerrando={cerrando} escenarioRef={escenario} desde={desde} />
-            </div>
-            <div className="relative flex items-center gap-2 border-t border-white/10 bg-humo/80 px-4 py-3 backdrop-blur md:px-5 lg:rounded-b-[2rem]">
-              <button onClick={pedir} disabled={!total || cerrando}
-                className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-munich px-5 text-sm font-bold tracking-wide text-crema uppercase shadow-lg transition hover:bg-munich-deep disabled:opacity-40">
-                <PackageCheck size={18} /> {cerrando ? 'Cerrando tu caja…' : total ? `Pedir mi caja (${total})` : 'Pedir mi caja'}
-              </button>
-              <button onClick={() => setCaja([])} disabled={!total || cerrando} aria-label="Vaciar la caja"
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema/80 transition hover:border-munich hover:text-crema disabled:opacity-30"><Trash2 size={18} /></button>
-            </div>
-          </div>
-          <Beneficios className="mt-4 hidden lg:grid lg:grid-cols-4" items={[
-            { icono: BadgeCheck, texto: 'Calidad premium' },
-            { icono: Award, texto: 'Productos seleccionados' },
-            { icono: Star, texto: 'Variedad de fiambres' },
-            { icono: ThumbsUp, texto: 'Sabor incomparable' },
-          ]} />
-        </div>
-
-        {/* Elegir productos */}
-        <div className="min-w-0 lg:order-1">
-          <div className="no-scrollbar -mx-5 mb-4 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:px-0">
+        {/* Filtros fijos arriba mientras se recorre la lista */}
+        <div className="sticky top-[max(46svh,300px)] z-10 -mx-4 mt-5 bg-humo/90 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 lg:top-0 lg:-mx-10 lg:px-10">
+          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:px-0">
             {[{ slug: 'todos', nombre: 'Todos' }, ...categorias].map((c) => (
               <button key={c.slug} onClick={() => setFiltro(c.slug)} aria-pressed={filtro === c.slug}
                 className={`min-h-10 shrink-0 rounded-full border px-4 text-sm transition ${filtro === c.slug ? 'border-celeste bg-celeste font-bold text-humo' : 'border-white/15 text-crema/75 hover:border-crema/40'}`}>
@@ -394,38 +380,123 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
               </button>
             ))}
           </div>
+        </div>
 
-          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4">
-            {visibles.map((p) => {
+        <motion.ul layout className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:gap-4 2xl:grid-cols-4">
+          <AnimatePresence mode="popLayout">
+            {visibles.map((p, i) => {
               const n = cuantos(p.slug)
               return (
-                <li key={p.slug} className={`group relative flex flex-col rounded-2xl border bg-carbon p-3 transition ${n ? 'border-celeste/60' : 'border-white/[.07] hover:border-white/20'}`}>
-                  {/* Para elegir se usa la foto original (fondo blanco), como en el catálogo; el recorte va solo dentro de la caja */}
+                <motion.li key={p.slug} layout initial={{ opacity: 0, scale: .94 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .94 }}
+                  transition={{ duration: .3, delay: Math.min(i, 8) * .02 }}
+                  className={`group relative flex flex-col rounded-2xl border bg-carbon p-2.5 transition-colors ${n ? 'border-celeste/70 shadow-[0_0_0_1px_rgba(63,196,230,.25),0_10px_30px_-10px_rgba(63,196,230,.35)]' : 'border-white/[.07] hover:border-white/20'}`}>
+                  {/* Foto original (fondo blanco), como en el catálogo; el recorte va solo dentro de la caja */}
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-white">
                     <img src={miniatura(fotosDe(p)[0])} alt="" loading="lazy" decoding="async" data-foto
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-                    {n > 0 && <span className="absolute top-1.5 right-1.5 flex h-7 min-w-7 items-center justify-center rounded-full bg-celeste px-1.5 text-sm font-bold text-humo">{n}</span>}
+                    <AnimatePresence>
+                      {n > 0 && (
+                        <motion.span key={n} initial={{ scale: .4 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 500, damping: 15 }}
+                          className="absolute top-1.5 right-1.5 flex h-7 min-w-7 items-center justify-center rounded-full bg-celeste px-1.5 text-sm font-bold text-humo shadow">{n}</motion.span>
+                      )}
+                    </AnimatePresence>
                   </div>
-                  <p className="mt-2.5 line-clamp-2 min-h-[2.5em] text-sm leading-tight font-bold text-crema">{p.nombre}</p>
+                  <p className="mt-2 line-clamp-2 min-h-[2.5em] text-[13px] leading-tight font-bold text-crema">{p.nombre}</p>
                   <p className="mt-0.5 truncate text-[11px] text-crema/50">{p.presentaciones?.[0]}</p>
-                  <div className="mt-2.5 flex items-center gap-1.5">
+                  <div className="mt-2 flex items-center gap-1.5">
                     {n > 0 && (
                       <button onClick={() => sacar(p)} aria-label={`Sacar ${p.nombre} de la caja`}
-                        className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-crema transition hover:border-munich"><Minus size={16} /></button>
+                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema transition hover:border-munich"><Minus size={16} /></button>
                     )}
                     <button onClick={(e) => sumar(p, e.currentTarget.closest('li').querySelector('[data-foto]')?.getBoundingClientRect())}
                       aria-label={`Sumar ${p.nombre} a la caja`}
-                      className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-crema text-xs font-bold tracking-wide text-humo uppercase transition hover:bg-celeste">
+                      className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-crema text-xs font-bold tracking-wide text-humo uppercase transition hover:bg-celeste active:scale-95">
                       <Plus size={15} strokeWidth={3} /> {n ? 'Otro' : 'A la caja'}
                     </button>
                   </div>
-                </li>
+                </motion.li>
               )
             })}
-          </ul>
+          </AnimatePresence>
+        </motion.ul>
+
+        <Beneficios className="mt-10 grid-cols-2 gap-y-5 sm:grid-cols-4" items={[
+          { icono: BadgeCheck, texto: 'Calidad premium' },
+          { icono: Award, texto: 'Productos seleccionados' },
+          { icono: Star, texto: 'Variedad de fiambres' },
+          { icono: ThumbsUp, texto: 'Sabor incomparable' },
+        ]} />
+      </div>
+    </motion.div>
+  )
+}
+
+// Motas de polvo flotando en la luz (posiciones fijas para que no cambien entre renders)
+const MOTAS = Array.from({ length: 22 }, (_, i) => ({
+  left: (i * 37) % 100, top: 8 + ((i * 53) % 70), t: 1 + (i % 3), d: 7 + (i % 5) * 1.7, del: -(i * .9),
+}))
+
+// La mesa de madera con la caja: inclinación 3D con el mouse, luz que sigue al puntero y polvo en el aire.
+function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const sx = useSpring(mx, { stiffness: 120, damping: 18 })
+  const sy = useSpring(my, { stiffness: 120, damping: 18 })
+  const rotY = useTransform(sx, [-.5, .5], [-9, 9])
+  const rotX = useTransform(sy, [-.5, .5], [6, -6])
+  const luzX = useTransform(sx, [-.5, .5], ['25%', '75%'])
+  const luzY = useTransform(sy, [-.5, .5], ['15%', '55%'])
+  const luz = useMotionTemplate`radial-gradient(ellipse 55% 45% at ${luzX} ${luzY}, rgba(255,196,120,.26), rgba(255,150,60,.08) 45%, transparent 75%)`
+
+  const mover = (e) => {
+    if (e.pointerType !== 'mouse') return
+    const r = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - .5)
+    my.set((e.clientY - r.top) / r.height - .5)
+  }
+
+  return (
+    <div className="sticky top-0 z-20 lg:relative lg:h-svh">
+      <div onPointerMove={mover} onPointerLeave={() => { mx.set(0); my.set(0) }}
+        className="relative flex h-[46svh] min-h-[300px] flex-col bg-cover bg-center shadow-[0_20px_40px_-10px_rgba(0,0,0,.8)] lg:h-full"
+        style={{ backgroundImage: `url(${marca.madera})` }}>
+        {/* Viñeta, luz cálida que sigue al mouse y polvo en el aire */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_45%,transparent_30%,rgba(0,0,0,.7))]" />
+          <motion.div className="absolute inset-0 mix-blend-screen" style={{ background: luz }} />
+          <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-black/50 to-transparent" />
+          {MOTAS.map((m, i) => (
+            <span key={i} className="mota" style={{ left: `${m.left}%`, top: `${m.top}%`, width: m.t, height: m.t, '--d': `${m.d}s`, '--del': `${m.del}s` }} />
+          ))}
+        </div>
+
+        {/* Barra superior sobre la mesa */}
+        <div className="relative z-10 flex items-center justify-between gap-3 px-4 pt-3 sm:px-6 lg:px-8 lg:pt-6">
+          <button onClick={onCerrar}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 text-sm text-crema backdrop-blur-md transition hover:border-crema/40">
+            <ArrowLeft size={17} /> <span>Volver<span className="hidden sm:inline"> al catálogo</span></span>
+          </button>
+          <img src={marca.logo} alt="Nuevo Munich" className="h-8 w-auto drop-shadow-lg lg:h-10" />
+        </div>
+
+        {/* La caja, lo más grande posible según el lugar disponible */}
+        <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 lg:px-8 lg:pb-24" style={{ containerType: 'size' }}>
+          <motion.div style={{ rotateX: rotX, rotateY: rotY, transformPerspective: 1400, width: 'min(100cqw, 100cqh)' }}>
+            {children}
+          </motion.div>
+        </div>
+
+        {/* Pedir: abajo de la mesa en compu; en celular va fija abajo de la pantalla */}
+        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t border-white/10 bg-humo/90 px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur-md lg:absolute lg:inset-x-8 lg:bottom-6 lg:rounded-full lg:border lg:bg-black/45 lg:p-2">
+          <motion.button onClick={onPedir} disabled={!total || cerrando} whileTap={{ scale: .97 }}
+            className="relative inline-flex min-h-12 flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-munich px-5 text-sm font-bold tracking-wide text-crema uppercase shadow-lg transition-colors hover:bg-munich-deep disabled:opacity-40">
+            {total > 0 && !cerrando && <span aria-hidden className="brillo-boton absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent" />}
+            <PackageCheck size={18} /> {cerrando ? 'Cerrando tu caja…' : total ? `Pedir mi caja (${total})` : 'Pedir mi caja'}
+          </motion.button>
+          <button onClick={onVaciar} disabled={!total || cerrando} aria-label="Vaciar la caja"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema/80 transition hover:border-munich hover:text-crema disabled:opacity-30"><Trash2 size={18} /></button>
         </div>
       </div>
-    </section>
-    </motion.div>
+    </div>
   )
 }
