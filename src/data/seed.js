@@ -44,6 +44,7 @@ const FET = ['100 g aprox. · al vacío']
 export const productos = [
   // feteados
   p('feteados', 'Bondiola', FET, {
+    sinGluten: true,
     ingredientes: 'Bondiola de cerdo, pimienta negra, coriandro, sal y azúcar.',
     sugerencias: 'Ideal para tablas y sándwiches.',
     destacado: true,
@@ -385,6 +386,7 @@ export const productos = [
   }),
   p('especialidades', 'Kassler', ['2 unidades · 300 g', '22 unidades aprox. · 2,3 kg'], {
     descripcion: 'Costeleta de cerdo horneada y ahumada.',
+    sinGluten: true,
     ingredientes: 'Carne de cerdo cortado en costeletas.',
     sugerencias: 'Platos calientes acompañados con puré de papas o puré de manzanas verdes.',
     destacado: true,

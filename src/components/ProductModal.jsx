@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight, Minus, Plus, X, MessageCircle, ShoppingBag } from 'lucide-react'
+import { BadgeCheck, ChefHat, ChevronLeft, ChevronRight, Minus, Plus, Users, X, MessageCircle, ShoppingBag } from 'lucide-react'
+import { Beneficios, SinGluten, Trazo } from './Estilo'
 import ProductImage from './ProductImage'
 import FichaNutricional from './FichaNutricional'
 import { linkWhatsApp } from '../lib/usePedido'
@@ -36,6 +37,7 @@ function Galeria({ producto, categoria }) {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .25 }}
             className="absolute inset-0 h-full w-full object-contain" />
         </AnimatePresence>
+        {producto.sinGluten && <SinGluten className="absolute top-3 left-3 z-10 w-16 text-[15px]" />}
         {varias && (
           <>
             <button onClick={() => mover(-1)} aria-label="Foto anterior"
@@ -81,10 +83,16 @@ function Detalle({ producto, categoria, relacionados, onCerrar, onAgregar, onAbr
   return (
         <div className="flex min-w-0 flex-col p-6 md:p-9">
           <p className="mb-3 pr-10 text-[11px] tracking-[.35em] text-munich uppercase">{categoria?.nombre}</p>
-          <h2 className="pr-10 font-display text-4xl leading-[1] text-crema md:text-5xl">{producto.nombre}</h2>
+          <h2 className="pr-10 font-pincel text-4xl leading-[1.15] text-white md:text-5xl">{producto.nombre}</h2>
+          <Trazo className="mt-1 w-36" />
 
           {texto && <p className="mt-4 leading-relaxed font-light text-crema/80">{texto}</p>}
           {producto.sugerencias && <Dato titulo="Sugerencia">{producto.sugerencias}</Dato>}
+          <Beneficios className="mt-6 rounded-2xl bg-white/[.04] py-4" items={[
+            { icono: BadgeCheck, texto: 'Calidad premium' },
+            { icono: ChefHat, texto: 'Ideal para tus recetas' },
+            { icono: Users, texto: 'Disfrutá en familia' },
+          ]} />
 
           {pres.length > 0 && (
             <div className="mt-6">

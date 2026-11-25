@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { useState } from 'react'
 import { Plus, Star } from 'lucide-react'
 import ProductImage from './ProductImage'
+import { SinGluten } from './Estilo'
 import { fotosDe, miniatura } from '../lib/data'
 
 export default function ProductCard({ producto, categoria, index, onAbrir, onAgregar }) {
@@ -31,6 +32,7 @@ export default function ProductCard({ producto, categoria, index, onAbrir, onAgr
           <img src={miniatura(alterna)} alt="" aria-hidden decoding="async"
             className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         )}
+        {producto.sinGluten && <SinGluten className="absolute top-2 right-2 w-11 text-[11px] md:w-13 md:text-[13px]" />}
         {(producto.nuevo || producto.destacado) && (
           <span className="absolute bottom-2.5 left-2.5 flex items-center gap-1 rounded-full bg-oro px-2.5 py-1 text-[10px] font-bold tracking-wider text-humo uppercase shadow-md">
             {producto.nuevo ? 'Nuevo envase' : <><Star size={10} fill="currentColor" /> Clásico</>}

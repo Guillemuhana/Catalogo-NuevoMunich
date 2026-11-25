@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import ProductCard from './ProductCard'
 import { marca } from '../data/seed'
+import { Trazo } from './Estilo'
 
 export default function CategorySection({ categoria, productos, numero, onAbrir, onAgregar }) {
   const n = String(numero).padStart(2, '0')
@@ -20,14 +21,15 @@ export default function CategorySection({ categoria, productos, numero, onAbrir,
         <div className="relative flex flex-col justify-end p-5 md:absolute md:inset-y-0 md:left-0 md:w-[45%] md:p-10">
           {ogianco && <img src={marca.ogianco} alt="Ogianco" loading="lazy" className="mb-3 h-12 w-fit md:h-14" />}
           <motion.span initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: .7 }}
-            className="mb-2 block text-[11px] tracking-[.35em] text-oro uppercase md:mb-3">
+            className="mb-2 block text-[11px] tracking-[.35em] text-celeste uppercase md:mb-3">
             {n} — {productos.length} productos
           </motion.span>
-          <h2 className="overflow-hidden pb-[.08em] font-display text-[2.75rem] leading-none text-crema md:text-6xl lg:text-7xl">
+          <h2 className="overflow-hidden pb-[.12em] font-pincel text-[2.6rem] leading-[1.15] text-white md:text-6xl lg:text-[4.2rem]">
             <motion.span className="inline-block" initial={{ y: '100%' }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>
               {categoria.nombre}
             </motion.span>
           </h2>
+          <Trazo className="w-32 md:w-44" />
           {categoria.bajada && <p className="mt-2 text-sm font-light text-crema/80 md:mt-3 md:text-base">{categoria.bajada}</p>}
         </div>
         <span className="franja absolute inset-x-0 bottom-0" />

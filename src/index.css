@@ -10,9 +10,12 @@
   --color-oro: #ffcc00;       /* dorado de marca */
   --color-crema: #f4ebdd;
   --color-pergamino: #e8dcc6;
+  --color-celeste: #3fc4e6;    /* trazos celestes de los estados de WhatsApp */
 
   --font-display: 'Cormorant Unicase', Georgia, serif;
   --font-sans: 'Inria Sans', system-ui, sans-serif;
+  --font-pincel: 'Kaushan Script', 'Brush Script MT', cursive;   /* títulos de los estados de WhatsApp */
+  --font-manuscrita: 'Caveat', cursive;
 
   --animate-marquee: marquee 40s linear infinite;
   --animate-marquee-lento: marquee 55s linear infinite;
@@ -214,6 +217,9 @@ button:is(:hover, :focus-visible) .gorro-chef {
 @media (max-width: 767px) {
   .grain::after { display: none; }
 }
+
+/* Barra de avance de los estados de WhatsApp */
+@keyframes estado-avance { from { transform: scaleX(0) } to { transform: scaleX(1) } }
 
 /* Barra de cuenta regresiva del popup de bienvenida */
 @keyframes popup-cuenta { from { transform: scaleX(1) } to { transform: scaleX(0) } }

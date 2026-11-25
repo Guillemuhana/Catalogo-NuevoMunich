@@ -5,6 +5,8 @@ import { IconoInstagram } from './Instagram'
 import { marca } from '../data/seed'
 import { recetas } from '../data/recetas'
 import { pausarScroll } from '../lib/scroll'
+import Estados from './Estados'
+import { Sello, Trazo, TituloPincel } from './Estilo'
 
 function RecetaModal({ receta, productos, onCerrar, onAbrir }) {
   useEffect(() => {
@@ -31,24 +33,25 @@ function RecetaModal({ receta, productos, onCerrar, onAbrir }) {
         <div data-lenis-prevent className="grid max-h-[92svh] overflow-y-auto overscroll-contain rounded-t-3xl border border-white/10 bg-carbon md:grid-cols-[2fr_3fr] md:rounded-3xl">
           <img src={receta.foto} alt={receta.titulo} className="aspect-[4/3] w-full object-cover md:sticky md:top-0 md:aspect-auto md:h-full md:max-h-[92svh]" />
           <div className="min-w-0 p-6 md:p-9">
-            <p className="mb-2 flex items-center gap-2 text-[11px] tracking-[.3em] text-oro uppercase"><ChefHat size={16} /> {receta.etiqueta}</p>
-            <h3 className="pr-8 font-display text-4xl leading-[1.02] text-crema md:text-5xl">{receta.titulo}</h3>
+            <p className="mb-2 flex items-center gap-2 text-[11px] tracking-[.3em] text-celeste uppercase"><ChefHat size={16} /> {receta.etiqueta}</p>
+            <h3 className="pr-8 font-pincel text-4xl leading-[1.15] text-white md:text-5xl">{receta.titulo}</h3>
+            <Trazo className="mt-1 w-40" />
             <p className="mt-3 leading-relaxed font-light text-crema/80">{receta.bajada}</p>
 
-            <h4 className={`texto-oro mt-7 ${subtitulo}`}>{receta.tituloIngredientes || 'Ingredientes'}</h4>
+            <h4 className={`mt-7 text-celeste ${subtitulo}`}>{receta.tituloIngredientes || 'Ingredientes'}</h4>
             <ul className="space-y-1.5 text-crema/90">
               {receta.ingredientes.map((i) => (
-                <li key={i} className="flex gap-2.5 leading-snug"><span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-oro" />{i}</li>
+                <li key={i} className="flex gap-2.5 leading-snug"><span aria-hidden className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-celeste" />{i}</li>
               ))}
             </ul>
 
             {receta.pasos.length > 0 && (
               <>
-                <h4 className={`texto-oro mt-7 ${subtitulo}`}>Procedimiento</h4>
+                <h4 className={`mt-7 text-celeste ${subtitulo}`}>Procedimiento</h4>
                 <ol className="space-y-3">
                   {receta.pasos.map((p, n) => (
                     <li key={p} className="flex gap-3 leading-relaxed text-crema/90">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-oro text-sm font-bold text-humo">{n + 1}</span>{p}
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-celeste text-sm font-bold text-humo">{n + 1}</span>{p}
                     </li>
                   ))}
                 </ol>
@@ -64,7 +67,7 @@ function RecetaModal({ receta, productos, onCerrar, onAbrir }) {
                 <div className="flex flex-wrap gap-2">
                   {usados.map((p) => (
                     <button key={p.slug} onClick={() => { onCerrar(); onAbrir(p) }}
-                      className="min-h-11 rounded-full border border-white/15 px-4 py-2 text-left text-sm text-crema transition hover:border-oro hover:text-oro">{p.nombre}</button>
+                      className="min-h-11 rounded-full border border-white/15 px-4 py-2 text-left text-sm text-crema transition hover:border-celeste hover:text-celeste">{p.nombre}</button>
                   ))}
                 </div>
               </>
@@ -89,30 +92,36 @@ export default function Recetas({ productos, onAbrir }) {
     <section id="recetas" className="mx-auto mt-20 max-w-7xl px-5 md:mt-32 md:px-8">
       <div className="mb-8 flex flex-col gap-5 md:mb-12 md:flex-row md:items-end md:justify-between">
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .7 }}>
-          <p className="mb-3 flex items-center gap-2.5 text-[11px] tracking-[.4em] text-oro uppercase"><ChefHat size={18} /> Rincón del Chef</p>
-          <h2 className="texto-oro w-fit pr-[.08em] font-display text-5xl leading-none italic md:text-7xl">Recetas</h2>
+          <p className="mb-3 flex items-center gap-2.5 text-[11px] tracking-[.4em] text-celeste uppercase"><ChefHat size={18} /> Rincón del Chef</p>
+          <TituloPincel bajada="Sabor que se disfruta">Recetas</TituloPincel>
           <p className="mt-4 max-w-xl font-light text-crema/80">Ideas de nuestra cocina para disfrutar los productos Nuevo Munich en casa.</p>
         </motion.div>
         <a href={marca.instagram} target="_blank" rel="noreferrer"
-          className="inline-flex min-h-12 w-fit shrink-0 items-center gap-2.5 rounded-full border border-oro/60 px-6 py-3 text-sm font-bold text-oro transition hover:bg-oro hover:text-humo">
+          className="inline-flex min-h-12 w-fit shrink-0 items-center gap-2.5 rounded-full border border-celeste/70 px-6 py-3 text-sm font-bold text-celeste transition hover:bg-celeste hover:text-humo">
           <IconoInstagram size={17} /> Más recetas en Instagram
         </a>
       </div>
+
+      <Estados productos={productos} onAbrir={onAbrir} />
 
       <div className="grid gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
         {recetas.map((r, i) => (
           <motion.button key={r.slug} onClick={() => setAbierta(r)} aria-label={`Ver receta: ${r.titulo}`}
             initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: .6, delay: i * .07, ease: [.22, 1, .36, 1] }}
-            className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/[.07] bg-carbon text-left transition duration-300 hover:-translate-y-1 hover:border-oro/40">
-            <span className="block aspect-[4/3] w-full overflow-hidden bg-roble lg:aspect-[4/5]">
+            className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/[.07] bg-carbon text-left transition duration-300 hover:-translate-y-1 hover:border-celeste/50">
+            <span className="relative block aspect-[4/3] w-full overflow-hidden bg-roble lg:aspect-[4/5]">
               <img src={r.foto} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <span className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/70 to-transparent" />
+              <img src={marca.logo} alt="" className="absolute bottom-3 left-1/2 h-9 w-auto -translate-x-1/2 drop-shadow-lg" />
+              {i === 0 && <Sello chico arriba="Sabor" abajo="del chef" className="absolute top-3 right-3" />}
             </span>
             <span className="flex flex-1 flex-col p-5 md:p-6">
-              <span className="mb-2 text-[11px] tracking-[.25em] text-oro uppercase">{r.etiqueta}</span>
-              <span className="font-display text-3xl leading-[1.05] text-crema">{r.titulo}</span>
+              <span className="mb-2 flex items-center gap-1.5 text-[11px] tracking-[.25em] text-celeste uppercase">{r.etiqueta}</span>
+              <span className="font-pincel text-[1.75rem] leading-[1.15] text-white">{r.titulo}</span>
+              <Trazo className="mt-1 w-24 opacity-90" />
               <span className="mt-2 leading-snug font-light text-crema/75">{r.bajada}</span>
-              <span className="mt-auto pt-4 text-sm font-bold text-oro">{r.pasos.length ? 'Ver receta' : 'Ver qué trae'} →</span>
+              <span className="mt-auto pt-4 text-sm font-bold text-celeste">{r.pasos.length ? 'Ver receta' : 'Ver qué trae'} →</span>
             </span>
           </motion.button>
         ))}
