@@ -382,9 +382,10 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
               const n = cuantos(p.slug)
               return (
                 <li key={p.slug} className={`group relative flex flex-col rounded-2xl border bg-carbon p-3 transition ${n ? 'border-celeste/60' : 'border-white/[.07] hover:border-white/20'}`}>
-                  <div className="relative flex aspect-[4/3] items-center justify-center rounded-xl bg-[radial-gradient(circle_at_50%_60%,#3a2f28,#1d1815_70%)] p-2">
-                    <img src={foto(p)} alt="" loading="lazy" decoding="async" data-foto
-                      className={`max-h-full max-w-full object-contain drop-shadow-[0_6px_8px_rgba(0,0,0,.5)] transition duration-300 group-hover:scale-105 ${conRecorte.has(p.slug) ? '' : 'rounded-lg'}`} />
+                  {/* Para elegir se usa la foto original (fondo blanco), como en el catálogo; el recorte va solo dentro de la caja */}
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-white">
+                    <img src={miniatura(fotosDe(p)[0])} alt="" loading="lazy" decoding="async" data-foto
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
                     {n > 0 && <span className="absolute top-1.5 right-1.5 flex h-7 min-w-7 items-center justify-center rounded-full bg-celeste px-1.5 text-sm font-bold text-humo">{n}</span>}
                   </div>
                   <p className="mt-2.5 line-clamp-2 min-h-[2.5em] text-sm leading-tight font-bold text-crema">{p.nombre}</p>
