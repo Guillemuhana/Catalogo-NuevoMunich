@@ -238,8 +238,11 @@ function Escenario({ unidades, total, cerrando, escenarioRef, desde }) {
               const corrido = giro(u.key + 'x') / 5 // pequeño desorden natural
               return (
                 <motion.div key={u.key} className="absolute -translate-x-1/2"
-                  style={{ left: `${l.x + corrido}%`, top: `${l.y - capa * 7 - alto + Math.abs(corrido) * .4}%`, height: `${alto}%`, width: '27%', zIndex: capa * 10 + l.fila }}
+                  style={{ left: `${l.x + corrido}%`, top: `${l.y - capa * 7 - alto + Math.abs(corrido) * .4}%`, height: `${alto}%`, width: '34%', zIndex: capa * 10 + l.fila }}
                   exit={{ opacity: 0, transition: { duration: .3 } }}>
+                  {/* Sombra de contacto sobre el piso de la caja (o sobre lo que hay abajo) */}
+                  <motion.span aria-hidden className="absolute bottom-[-3%] left-[22%] h-[12%] w-[62%] rounded-[50%] bg-black blur-[5px]"
+                    initial={{ opacity: 0 }} animate={{ opacity: .55 * l.luz }} transition={{ delay: d ? .6 : 0, duration: .25 }} />
                   <motion.img src={u.src} alt="" draggable={false}
                     initial={d ? { x: d.dx, y: d.dy, rotate: 0, scale: 1.15 } : { y: -30, opacity: 0, rotate: rot }}
                     animate={d
@@ -252,10 +255,10 @@ function Escenario({ unidades, total, cerrando, escenarioRef, desde }) {
                     }}
                     style={{
                       transformPerspective: 600, originY: 1,
-                      // tono de la luz cálida de la escena + sombra propia y de contacto
-                      filter: `brightness(${l.luz}) sepia(.12) saturate(1.05) drop-shadow(0 2px 1.5px rgba(0,0,0,.55)) drop-shadow(0 10px 10px rgba(20,10,0,.45))`,
+                      // luz cálida desde arriba a la izquierda: el producto proyecta su sombra hacia abajo a la derecha
+                      filter: `brightness(${l.luz}) contrast(1.04) saturate(1.06) drop-shadow(0 1px 1px rgba(0,0,0,.6)) drop-shadow(5px 7px 7px rgba(20,10,0,.5))`,
                     }}
-                    className="h-full w-full object-contain object-bottom" />
+                    className="relative h-full w-full object-contain object-bottom" />
                 </motion.div>
               )
             })}
@@ -486,7 +489,7 @@ function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
         </div>
 
         {/* Pedir: abajo de la mesa en compu; en celular va fija abajo de la pantalla */}
-        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t border-white/10 bg-humo/90 px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur-md partido:absolute partido:inset-x-4 partido:bottom-3 lg:inset-x-8 lg:bottom-6 partido:rounded-full partido:border partido:bg-black/45 partido:p-2">
+        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t border-white/10 bg-humo/90 px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur-md partido:absolute partido:inset-x-auto partido:left-1/2 partido:w-[min(22rem,calc(100%-2rem))] partido:-translate-x-1/2 partido:bottom-3 lg:bottom-6 partido:rounded-full partido:border partido:bg-black/45 partido:p-2">
           <motion.button onClick={onPedir} disabled={!total || cerrando} whileTap={{ scale: .97 }}
             className="relative inline-flex min-h-12 flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-munich px-5 text-sm font-bold tracking-wide text-crema uppercase shadow-lg transition-colors hover:bg-munich-deep disabled:opacity-40">
             {total > 0 && !cerrando && <span aria-hidden className="brillo-boton absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent" />}
