@@ -436,14 +436,12 @@ const MOTAS = Array.from({ length: 22 }, (_, i) => ({
   left: (i * 37) % 100, top: 8 + ((i * 53) % 70), t: 1 + (i % 3), d: 7 + (i % 5) * 1.7, del: -(i * .9),
 }))
 
-// La mesa de madera con la caja: inclinación 3D con el mouse, luz que sigue al puntero y polvo en el aire.
+// La mesa de madera con la caja: luz cálida que sigue al puntero y polvo en el aire.
 function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
   const mx = useMotionValue(0)
   const my = useMotionValue(0)
   const sx = useSpring(mx, { stiffness: 120, damping: 18 })
   const sy = useSpring(my, { stiffness: 120, damping: 18 })
-  const rotY = useTransform(sx, [-.5, .5], [-9, 9])
-  const rotX = useTransform(sy, [-.5, .5], [6, -6])
   const luzX = useTransform(sx, [-.5, .5], ['25%', '75%'])
   const luzY = useTransform(sy, [-.5, .5], ['15%', '55%'])
   const luz = useMotionTemplate`radial-gradient(ellipse 55% 45% at ${luzX} ${luzY}, rgba(255,196,120,.26), rgba(255,150,60,.08) 45%, transparent 75%)`
@@ -481,9 +479,9 @@ function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
 
         {/* La caja, lo más grande posible según el lugar disponible */}
         <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 lg:px-8 lg:pb-24" style={{ containerType: 'size' }}>
-          <motion.div style={{ rotateX: rotX, rotateY: rotY, transformPerspective: 1400, width: 'min(100cqw, 100cqh)' }}>
+          <div style={{ width: 'min(100cqw, 100cqh)' }}>
             {children}
-          </motion.div>
+          </div>
         </div>
 
         {/* Pedir: abajo de la mesa en compu; en celular va fija abajo de la pantalla */}
