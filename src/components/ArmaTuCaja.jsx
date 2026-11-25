@@ -489,7 +489,7 @@ function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
         </div>
 
         {/* Pedir: abajo de la mesa en compu; en celular va fija abajo de la pantalla */}
-        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t border-white/10 bg-humo/90 px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur-md partido:absolute partido:inset-x-auto partido:left-1/2 partido:w-[min(22rem,calc(100%-2rem))] partido:-translate-x-1/2 partido:bottom-3 lg:bottom-6 partido:rounded-full partido:border partido:bg-black/45 partido:p-2">
+        <div className="fixed bottom-[max(.75rem,env(safe-area-inset-bottom))] left-1/2 z-30 flex w-[min(20rem,calc(100%-2rem))] -translate-x-1/2 items-center gap-2 rounded-full border border-white/10 bg-black/60 p-1.5 shadow-[0_10px_30px_rgba(0,0,0,.6)] backdrop-blur-md partido:absolute partido:bottom-3 partido:w-[min(22rem,calc(100%-2rem))] lg:bottom-6 partido:bg-black/45 partido:p-2">
           <motion.button onClick={onPedir} disabled={!total || cerrando} whileTap={{ scale: .97 }}
             className="relative inline-flex min-h-12 flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-munich px-5 text-sm font-bold tracking-wide text-crema uppercase shadow-lg transition-colors hover:bg-munich-deep disabled:opacity-40">
             {total > 0 && !cerrando && <span aria-hidden className="brillo-boton absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent" />}
