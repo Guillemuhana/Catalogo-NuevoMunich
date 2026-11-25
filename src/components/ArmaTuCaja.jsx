@@ -480,7 +480,7 @@ function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
 
         {/* La caja, lo más grande posible según el lugar disponible */}
         <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 lg:px-8 partido:pb-[4.5rem] lg:pb-24" style={{ containerType: 'size' }}>
-          <div style={{ width: 'min(100cqw, 100cqh)' }}>
+          <div className="-translate-y-5 partido:translate-y-0" style={{ width: 'min(100cqw, 100cqh)' }}>
             {children}
           </div>
         </div>
