@@ -349,7 +349,7 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
   return (
     <motion.div id="arma-tu-caja" role="dialog" aria-modal aria-label="Armá tu caja de productos" data-lenis-prevent
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: .4 }}
-      className="fixed inset-0 z-[45] overflow-y-auto overscroll-contain bg-humo lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:overflow-hidden">
+      className="fixed inset-0 z-[45] overflow-y-auto overscroll-contain bg-humo partido:grid partido:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] partido:overflow-hidden">
 
       {/* Mesa: la caja es la protagonista. Arriba y fija en celular; mitad izquierda a pantalla completa en compu. */}
       <Mesa total={total} cerrando={cerrando} onCerrar={onCerrar} onPedir={pedir} onVaciar={() => setCaja([])}>
@@ -357,8 +357,9 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
       </Mesa>
 
       {/* Productos para elegir */}
-      <div data-lenis-prevent className="relative min-w-0 px-4 pt-6 pb-28 sm:px-6 lg:h-svh lg:overflow-y-auto lg:overscroll-contain lg:px-10 lg:pt-10 lg:pb-12">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .15 }}>
+      <div data-lenis-prevent className="@container relative min-w-0 px-4 pt-6 pb-28 sm:px-6 partido:h-svh partido:overflow-y-auto partido:overscroll-contain lg:px-10 lg:pt-10 partido:pb-12 bajo:pt-3">
+        <h2 className="hidden font-pincel text-3xl text-white bajo:block">¡Armá tu <span className="text-celeste">caja!</span></h2>
+        <motion.div className="bajo:hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .15 }}>
           <p className="mb-2 flex items-center gap-2.5 text-[11px] tracking-[.4em] text-celeste uppercase"><ShoppingCart size={16} /> Nuevo · Hacé tu pedido</p>
           <h2 className="font-pincel leading-[1.05] text-white">
             <span className="flex items-center gap-2 text-4xl md:text-5xl xl:text-6xl"><Chispas />¡Armá tu</span>
@@ -371,7 +372,7 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
         </motion.div>
 
         {/* Filtros fijos arriba mientras se recorre la lista */}
-        <div className="sticky top-[max(46svh,300px)] z-10 -mx-4 mt-5 bg-humo/90 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 lg:top-0 lg:-mx-10 lg:px-10">
+        <div className="sticky top-[max(46svh,300px)] z-10 -mx-4 mt-5 bajo:mt-2 bg-humo/90 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 partido:top-0 lg:-mx-10 lg:px-10 bajo:py-2">
           <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:px-0">
             {[{ slug: 'todos', nombre: 'Todos' }, ...categorias].map((c) => (
               <button key={c.slug} onClick={() => setFiltro(c.slug)} aria-pressed={filtro === c.slug}
@@ -382,7 +383,7 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
           </div>
         </div>
 
-        <motion.ul layout className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:gap-4 2xl:grid-cols-4">
+        <motion.ul layout className="mt-2 grid grid-cols-2 gap-3 @md:grid-cols-3 @3xl:grid-cols-4 partido:gap-4">
           <AnimatePresence mode="popLayout">
             {visibles.map((p, i) => {
               const n = cuantos(p.slug)
@@ -454,9 +455,9 @@ function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
   }
 
   return (
-    <div className="sticky top-0 z-20 lg:relative lg:h-svh">
+    <div className="sticky top-0 z-20 partido:relative partido:h-svh">
       <div onPointerMove={mover} onPointerLeave={() => { mx.set(0); my.set(0) }}
-        className="relative flex h-[46svh] min-h-[300px] flex-col bg-cover bg-center shadow-[0_20px_40px_-10px_rgba(0,0,0,.8)] lg:h-full"
+        className="relative flex h-[46svh] min-h-[300px] flex-col bg-cover bg-center shadow-[0_20px_40px_-10px_rgba(0,0,0,.8)] partido:h-full"
         style={{ backgroundImage: `url(${marca.madera})` }}>
         {/* Viñeta, luz cálida que sigue al mouse y polvo en el aire */}
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -474,18 +475,18 @@ function Mesa({ children, total, cerrando, onCerrar, onPedir, onVaciar }) {
             className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-black/35 px-4 text-sm text-crema backdrop-blur-md transition hover:border-crema/40">
             <ArrowLeft size={17} /> <span>Volver<span className="hidden sm:inline"> al catálogo</span></span>
           </button>
-          <img src={marca.logo} alt="Nuevo Munich" className="h-8 w-auto drop-shadow-lg lg:h-10" />
+          <img src={marca.logo} alt="Nuevo Munich" className="h-8 w-auto drop-shadow-lg partido:h-10" />
         </div>
 
         {/* La caja, lo más grande posible según el lugar disponible */}
-        <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 lg:px-8 lg:pb-24" style={{ containerType: 'size' }}>
+        <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 lg:px-8 partido:pb-[4.5rem] lg:pb-24" style={{ containerType: 'size' }}>
           <div style={{ width: 'min(100cqw, 100cqh)' }}>
             {children}
           </div>
         </div>
 
         {/* Pedir: abajo de la mesa en compu; en celular va fija abajo de la pantalla */}
-        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t border-white/10 bg-humo/90 px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur-md lg:absolute lg:inset-x-8 lg:bottom-6 lg:rounded-full lg:border lg:bg-black/45 lg:p-2">
+        <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-2 border-t border-white/10 bg-humo/90 px-4 pt-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur-md partido:absolute partido:inset-x-4 partido:bottom-3 lg:inset-x-8 lg:bottom-6 partido:rounded-full partido:border partido:bg-black/45 partido:p-2">
           <motion.button onClick={onPedir} disabled={!total || cerrando} whileTap={{ scale: .97 }}
             className="relative inline-flex min-h-12 flex-1 items-center justify-center gap-2 overflow-hidden rounded-full bg-munich px-5 text-sm font-bold tracking-wide text-crema uppercase shadow-lg transition-colors hover:bg-munich-deep disabled:opacity-40">
             {total > 0 && !cerrando && <span aria-hidden className="brillo-boton absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/25 to-transparent" />}

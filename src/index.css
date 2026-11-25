@@ -23,6 +23,15 @@
   --animate-spin-slow: spin 22s linear infinite;
 }
 
+/* Pantalla baja y acostada (celular apaisado): versión compacta */
+@custom-variant bajo (@media (orientation: landscape) and (max-height: 600px));
+
+/* Armá tu caja en dos columnas: compu, o celular/tablet acostado (poca altura) */
+@custom-variant partido {
+  @media (min-width: 1024px) { @slot; }
+  @media (orientation: landscape) and (max-height: 600px) and (min-width: 600px) { @slot; }
+}
+
 /* Pantalla apaisada con lugar para poner el texto al lado de la foto del hero */
 @custom-variant ancho (@media (min-aspect-ratio: 7/5) and (min-width: 640px));
 
