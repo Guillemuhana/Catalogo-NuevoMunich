@@ -338,9 +338,6 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
           </h2>
           <p className="mt-4 font-manuscrita text-2xl text-crema/90 md:text-3xl">Elegí tus favoritos y disfrutá la calidad de siempre</p>
         </motion.div>
-        <p className="max-w-sm font-light text-crema/75 md:text-right">
-          Tocá <span className="font-bold text-crema">+</span> en cada producto y miralo caer en tu caja. Cuando esté lista, la cerramos y te la preparamos.
-        </p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,500px)] lg:gap-10">
