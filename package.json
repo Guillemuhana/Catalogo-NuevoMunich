@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "catalogo": "node scripts/catalogo-pdf.mjs",
+    "recortes": "node scripts/recortes-caja.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

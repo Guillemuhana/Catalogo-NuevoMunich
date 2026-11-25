@@ -15,6 +15,7 @@ import FoodTruck from './components/FoodTruck'
 import Negocios from './components/Negocios'
 import Footer from './components/Footer'
 import Clasicos from './components/Clasicos'
+import ArmaTuCaja from './components/ArmaTuCaja'
 import Recetas from './components/Recetas'
 import NuevoEnvase from './components/NuevoEnvase'
 import Instagram, { PestanaInstagram } from './components/Instagram'
@@ -46,6 +47,8 @@ export default function App() {
   const [toast, setToast] = useState(null)
   const [vuelos, setVuelos] = useState([])
   const [verPopup, setVerPopup] = useState(true)
+  const [verCaja, setVerCaja] = useState(() => location.hash === '#caja')
+  const cerrarCaja = useCallback(() => setVerCaja(false), [])
   const cerrarPopup = useCallback(() => setVerPopup(false), [])
   const pedido = usePedido()
 
@@ -99,7 +102,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', k)
   }, [])
 
-  const hayOverlay = !!abierto || verPedido || verBuscar
+  const hayOverlay = !!abierto || verPedido || verBuscar || verCaja
   useEffect(() => {
     pausarScroll(hayOverlay)
     document.documentElement.style.overflow = hayOverlay ? 'hidden' : ''
@@ -114,6 +117,13 @@ export default function App() {
     setToast({ id: Date.now(), texto: `${cantidad} × ${producto.nombre}` })
   }, [pedido])
 
+  // La caja armada pasa entera al pedido y se abre para completar los datos
+  const pedirCaja = useCallback((lineas) => {
+    lineas.forEach((l) => pedido.agregar(l.producto, l.presentacion, l.cantidad))
+    setVerCaja(false)
+    setVerPedido(true)
+  }, [pedido])
+
   useEffect(() => {
     if (!toast) return
     const t = setTimeout(() => setToast(null), 2600)
@@ -124,11 +134,11 @@ export default function App() {
     <MotionConfig reducedMotion="user">
     <div className="grain">
       <AnimatePresence>{intro && <Intro key="intro" />}</AnimatePresence>
-      <AnimatePresence>{!intro && verPopup && <PopupNovedad key="popup" onCerrar={cerrarPopup} onAbrir={setAbierto}
+      <AnimatePresence>{!intro && verPopup && !verCaja && <PopupNovedad key="popup" onCerrar={cerrarPopup} onAbrir={setAbierto}
         producto={productos.find((p) => normalizar(p.nombre).includes('pepperoni'))} />}</AnimatePresence>
       <Progreso />
       {data && <BotonBot />}
-      {data && <PestanaInstagram />}
+      {data && <PestanaInstagram onCaja={() => setVerCaja(true)} />}
       {vuelos.map((v) => (
         <motion.img key={v.id} src={v.src} alt="" aria-hidden
           initial={{ left: v.origen.left, top: v.origen.top, width: v.origen.width, height: v.origen.height, opacity: 1, borderRadius: 16 }}
@@ -177,6 +187,9 @@ export default function App() {
         </LayoutGroup>
       )}
 
+      <AnimatePresence>
+        {data && verCaja && <ArmaTuCaja key="caja" categorias={categorias} productos={productos} onPedir={pedirCaja} onCerrar={cerrarCaja} />}
+      </AnimatePresence>
       <AnimatePresence>{verPedido && <PedidoDrawer key="pedido" pedido={pedido} onCerrar={() => setVerPedido(false)} />}</AnimatePresence>
       <AnimatePresence>
         {verBuscar && <SearchOverlay key="buscar" productos={productos} catMap={catMap} onCerrar={() => setVerBuscar(false)} onAbrir={setAbierto} />}

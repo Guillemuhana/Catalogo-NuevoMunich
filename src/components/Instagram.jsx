@@ -1,3 +1,4 @@
+import { Package } from 'lucide-react'
 import { motion } from 'motion/react'
 import { marca, productos } from '../data/seed'
 
@@ -47,12 +48,22 @@ export default function Instagram() {
 }
 
 // Pestaña vertical fija en el borde derecho de la pantalla.
-export function PestanaInstagram() {
+// Pestañas fijas del costado: Instagram y, debajo, "Armá tu caja"
+export function PestanaInstagram({ onCaja }) {
   return (
-    <a href={marca.instagram} target="_blank" rel="noreferrer" aria-label="Seguinos en Instagram"
-      className="fixed top-1/2 right-0 z-40 flex -translate-y-1/2 flex-col items-center gap-2 rounded-l-xl bg-gradient-to-b from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] px-1.5 py-3 text-white shadow-lg shadow-black/40 transition-[padding] hover:pr-2.5">
-      <IconoInstagram size={15} />
-      <span className="text-[10px] font-bold tracking-[.2em] uppercase [writing-mode:vertical-rl] rotate-180">Instagram</span>
-    </a>
+    <div className="fixed top-1/2 right-0 z-40 flex -translate-y-1/2 flex-col items-end gap-2">
+      <a href={marca.instagram} target="_blank" rel="noreferrer" aria-label="Seguinos en Instagram"
+        className="flex flex-col items-center gap-2 rounded-l-xl bg-gradient-to-b from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] px-1.5 py-3 text-white shadow-lg shadow-black/40 transition-[padding] hover:pr-2.5">
+        <IconoInstagram size={15} />
+        <span className="text-[10px] font-bold tracking-[.2em] uppercase [writing-mode:vertical-rl] rotate-180">Instagram</span>
+      </a>
+      {onCaja && (
+        <button onClick={onCaja} aria-label="Armá tu caja de productos"
+          className="flex flex-col items-center gap-2 rounded-l-xl bg-gradient-to-b from-[#d9a867] to-[#a8743f] px-1.5 py-3 text-humo shadow-lg shadow-black/40 transition-[padding] hover:pr-2.5">
+          <Package size={15} strokeWidth={2.4} />
+          <span className="text-[10px] font-bold tracking-[.2em] uppercase [writing-mode:vertical-rl] rotate-180">Armá tu caja</span>
+        </button>
+      )}
+    </div>
   )
 }

@@ -435,6 +435,7 @@ export const productos = [
 
 export const marca = {
   logo: 'img/marca/logo.webp',
+  madera: 'img/marca/madera.webp',
   ogianco: 'img/marca/ogianco.webp',
   hero: 'img/marca/hero.webp',          // pantalla ancha (16:9, con lugar para el texto)
   heroMovil: 'img/marca/hero-movil.webp', // celular (4:3, la foto original)
