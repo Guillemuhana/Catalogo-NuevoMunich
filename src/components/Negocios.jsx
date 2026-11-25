@@ -37,10 +37,13 @@ export function Carrusel() {
       {/* Precarga de las fotos para que el cambio sea inmediato */}
       <div hidden>{fotos.map((f) => <img key={f.src} src={f.src} alt="" />)}</div>
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 to-transparent" />
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+      {/* Puntos chicos a la vista, pero con zona táctil grande para el dedo */}
+      <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2">
         {fotos.map((f, n) => (
-          <button key={f.src} onClick={() => setI(n)} aria-label={`Ver foto ${n + 1}`}
-            className={`h-2 rounded-full transition-all ${n === i ? 'w-6 bg-oro' : 'w-2 bg-white/60 hover:bg-white'}`} />
+          <button key={f.src} onClick={() => setI(n)} aria-label={`Ver foto ${n + 1}`} aria-current={n === i}
+            className="group flex h-11 items-center px-1">
+            <span className={`block h-2 rounded-full transition-all ${n === i ? 'w-6 bg-oro' : 'w-2 bg-white/60 group-hover:bg-white'}`} />
+          </button>
         ))}
       </div>
     </div>
