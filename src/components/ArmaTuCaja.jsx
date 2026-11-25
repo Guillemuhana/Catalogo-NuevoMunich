@@ -12,12 +12,14 @@ const foto = (p) => (conRecorte.has(p.slug) ? `img/caja/${p.slug}.webp` : miniat
 
 // Lugares dentro de la caja: primero la fila del fondo, después las de adelante.
 // y = dónde apoya la base del producto (en % del alto del escenario).
+// luz: los del fondo quedan más en sombra; inclina: los de atrás se apoyan contra la pared.
 const FILAS = [
-  { y: 47, s: .78, xs: [25, 38, 51, 64, 77] },
-  { y: 53, s: .88, xs: [21, 35, 50, 65, 79] },
-  { y: 60, s: 1, xs: [28, 43, 58, 73] },
+  { y: 48, s: .86, luz: .72, inclina: 16, xs: [26, 39, 52, 65, 77] },
+  { y: 55, s: .96, luz: .84, inclina: 8, xs: [22, 36, 50, 64, 78] },
+  { y: 62, s: 1.06, luz: .96, inclina: 0, xs: [29, 45, 61, 75] },
 ]
-const LUGARES = FILAS.flatMap((f, n) => f.xs.map((x) => ({ x, y: f.y, s: f.s, fila: n })))
+const LUGARES = FILAS.flatMap((f, n) => f.xs.map((x) => ({ x, y: f.y, s: f.s, luz: f.luz, inclina: f.inclina, fila: n })))
+const ALTO = 31 // alto base de cada producto, en % del escenario
 const MAX_VISIBLES = LUGARES.length * 2
 
 const giro = (txt) => {
@@ -155,9 +157,19 @@ function CajaFrente({ cerrando, total }) {
 
       {/* Logo y textos impresos sobre el cartón (tinta absorbida) */}
       <g style={{ mixBlendMode: 'multiply' }} opacity=".9">
-        <image href={marca.logo} x="106" y="248" width="188" height="61" />
-        <text x="200" y="326" textAnchor="middle" fill="#3b2410" fontFamily="Georgia, serif" fontSize="12.5" letterSpacing="2.6">ARTESANOS DEL SABOR</text>
-        <text x="200" y="343" textAnchor="middle" fill="#3b2410" opacity=".7" fontFamily="Georgia, serif" fontSize="8" letterSpacing="1">www.nuevomunich.com.ar</text>
+        <image href={marca.logo} x="104" y="236" width="192" height="62" />
+        <text x="200" y="318" textAnchor="middle" fill="#2a1a0c" fontFamily="Georgia, 'Times New Roman', serif" fontWeight="700" fontSize="12.5" letterSpacing="1.2">ARTESANOS DEL SABOR</text>
+        {/* WhatsApp */}
+        <g transform="translate(163 323.5)" fill="none" stroke="#2a1a0c" strokeWidth="1.1">
+          <circle cx="4" cy="4" r="3.6" /><path d="M1.3 6.9 0.6 8.2 2.1 7.6" fill="#2a1a0c" />
+        </g>
+        <text x="175" y="330.5" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="7.5">3513844802</text>
+        {/* Instagram */}
+        <g transform="translate(163 334.5)" fill="none" stroke="#2a1a0c" strokeWidth="1.1">
+          <rect x=".4" y=".4" width="7.2" height="7.2" rx="2" /><circle cx="4" cy="4" r="1.8" /><circle cx="6" cy="2" r=".4" fill="#2a1a0c" />
+        </g>
+        <text x="175" y="341.5" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="7.5">nuevomunich</text>
+        <text x="200" y="354" textAnchor="middle" fill="#2a1a0c" fontFamily="Georgia, 'Times New Roman', serif" fontWeight="700" fontSize="10.5">www.nuevomunich.com.ar</text>
       </g>
 
       {/* Solapa de adelante doblada hacia el frente, con su sombra */}
@@ -186,11 +198,11 @@ function CajaFrente({ cerrando, total }) {
 
       {/* Etiqueta con la cantidad */}
       {total > 0 && !cerrando && (
-        <g transform="rotate(-8 322 272)">
-          <circle cx="324" cy="275" r="25" fill="#000" opacity=".25" filter="url(#k-desenfoque-chico)" />
-          <circle cx="322" cy="272" r="25" fill="#fff8ea" stroke="#c8102e" strokeWidth="2" />
-          <text x="322" y="275" textAnchor="middle" fill="#c8102e" fontFamily="Georgia, serif" fontWeight="700" fontSize="19">{total}</text>
-          <text x="322" y="287" textAnchor="middle" fill="#3b2410" fontSize="7" fontWeight="700" letterSpacing=".5">{total === 1 ? 'PRODUCTO' : 'PRODUCTOS'}</text>
+        <g transform="rotate(-8 330 268)">
+          <circle cx="332" cy="271" r="21" fill="#000" opacity=".25" filter="url(#k-desenfoque-chico)" />
+          <circle cx="330" cy="268" r="21" fill="#fff8ea" stroke="#c8102e" strokeWidth="2" />
+          <text x="330" y="271" textAnchor="middle" fill="#c8102e" fontFamily="Georgia, serif" fontWeight="700" fontSize="16">{total}</text>
+          <text x="330" y="280" textAnchor="middle" fill="#3b2410" fontSize="5.5" fontWeight="700" letterSpacing=".5">{total === 1 ? 'PRODUCTO' : 'PRODUCTOS'}</text>
         </g>
       )}
     </svg>
@@ -221,19 +233,25 @@ function Escenario({ unidades, total, cerrando, escenarioRef, desde }) {
               const capa = Math.floor(n / LUGARES.length)
               const rot = giro(u.key)
               const d = desde.current[u.key]
-              const alto = 27 * l.s
+              const alto = ALTO * l.s
+              const corrido = giro(u.key + 'x') / 5 // pequeño desorden natural
               return (
                 <motion.div key={u.key} className="absolute -translate-x-1/2"
-                  style={{ left: `${l.x}%`, top: `${l.y - capa * 7 - alto}%`, height: `${alto}%`, width: '24%', zIndex: capa * 10 + l.fila }}
+                  style={{ left: `${l.x + corrido}%`, top: `${l.y - capa * 7 - alto + Math.abs(corrido) * .4}%`, height: `${alto}%`, width: '27%', zIndex: capa * 10 + l.fila }}
                   exit={{ opacity: 0, transition: { duration: .3 } }}>
                   <motion.img src={u.src} alt="" draggable={false}
                     initial={d ? { x: d.dx, y: d.dy, rotate: 0, scale: 1.15 } : { y: -30, opacity: 0, rotate: rot }}
                     animate={d
-                      ? { x: [d.dx, d.dx * .3, 0], y: [d.dy, Math.min(d.dy, 0) - d.alto * .3, 0], rotate: [0, rot * 2, rot], scale: [1.15, .95, 1] }
-                      : { y: 0, opacity: 1, rotate: rot }}
+                      ? { x: [d.dx, d.dx * .3, 0], y: [d.dy, Math.min(d.dy, 0) - d.alto * .3, 0], rotate: [0, rot * 2, rot], scale: [1.15, .95, 1], rotateX: [0, 0, l.inclina] }
+                      : { y: 0, opacity: 1, rotate: rot, rotateX: l.inclina }}
                     transition={d ? { duration: .75, times: [0, .55, 1], ease: 'easeInOut' } : { type: 'spring', stiffness: 260, damping: 20 }}
                     onAnimationComplete={() => { delete desde.current[u.key] }}
-                    className="h-full w-full object-contain object-bottom drop-shadow-[0_6px_6px_rgba(0,0,0,.45)]" />
+                    style={{
+                      transformPerspective: 600, originY: 1,
+                      // tono de la luz cálida de la escena + sombra propia y de contacto
+                      filter: `brightness(${l.luz}) sepia(.12) saturate(1.05) drop-shadow(0 2px 1.5px rgba(0,0,0,.55)) drop-shadow(0 10px 10px rgba(20,10,0,.45))`,
+                    }}
+                    className="h-full w-full object-contain object-bottom" />
                 </motion.div>
               )
             })}
@@ -293,7 +311,7 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
     const e = escenario.current?.getBoundingClientRect()
     if (origen && e && lugar && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const capa = Math.floor(total / LUGARES.length)
-      const alto = e.height * .27 * lugar.s
+      const alto = e.height * ALTO / 100 * lugar.s
       const fx = e.left + e.width * lugar.x / 100
       const fy = e.top + e.height * (lugar.y - capa * 7) / 100 - alto / 2
       desde.current[`${p.slug}#${n}`] = { dx: origen.left + origen.width / 2 - fx, dy: origen.top + origen.height / 2 - fy, alto: e.height }
