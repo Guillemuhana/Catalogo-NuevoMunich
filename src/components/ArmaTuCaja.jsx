@@ -81,18 +81,6 @@ const KRAFT = (
       <feComposite in="tono" in2="SourceGraphic" operator="in" result="t" />
       <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="t" /><feMergeNode in="m" /></feMerge>
     </filter>
-    {/* Ondas del corrugado que se marcan a través del papel (el "lavarropas" del cartón) */}
-    <pattern id="k-ondas" width="4.6" height="10" patternUnits="userSpaceOnUse">
-      <rect width="2.3" height="10" fill="#fff" opacity=".035" />
-      <rect x="2.3" width="2.3" height="10" fill="#000" opacity=".04" />
-    </pattern>
-    {/* Esquinas gastadas: el cartón se aclara donde roza */}
-    <radialGradient id="k-gastado">
-      <stop offset="0" stopColor="#f6dcb0" stopOpacity=".55" /><stop offset="1" stopColor="#f6dcb0" stopOpacity="0" />
-    </radialGradient>
-    <linearGradient id="k-pliegue-atras" x1="0" y1="1" x2="0" y2="0">
-      <stop offset="0" stopColor="#000" stopOpacity=".3" /><stop offset="1" stopColor="#000" stopOpacity="0" />
-    </linearGradient>
     <filter id="k-desenfoque"><feGaussianBlur stdDeviation="6" /></filter>
     <filter id="k-desenfoque-chico"><feGaussianBlur stdDeviation="1.6" /></filter>
   </defs>
@@ -130,14 +118,6 @@ function CajaAtras({ cerrando }) {
           <polygon points="8,186 38,118 41,119 12,187" fill="url(#k-flauta)" />
           <polygon points={SOLAPAS.abierta.der} fill={RELLENO.der} />
           <polygon points="392,186 362,118 359,119 388,187" fill="url(#k-flauta)" />
-          {/* ondas del corrugado y sombra del doblez junto a cada bisagra */}
-          <polygon points={SOLAPAS.abierta.atras} fill="url(#k-ondas)" />
-          <polygon points={SOLAPAS.abierta.izq} fill="url(#k-ondas)" />
-          <polygon points={SOLAPAS.abierta.der} fill="url(#k-ondas)" />
-          <polygon points="84,150 316,150 315.4,141 84.6,141" fill="url(#k-pliegue-atras)" />
-          <polygon points="84,150 48,200 41,197.5 78,146" fill="#000" opacity=".14" />
-          <polygon points="316,150 352,200 359,197.5 322,146" fill="#000" opacity=".2" />
-          <polyline points="85,146.5 315,146.5" stroke="#f4d39f" strokeWidth=".8" opacity=".45" />
           {/* pliegues de las bisagras */}
           <polyline points="84,150 316,150" stroke="#7a5128" strokeWidth="1.2" opacity=".7" />
           <polyline points="84,150 48,200" stroke="#7a5128" strokeWidth="1" opacity=".6" />
@@ -151,8 +131,6 @@ function CajaAtras({ cerrando }) {
         <polygon points="316,150 352,200 328,200 302,177" fill="#5e3d1e" />
         <polygon points="98,177 302,177 328,200 72,200" fill="url(#k-piso)" />
       </g>
-      {/* Sombra en los rincones donde las paredes tocan el piso */}
-      <polyline points="72,200 98,177 302,177 328,200" fill="none" stroke="#000" strokeWidth="5" opacity=".35" filter="url(#k-desenfoque-chico)" />
       <polygon points="84,150 316,150 312,156 88,156" fill="#000" opacity=".22" />
       <polygon points="84,150 316,150 316,151.5 84,151.5" fill="url(#k-flauta)" />
     </svg>
@@ -172,19 +150,9 @@ function CajaFrente({ cerrando, total }) {
         <rect x="48" y="200" width="304" height="160" fill="url(#k-frente)" />
         <rect x="48" y="200" width="304" height="160" fill="url(#k-frente-luz)" />
         <rect x="48" y="200" width="304" height="160" fill="url(#k-brillo)" />
-        <rect x="48" y="200" width="304" height="160" fill="url(#k-ondas)" />
         {/* aristas verticales del frente */}
         <rect x="48" y="200" width="3" height="160" fill="#f0c993" opacity=".5" />
         <rect x="349" y="200" width="3" height="160" fill="#5a3818" opacity=".45" />
-        {/* esquinas gastadas por el uso */}
-        <ellipse cx="60" cy="350" rx="11" ry="7" fill="url(#k-gastado)" opacity=".6" />
-        <ellipse cx="341" cy="351" rx="9" ry="6" fill="url(#k-gastado)" opacity=".45" />
-        <ellipse cx="54" cy="244" rx="5" ry="12" fill="url(#k-gastado)" opacity=".5" />
-        {/* leve abolladura: un pliegue con su luz y su sombra */}
-        <path d="M58 300 Q66 318 62 340" fill="none" stroke="#fff3dc" strokeWidth="1.1" opacity=".22" />
-        <path d="M59.4 300.4 Q67.4 318.4 63.4 340.4" fill="none" stroke="#3a2210" strokeWidth="1.2" opacity=".2" />
-        {/* contacto con la mesa: la base se oscurece y toma un poco del tono de la madera */}
-        <rect x="48" y="352" width="304" height="8" fill="#2a170a" opacity=".22" />
       </g>
 
       {/* Logo y textos impresos sobre el cartón (tinta absorbida) */}
@@ -202,15 +170,6 @@ function CajaFrente({ cerrando, total }) {
         </g>
         <text x="175" y="341.5" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="7.5">nuevomunich</text>
         <text x="200" y="354" textAnchor="middle" fill="#2a1a0c" fontFamily="Georgia, 'Times New Roman', serif" fontWeight="700" fontSize="10.5">www.nuevomunich.com.ar</text>
-        {/* Íconos de embalaje: "este lado arriba" y "conservar en frío" */}
-        <path d="M62 350 V338 M58.6 341.4 L62 338 L65.4 341.4 M71 350 V338 M67.6 341.4 L71 338 L74.4 341.4 M57 352.5 H76"
-          fill="none" stroke="#2a1a0c" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-        <g transform="translate(288 346)" stroke="#2a1a0c" strokeWidth="1" strokeLinecap="round">
-          <path d="M0 -5 V5 M-4.3 -2.5 L4.3 2.5 M-4.3 2.5 L4.3 -2.5" />
-          <path d="M-1.4 -3.8 L0 -2.6 L1.4 -3.8 M-1.4 3.8 L0 2.6 L1.4 3.8" fill="none" />
-        </g>
-        <text x="296" y="345" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="4.6" letterSpacing=".3">CONSERVAR</text>
-        <text x="296" y="350.5" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="4.6" letterSpacing=".3">ENTRE 0° Y 4°C</text>
       </g>
 
       {/* Solapa de adelante doblada hacia el frente, con su sombra */}
