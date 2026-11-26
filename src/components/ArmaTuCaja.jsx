@@ -364,18 +364,21 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
         <h2 className="hidden font-pincel text-3xl text-white bajo:block">¡Armá tu <span className="text-celeste">caja!</span></h2>
         <motion.div className="bajo:hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .15 }}>
           <p className="mb-2 flex items-center gap-2.5 text-[11px] tracking-[.4em] text-celeste uppercase"><ShoppingCart size={16} /> Nuevo · Hacé tu pedido</p>
-          <h2 className="font-pincel leading-[1.05] text-white">
-            <span className="flex items-center gap-2 text-4xl md:text-5xl xl:text-6xl"><Chispas />¡Armá tu</span>
-            <span className="relative mt-1 inline-block -rotate-2 px-3.5 pt-0.5 pb-1.5 text-3xl md:text-4xl xl:text-5xl">
+          {/* Todo el título en un renglón: el tamaño se ajusta al ancho de la columna */}
+          <h2 className="flex items-center gap-[.3em] font-pincel text-[clamp(1.35rem,7.6cqi,3.75rem)] leading-none whitespace-nowrap text-white">
+            <Chispas />
+            <span>¡Armá tu</span>
+            <span className="relative inline-block -rotate-2 px-[.3em] pt-[.08em] pb-[.16em]">
               <span aria-hidden className="absolute inset-0 -skew-x-6 rounded-[.6rem_1.4rem_.8rem_1.6rem] bg-munich-deep shadow-[0_8px_24px_rgba(0,0,0,.45)]" />
               <span className="relative">caja de productos!</span>
             </span>
           </h2>
-          <p className="mt-3 font-manuscrita text-xl text-crema/90 md:text-2xl">Elegí tus favoritos y disfrutá la calidad de siempre</p>
+          <p className="mt-4 font-manuscrita text-xl text-crema/90 md:text-2xl">Elegí tus favoritos y disfrutá la calidad de siempre</p>
+          <div aria-hidden className="mt-6 h-px w-full bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
         </motion.div>
 
         {/* Filtros fijos arriba mientras se recorre la lista */}
-        <div className="sticky top-[max(46svh,300px)] z-10 -mx-4 mt-5 bajo:mt-2 bg-humo/90 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 partido:top-0 lg:-mx-10 lg:px-10 bajo:py-2">
+        <div className="sticky top-[max(46svh,300px)] z-10 -mx-4 mt-4 bajo:mt-2 bg-humo/90 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 partido:top-0 lg:-mx-10 lg:px-10 bajo:py-2">
           <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:px-0">
             {[{ slug: 'todos', nombre: 'Todos' }, ...categorias].map((c) => (
               <button key={c.slug} onClick={() => setFiltro(c.slug)} aria-pressed={filtro === c.slug}
