@@ -59,9 +59,10 @@ export function PestanaInstagram({ onCaja }) {
       </a>
       {onCaja && (
         <button onClick={onCaja} aria-label="Armá tu caja de productos"
-          className="flex flex-col items-center gap-2 rounded-l-xl bg-gradient-to-b from-[#d9a867] to-[#a8743f] px-1.5 py-3 text-humo shadow-lg shadow-black/40 transition-[padding] hover:pr-2.5">
-          <Package size={15} strokeWidth={2.4} />
-          <span className="text-[10px] font-bold tracking-[.2em] uppercase [writing-mode:vertical-rl] rotate-180">Armá tu caja</span>
+          className="pulso-caja group relative flex flex-col items-center gap-2.5 overflow-hidden rounded-l-2xl bg-gradient-to-b from-[#e8bb7a] via-[#d9a867] to-[#a8743f] px-2 py-4 text-humo shadow-lg shadow-black/40 ring-1 ring-white/20 transition-[padding] duration-300 hover:pr-3.5 md:px-2.5 md:py-5">
+          <span aria-hidden className="brillo-caja pointer-events-none absolute inset-x-0 h-1/3 bg-gradient-to-b from-transparent via-white/40 to-transparent" />
+          <Package size={20} strokeWidth={2.4} className="relative transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110" />
+          <span className="relative text-[12px] font-bold tracking-[.2em] uppercase [writing-mode:vertical-rl] rotate-180 md:text-[13px]">Armá tu caja</span>
         </button>
       )}
     </div>
