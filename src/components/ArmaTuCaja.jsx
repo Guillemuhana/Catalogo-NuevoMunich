@@ -81,6 +81,18 @@ const KRAFT = (
       <feComposite in="tono" in2="SourceGraphic" operator="in" result="t" />
       <feMerge><feMergeNode in="SourceGraphic" /><feMergeNode in="t" /><feMergeNode in="m" /></feMerge>
     </filter>
+    {/* Ondas del corrugado que se marcan a través del papel (el "lavarropas" del cartón) */}
+    <pattern id="k-ondas" width="4.6" height="10" patternUnits="userSpaceOnUse">
+      <rect width="2.3" height="10" fill="#fff" opacity=".035" />
+      <rect x="2.3" width="2.3" height="10" fill="#000" opacity=".04" />
+    </pattern>
+    {/* Esquinas gastadas: el cartón se aclara donde roza */}
+    <radialGradient id="k-gastado">
+      <stop offset="0" stopColor="#f6dcb0" stopOpacity=".55" /><stop offset="1" stopColor="#f6dcb0" stopOpacity="0" />
+    </radialGradient>
+    <linearGradient id="k-pliegue-atras" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stopColor="#000" stopOpacity=".3" /><stop offset="1" stopColor="#000" stopOpacity="0" />
+    </linearGradient>
     <filter id="k-desenfoque"><feGaussianBlur stdDeviation="6" /></filter>
     <filter id="k-desenfoque-chico"><feGaussianBlur stdDeviation="1.6" /></filter>
   </defs>
@@ -118,6 +130,14 @@ function CajaAtras({ cerrando }) {
           <polygon points="8,186 38,118 41,119 12,187" fill="url(#k-flauta)" />
           <polygon points={SOLAPAS.abierta.der} fill={RELLENO.der} />
           <polygon points="392,186 362,118 359,119 388,187" fill="url(#k-flauta)" />
+          {/* ondas del corrugado y sombra del doblez junto a cada bisagra */}
+          <polygon points={SOLAPAS.abierta.atras} fill="url(#k-ondas)" />
+          <polygon points={SOLAPAS.abierta.izq} fill="url(#k-ondas)" />
+          <polygon points={SOLAPAS.abierta.der} fill="url(#k-ondas)" />
+          <polygon points="84,150 316,150 315.4,141 84.6,141" fill="url(#k-pliegue-atras)" />
+          <polygon points="84,150 48,200 41,197.5 78,146" fill="#000" opacity=".14" />
+          <polygon points="316,150 352,200 359,197.5 322,146" fill="#000" opacity=".2" />
+          <polyline points="85,146.5 315,146.5" stroke="#f4d39f" strokeWidth=".8" opacity=".45" />
           {/* pliegues de las bisagras */}
           <polyline points="84,150 316,150" stroke="#7a5128" strokeWidth="1.2" opacity=".7" />
           <polyline points="84,150 48,200" stroke="#7a5128" strokeWidth="1" opacity=".6" />
@@ -131,6 +151,8 @@ function CajaAtras({ cerrando }) {
         <polygon points="316,150 352,200 328,200 302,177" fill="#5e3d1e" />
         <polygon points="98,177 302,177 328,200 72,200" fill="url(#k-piso)" />
       </g>
+      {/* Sombra en los rincones donde las paredes tocan el piso */}
+      <polyline points="72,200 98,177 302,177 328,200" fill="none" stroke="#000" strokeWidth="5" opacity=".35" filter="url(#k-desenfoque-chico)" />
       <polygon points="84,150 316,150 312,156 88,156" fill="#000" opacity=".22" />
       <polygon points="84,150 316,150 316,151.5 84,151.5" fill="url(#k-flauta)" />
     </svg>
@@ -150,9 +172,19 @@ function CajaFrente({ cerrando, total }) {
         <rect x="48" y="200" width="304" height="160" fill="url(#k-frente)" />
         <rect x="48" y="200" width="304" height="160" fill="url(#k-frente-luz)" />
         <rect x="48" y="200" width="304" height="160" fill="url(#k-brillo)" />
+        <rect x="48" y="200" width="304" height="160" fill="url(#k-ondas)" />
         {/* aristas verticales del frente */}
         <rect x="48" y="200" width="3" height="160" fill="#f0c993" opacity=".5" />
         <rect x="349" y="200" width="3" height="160" fill="#5a3818" opacity=".45" />
+        {/* esquinas gastadas por el uso */}
+        <ellipse cx="60" cy="350" rx="11" ry="7" fill="url(#k-gastado)" opacity=".6" />
+        <ellipse cx="341" cy="351" rx="9" ry="6" fill="url(#k-gastado)" opacity=".45" />
+        <ellipse cx="54" cy="244" rx="5" ry="12" fill="url(#k-gastado)" opacity=".5" />
+        {/* leve abolladura: un pliegue con su luz y su sombra */}
+        <path d="M58 300 Q66 318 62 340" fill="none" stroke="#fff3dc" strokeWidth="1.1" opacity=".22" />
+        <path d="M59.4 300.4 Q67.4 318.4 63.4 340.4" fill="none" stroke="#3a2210" strokeWidth="1.2" opacity=".2" />
+        {/* contacto con la mesa: la base se oscurece y toma un poco del tono de la madera */}
+        <rect x="48" y="352" width="304" height="8" fill="#2a170a" opacity=".22" />
       </g>
 
       {/* Logo y textos impresos sobre el cartón (tinta absorbida) */}
@@ -170,6 +202,15 @@ function CajaFrente({ cerrando, total }) {
         </g>
         <text x="175" y="341.5" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="7.5">nuevomunich</text>
         <text x="200" y="354" textAnchor="middle" fill="#2a1a0c" fontFamily="Georgia, 'Times New Roman', serif" fontWeight="700" fontSize="10.5">www.nuevomunich.com.ar</text>
+        {/* Íconos de embalaje: "este lado arriba" y "conservar en frío" */}
+        <path d="M62 350 V338 M58.6 341.4 L62 338 L65.4 341.4 M71 350 V338 M67.6 341.4 L71 338 L74.4 341.4 M57 352.5 H76"
+          fill="none" stroke="#2a1a0c" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+        <g transform="translate(288 346)" stroke="#2a1a0c" strokeWidth="1" strokeLinecap="round">
+          <path d="M0 -5 V5 M-4.3 -2.5 L4.3 2.5 M-4.3 2.5 L4.3 -2.5" />
+          <path d="M-1.4 -3.8 L0 -2.6 L1.4 -3.8 M-1.4 3.8 L0 2.6 L1.4 3.8" fill="none" />
+        </g>
+        <text x="296" y="345" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="4.6" letterSpacing=".3">CONSERVAR</text>
+        <text x="296" y="350.5" fill="#2a1a0c" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="4.6" letterSpacing=".3">ENTRE 0° Y 4°C</text>
       </g>
 
       {/* Solapa de adelante doblada hacia el frente, con su sombra */}
@@ -399,29 +440,38 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
                   transition={{ duration: .3, delay: Math.min(i, 8) * .02 }}
                   className={`group relative flex flex-col rounded-2xl border bg-carbon p-2.5 transition-colors ${n ? 'border-celeste/70 shadow-[0_0_0_1px_rgba(63,196,230,.25),0_10px_30px_-10px_rgba(63,196,230,.35)]' : 'border-white/[.07] hover:border-white/20'}`}>
                   {/* Foto original (fondo blanco), como en el catálogo; el recorte va solo dentro de la caja */}
-                  <div className="relative aspect-square overflow-hidden rounded-xl bg-white">
+                  {/* Tocar la foto también suma; el botón + flota en la esquina y se abre en [− n +] al tener unidades */}
+                  <div onClick={(e) => sumar(p, e.currentTarget.querySelector('[data-foto]')?.getBoundingClientRect())}
+                    className="relative aspect-square cursor-pointer overflow-hidden rounded-xl bg-white">
                     <img src={miniatura(fotosDe(p)[0])} alt="" loading="lazy" decoding="async" data-foto
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-                    <AnimatePresence>
-                      {n > 0 && (
-                        <motion.span key={n} initial={{ scale: .4 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 500, damping: 15 }}
-                          className="absolute top-1.5 right-1.5 flex h-7 min-w-7 items-center justify-center rounded-full bg-celeste px-1.5 text-sm font-bold text-humo shadow">{n}</motion.span>
-                      )}
-                    </AnimatePresence>
+                    <span aria-hidden className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent transition-opacity duration-300 ${n ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+
+                    <motion.div layout onClick={(e) => e.stopPropagation()} transition={{ type: 'spring', stiffness: 520, damping: 34 }}
+                      className={`absolute right-2 bottom-2 flex items-center rounded-full shadow-[0_8px_20px_-6px_rgba(0,0,0,.55)] ring-2 ring-white/70 ${n ? 'bg-celeste p-1' : 'bg-transparent'}`}>
+                      <AnimatePresence mode="popLayout" initial={false}>
+                        {n > 0 && (
+                          <motion.button key="menos" layout initial={{ opacity: 0, scale: .5 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: .5 }}
+                            onClick={() => sacar(p)} aria-label={`Sacar ${p.nombre} de la caja`}
+                            className="flex h-8 w-8 items-center justify-center rounded-full text-humo transition hover:bg-black/10 active:scale-90">
+                            <Minus size={16} strokeWidth={3} />
+                          </motion.button>
+                        )}
+                        {n > 0 && (
+                          <motion.span key={`n${n}`} layout initial={{ y: -10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 10, opacity: 0 }}
+                            aria-live="polite" className="min-w-5 text-center text-sm font-bold text-humo tabular-nums">{n}</motion.span>
+                        )}
+                      </AnimatePresence>
+                      <motion.button layout whileTap={{ scale: .85 }}
+                        onClick={(e) => sumar(p, e.currentTarget.closest('li').querySelector('[data-foto]')?.getBoundingClientRect())}
+                        aria-label={`Sumar ${p.nombre} a la caja`}
+                        className={`relative flex items-center justify-center rounded-full transition-colors ${n ? 'h-8 w-8 bg-humo text-celeste' : 'h-11 w-11 bg-celeste text-humo hover:bg-white'}`}>
+                        <Plus size={n ? 16 : 22} strokeWidth={3} className="relative transition-transform duration-300 group-hover:rotate-90" />
+                      </motion.button>
+                    </motion.div>
                   </div>
-                  <p className="mt-2 line-clamp-2 min-h-[2.5em] text-[13px] leading-tight font-bold text-crema">{p.nombre}</p>
+                  <p className="mt-2.5 line-clamp-2 min-h-[2.5em] text-[13px] leading-tight font-bold text-crema">{p.nombre}</p>
                   <p className="mt-0.5 truncate text-[11px] text-crema/50">{p.presentaciones?.[0]}</p>
-                  <div className="mt-2 flex items-center gap-1.5">
-                    {n > 0 && (
-                      <button onClick={() => sacar(p)} aria-label={`Sacar ${p.nombre} de la caja`}
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 text-crema transition hover:border-munich"><Minus size={16} /></button>
-                    )}
-                    <button onClick={(e) => sumar(p, e.currentTarget.closest('li').querySelector('[data-foto]')?.getBoundingClientRect())}
-                      aria-label={`Sumar ${p.nombre} a la caja`}
-                      className="flex h-10 flex-1 items-center justify-center gap-1.5 rounded-full bg-crema text-xs font-bold tracking-wide text-humo uppercase transition hover:bg-celeste active:scale-95">
-                      <Plus size={15} strokeWidth={3} /> {n ? 'Otro' : 'A la caja'}
-                    </button>
-                  </div>
                 </motion.li>
               )
             })}
