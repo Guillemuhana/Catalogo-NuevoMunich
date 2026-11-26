@@ -379,10 +379,11 @@ export default function ArmaTuCaja({ categorias, productos, onPedir, onCerrar })
 
         {/* Filtros fijos arriba mientras se recorre la lista */}
         <div className="sticky top-[max(46svh,300px)] z-10 -mx-4 mt-4 bajo:mt-2 bg-humo/90 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6 partido:top-0 lg:-mx-10 lg:px-10 bajo:py-2">
-          <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:px-0">
+          {/* Siempre en un renglón; si no entran, se deslizan de costado (con un fundido en el borde) */}
+          <div className="no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 [mask-image:linear-gradient(to_right,#000_calc(100%-2rem),transparent)] sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10">
             {[{ slug: 'todos', nombre: 'Todos' }, ...categorias].map((c) => (
-              <button key={c.slug} onClick={() => setFiltro(c.slug)} aria-pressed={filtro === c.slug}
-                className={`min-h-10 shrink-0 rounded-full border px-4 text-sm transition ${filtro === c.slug ? 'border-celeste bg-celeste font-bold text-humo' : 'border-white/15 text-crema/75 hover:border-crema/40'}`}>
+              <button key={c.slug} onClick={() => { setFiltro(c.slug); requestAnimationFrame(() => document.activeElement?.scrollIntoView?.({ behavior: 'smooth', inline: 'nearest', block: 'nearest' })) }} aria-pressed={filtro === c.slug}
+                className={`min-h-9 shrink-0 rounded-full border px-3.5 text-[13px] whitespace-nowrap transition ${filtro === c.slug ? 'border-celeste bg-celeste font-bold text-humo' : 'border-white/15 text-crema/75 hover:border-crema/40'}`}>
                 {c.nombre}
               </button>
             ))}
